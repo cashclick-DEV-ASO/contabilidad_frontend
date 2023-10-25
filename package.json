@@ -5,17 +5,17 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "node server.js",
-    "dev": "nodemon --exec node server.js",
-    "dev_vite": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "build:login": "vite build --base=/login/"
+    "start": "node server.js",
+    "start:dev": "node server.js true",
+    "start:prod": "node server.js false",
+    "build": "vite build -c vite.config.js",
+    "preview": "vite preview -c vite.config.js"
   },
   "keywords": [],
   "author": "Alberto Soto",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "1.4.6",
     "cors": "2.8.5",
     "dotenv": "16.3.1",
     "express": "4.18.2",

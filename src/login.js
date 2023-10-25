@@ -1,13 +1,13 @@
-const boton = document.querySelector(".boton")
+import { borrarCookie } from "./utils.js"
+import FormularioLogin from "../views/login.js"
 
-boton.addEventListener("click", () => {
-    const user = document.querySelector("#user").value
-    const pass = document.querySelector("#pass").value
-    fetch("http://0.0.0.0:0")
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            window.location.href = "http://127.0.0.1:3030/"
-        })
-        .catch(error => console.log(error))
-});
+const contenido = () => {
+    borrarCookie("token")
+    borrarCookie("user")
+    const contenedor = document.querySelector(".login")
+    const formulario = new FormularioLogin()
+    formulario.crearElementos()
+    contenedor.appendChild(formulario.elemento)
+}
+
+contenido()

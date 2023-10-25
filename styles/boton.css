@@ -1,0 +1,23 @@
+.btnDefault {
+    background-color: var(--azul_medio_1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-weight: bold;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.btnDefault:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transform-origin: center bottom;
+}
+
+.btnDefault:active {
+    transform: scale(1);
+    transform-origin: center bottom;
+    background-color: var(--azul_medio_2);
+}

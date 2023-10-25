@@ -4,13 +4,16 @@
     --azul_medio_2: #1c6c94;
     --azul_medio_3: #198fb0;
     --azul_claro: #07aada;
+    --advertencia: #d3d32b;
+    --error: #a50d0d;
+    --exito: #169c16;
 }
 
 html {
     border: 0;
     padding: 0;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
 }
 
 body {

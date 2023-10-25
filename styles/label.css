@@ -1,0 +1,9 @@
+.lblDefault {
+    font-size: 1em;
+}
+
+.lblTitulo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--azul_medio_2);
+}
