@@ -1,61 +1,44 @@
 @import url("./global.css");
-@import url("./boton.css");
-@import url("./label.css");
-@import url("./input.css");
 @import url("./mensaje.css");
+@import url("./navegacion.css");
+@import url("./inicio.css");
+@import url("./trnBancos.css");
 
 .contenedor {
     width: 100%;
     height: 100%;
-}
-
-.contenido {
-    height: 100%;
-    width: 100%;
     display: grid;
     grid-template-rows: 3% 95% 2%;
+    position: relative;
 }
 
 .navegacion {
-    background-color: var(--azul_fuerte);
-    z-index: 100;
-    border-radius: 0 0 15px 15px;
-}
-
-.listaNavegacion {
-    margin: 0;
-    padding: 0;
-    display: flex;
+    width: 100%;
     height: 100%;
-    justify-content: space-evenly;
-    align-items: center;
+    position: relative;
+    z-index: 10;
 }
 
-.itemNavegacion {
-    margin: 5px;
-    display: flex;
-}
-
-.linkNavegacion {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-
-.linkNavegacion:hover {
-    color: var(--azul_claro);
-    cursor: pointer;
-}
-
-.vista {
+.main {
+    width: 100%;
+    height: 100%;
+    position: relative;
     overflow: auto;
 }
 
+.main:first-child {
+    width: 100%;
+    height: 100%;
+}
+
 .pie {
-    z-index: 100;
+    width: 100%;
+    height: 100%;
+    position: relative;
     text-align: center;
     font-size: x-small;
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }

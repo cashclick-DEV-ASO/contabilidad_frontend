@@ -1,41 +1,59 @@
-import Componente from "../components/componente.js"
 import LoginController from "../controllers/login.js"
 
-import Label from "../components/label.js"
-import Boton from "../components/boton.js"
-import Input from "../components/input.js"
+import Componente from "../components/componente.js"
 
-class FormularioLogin extends Componente {
+/**
+ * @class Login
+ * @extends Componente
+ * @description Componente para mostrar el fomulario de login
+ */
+class Login extends Componente {
+    #controlador
+
     constructor() {
-        super(document.createElement("form"), "formulario")
-        this.controlador = new LoginController(this)
+        super("form", { clase: "formulario" })
+        this.#controlador = new LoginController(this)
+        return this
     }
 
-    iniciarElementos() {
-        this.titulo = new Label("Inicio de sesión", "lblTitulo")
-        this.usuario = new Input("text")
-        this.password = new Input("password")
-        this.btnLogin = new Boton("Iniciar sesión")
+    inicia() {
+        this.titulo = new Componente("label", { clase: "lblTitulo" })
+        this.usuario = new Componente("input", { clase: "inputLogin" })
+        this.password = new Componente("input", { clase: "inputLogin" })
+        this.btnLogin = new Componente("button", { clase: "btnLogin" })
+        return this
     }
 
-    configurarElementos() {
-        this.usuario.addPlaceholder("Usuario")
-        this.password.addPlaceholder("Contraseña")
-        this.addListener("submit", this.controlador.login)
+    configura() {
+        this.titulo.setTexto("Inicio de sesión")
+
+        this.usuario.setPropiedad("placeholder", "Usuario")
+
+        this.password.setPropiedad("type", "password")
+        this.password.setPropiedad("placeholder", "Contraseña")
+
+        this.btnLogin.setTexto("Iniciar sesión")
+        this.setListener("submit", this.#controlador.login)
+
+        return this
     }
 
-    integrarElementos() {
-        this.elemento.appendChild(this.titulo.elemento)
-        this.elemento.appendChild(this.usuario.elemento)
-        this.elemento.appendChild(this.password.elemento)
-        this.elemento.appendChild(this.btnLogin.elemento)
+    crea() {
+        this.addHijos([
+            this.titulo.getComponente(),
+            this.usuario.getComponente(),
+            this.password.getComponente(),
+            this.btnLogin.getComponente()
+        ])
+        return this
     }
 
-    crearElementos() {
-        this.iniciarElementos()
-        this.configurarElementos()
-        this.integrarElementos()
+    mostrar() {
+        return this.inicia()
+            .configura()
+            .crea()
+            .getComponente()
     }
 }
 
-export default FormularioLogin
+export default Login

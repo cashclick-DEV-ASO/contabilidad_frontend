@@ -1,0 +1,41 @@
+.selPeriodo {
+    display: grid;
+    gap: 10px 10px; 
+    align-items: center;
+    align-content: center;
+    margin: 10px;
+}
+
+.selPeriodo.cuadrado {
+    grid-template-areas: 
+    "titulo titulo"
+    "etq1 txt1"
+    "etq2 txt2"; 
+}
+
+.selPeriodo.largo {
+    grid-template-areas: 
+    "titulo titulo titulo titulo"
+    "etq1 txt1 etq2 txt2";
+}
+
+.tituloPeriodo {
+    grid-area: titulo;
+    font-weight: bold;
+}
+
+#lblAnioPeriodo {
+    grid-area: etq1;
+}
+
+#anioPeriodo {
+    grid-area: txt1;
+}
+
+#lblMesPeriodo {
+    grid-area: etq2;
+}
+
+#mesPeriodo {
+    grid-area: txt2;
+}

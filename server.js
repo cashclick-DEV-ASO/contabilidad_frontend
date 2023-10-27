@@ -53,7 +53,7 @@ const desarrollo = (dirname) => {
         dirname,
         path.resolve(dirname, "login.html"),
         path.resolve(dirname, "index.html"),
-        ["/login", "/components", "/controllers", "/models", "/src", "/styles", "/views"]
+        ["/login", "/components", "/controllers", "/models", "/src", "/styles", "/views", "/lib", "/images"]
     ]
 }
 

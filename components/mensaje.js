@@ -1,19 +1,17 @@
+import { MSJ_CONTENEDOR_CLS } from "../src/constantes.js"
+
 import Componente from "./componente.js"
 
-import Div from "./div.js"
-import Span from "./span.js"
-
 /**
- * @Description Clase para mostrar mensajes en pantalla.
+ * @class Mensaje
+ * @extends Componente
+ * @param {string} tipo - Clase para el contenedor del mensaje
+ * @description Componente para mostrar mensajes en pantalla
  */
 export class Mensaje extends Componente {
-    constructor(clase = "msjContenedor") {
-        super(document.createElement("div"), clase)
-        this.configura()
-        this.iniciarElementos()
-    }
+    constructor(tipo = null) {
+        super("div", { clase: MSJ_CONTENEDOR_CLS })
 
-    configura() {
         this.txtTitulo = "Mensaje de sistema"
         this.txtMensaje = ""
         this.tipos = {
@@ -28,9 +26,10 @@ export class Mensaje extends Componente {
             msjAdvertencia: "Advertencia",
             msjInformacion: "Información"
         }
-        this.tipo = this.tipos.informacion
+        this.tipo = tipo ?? this.tipos.informacion
         this.listo = false
         this.botones = []
+        return this
     }
 
     setMensaje(mensaje) {
@@ -54,39 +53,45 @@ export class Mensaje extends Componente {
         return this
     }
 
-    iniciarElementos() {
-        this.marco = new Div("msjMarco")
-        this.titulo = new Span("", "msjTitulo")
-        this.cerrar = new Span("", "msjCerrar")
-        this.mensaje = new Span("", "msjTexto")
+    inicia() {
+        this.marco = new Componente("div", { clase: "msjMarco" })
+        this.titulo = new Componente("span", { clase: "msjTitulo" })
+        this.cerrar = new Componente("span", { clase: "msjCerrar" })
+        this.mensaje = new Componente("span", { clase: "msjTexto" })
+        return this
     }
 
-    configurarElementos() {
-        this.marco.addClase(this.tipo)
+    configura() {
+        this.marco.setClase(this.tipo)
         this.titulo.setTexto(this.txtTitulo)
         this.cerrar.setTexto("X")
-        this.cerrar.addListener("click", this.ocultar)
+        this.cerrar.setListener("click", this.ocultar.bind(this))
         this.mensaje.setTexto(this.txtMensaje)
+        return this
     }
 
-    integrarElementos() {
-        this.configurarElementos()
-        this.marco.appendChild(this.titulo.elemento)
-        this.marco.appendChild(this.cerrar.elemento)
-        this.marco.appendChild(this.mensaje.elemento)
-        this.botones.forEach(boton => {
-            this.marco.appendChild(boton.elemento)
-        })
-        this.elemento.appendChild(this.marco.elemento)
+    crea() {
+        this.marco.addHijos([
+            this.titulo.getComponente(),
+            this.cerrar.getComponente(),
+            this.mensaje.getComponente(),
+        ])
+        // this.botones.forEach(boton => {
+        //     this.marco.appendChild(boton.elemento)
+        // })
+        this.addHijo(this.marco.getComponente())
+        return this
     }
 
     mostrar() {
-        this.integrarElementos()
-        document.querySelector("body").appendChild(this.elemento)
+        const msj = this.inicia()
+            .configura()
+            .crea()
+        document.querySelector("body").appendChild(msj.getComponente())
     }
 
     ocultar() {
-        document.querySelector(".msjContenedor").remove()
+        this.removeComponente()
     }
 }
 

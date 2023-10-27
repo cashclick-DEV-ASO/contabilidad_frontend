@@ -1,0 +1,39 @@
+.ulMenu, .ulSubMenu {
+    background-color: var(--azul_fuerte);
+    border-radius: 0 0 15px 15px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.ulSubMenu {
+    width: 80%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    transition: all 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+}
+
+.liMenu, .liSubMenu {
+    margin: auto;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    user-select: none;
+    list-style: none;
+}
+
+.liMenu:hover, .liSubMenu:hover {
+    color: var(--azul_claro);
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.liMenu:hover .ulSubMenu, .ulSubMenu:hover {
+    top: 100%;
+}

@@ -1,9 +1,25 @@
-import Componente from "./componente.js";
+import { PIE_CLS, MSJ_PIE } from "../src/constantes.js"
 
+import Componente from "./componente.js"
+
+/**
+ * @class Pie
+ * @extends Componente
+ * @description Componente que representa el pie de página
+ */
 class Pie extends Componente {
     constructor() {
-        super(document.createElement("footer"), "pie")
-        this.elemento.innerHTML = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`
+        super("footer", { clase: PIE_CLS })
+        return this
+    }
+
+    configura() {
+        this.setTexto(MSJ_PIE)
+        return this
+    }
+
+    mostrar() {
+        return this.configura().getComponente()
     }
 }
 
