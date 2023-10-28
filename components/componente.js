@@ -177,6 +177,7 @@ class Componente {
      * @description Remueve el componente del DOM
      */
     removeComponente() {
+        console.log(this.#componente);
         this.#componente.remove()
     }
 

@@ -29,6 +29,7 @@ export class Mensaje extends Componente {
         this.tipo = tipo ?? this.tipos.informacion
         this.listo = false
         this.botones = []
+        this.inicia()
         return this
     }
 
@@ -84,7 +85,7 @@ export class Mensaje extends Componente {
     }
 
     mostrar() {
-        const msj = this.inicia()
+        const msj = this
             .configura()
             .crea()
         document.querySelector("body").appendChild(msj.getComponente())

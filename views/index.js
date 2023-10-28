@@ -6,7 +6,7 @@ import Pie from "../components/pie.js"
 class Index extends Componente {
     constructor(){
         super(document.createDocumentFragment())
-        return this
+        return this.inicia()
     }
 
     inicia(){
@@ -31,7 +31,7 @@ class Index extends Componente {
     }
 
     mostrar(){
-        return this.inicia()
+        return this
             .configura()
             .crea()
             .getComponente()

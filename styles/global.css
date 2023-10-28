@@ -24,3 +24,35 @@ body {
     width: 100%;
     box-sizing: border-box;
 }
+
+select, input:focus {
+    outline: none;
+}
+
+input:hover {
+    border: 2px solid var(--azul_fuerte);
+}
+
+button {
+    box-shadow: inset 0px -3px 7px 0px #1d4387;
+    background: linear-gradient(to bottom, #1d4387 5%, #07aada 100%);
+    background-color: #1d4387;
+    border-radius: 3px;
+    border: 0;
+    display: inline-block;
+    cursor: pointer;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #263666;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, #07aada 5%, #1d4387 100%);
+    background-color: #07aada;
+}
+
+button:active {
+    position: relative;
+    top: 1px;
+}

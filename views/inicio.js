@@ -3,7 +3,7 @@ import Componente from "../components/componente.js";
 class Inicio extends Componente {
     constructor() {
         super("section", { clase: "inicio" })
-        return this
+        return this.inicia()
     }
 
     inicia() {
@@ -29,7 +29,7 @@ class Inicio extends Componente {
     }
 
     mostrar() {
-        return this.inicia()
+        return this
             .configura()
             .crea()
             .getComponente()

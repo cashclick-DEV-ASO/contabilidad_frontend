@@ -16,7 +16,8 @@ class SelPeriodo extends Componente {
             PERIODO_ESTILO_1,
             PERIODO_ESTILO_2
         }
-        return this
+        
+        return this.inicia()
     }
 
     setEstilo(estilo) {
@@ -42,8 +43,12 @@ class SelPeriodo extends Componente {
 
     configura() {
         this.lblPeriodo.setTexto("Periodo")
+
         this.lblAnioPeriodo.setTexto("Año")
+        this.lblAnioPeriodo.setPropiedad("htmlFor", this.txtAnioPeriodo.getID())
+
         this.lblMesPeriodo.setTexto("Mes")
+        this.lblMesPeriodo.setPropiedad("htmlFor", this.txtMesPeriodo.getID())
 
         this.txtAnioPeriodo.setPropiedad("type", "number")
         this.txtAnioPeriodo.setPropiedad("min", ANIO_MINIMO)
@@ -69,7 +74,7 @@ class SelPeriodo extends Componente {
     }
 
     mostrar() {
-        return this.inicia()
+        return this
             .configura()
             .crea()
             .getComponente()

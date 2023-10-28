@@ -1,22 +1,29 @@
 .selPeriodo {
     display: grid;
-    gap: 10px 10px; 
-    align-items: center;
-    align-content: center;
+    gap: 5px 0;
     margin: 10px;
 }
 
 .selPeriodo.cuadrado {
     grid-template-areas: 
     "titulo titulo"
-    "etq1 txt1"
-    "etq2 txt2"; 
+    "lblAnio txtAnio"
+    "lblMes txtMes";
+    width: 150px;
+    align-items: center;
+    justify-items: center;
 }
 
 .selPeriodo.largo {
     grid-template-areas: 
     "titulo titulo titulo titulo"
-    "etq1 txt1 etq2 txt2";
+    "lblAnio txtAnio lblMes txtMes";
+    width: 250px;
+    justify-items: center;
+    justify-items: center;
+    align-content: space-around;
+    align-items: center;
+    justify-content: center;
 }
 
 .tituloPeriodo {
@@ -25,17 +32,23 @@
 }
 
 #lblAnioPeriodo {
-    grid-area: etq1;
+    grid-area: lblAnio;
+    width: 50px;
+    text-align: end;
 }
 
 #anioPeriodo {
-    grid-area: txt1;
+    grid-area: txtAnio;
+    width: 50px;
 }
 
 #lblMesPeriodo {
-    grid-area: etq2;
+    grid-area: lblMes;
+    width: 50px;
+    text-align: end;
 }
 
 #mesPeriodo {
-    grid-area: txt2;
+    grid-area: txtMes;
+    width: 50px;
 }

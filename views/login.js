@@ -13,7 +13,7 @@ class Login extends Componente {
     constructor() {
         super("form", { clase: "formulario" })
         this.#controlador = new LoginController(this)
-        return this
+        return this.inicia()
     }
 
     inicia() {
@@ -49,7 +49,7 @@ class Login extends Componente {
     }
 
     mostrar() {
-        return this.inicia()
+        return this
             .configura()
             .crea()
             .getComponente()
