@@ -1,5 +1,8 @@
-import Componente from "../components/componente.js";
-import logo from "../images/Cashclick_logo.svg";
+import Componente from "../components/componente.js"
+// import logo from "../images/Cashclick_logo.svg"
+
+const logo = new URL("../images/Cashclick_logo.svg", import.meta.url).href
+
 
 class Inicio extends Componente {
     constructor() {
