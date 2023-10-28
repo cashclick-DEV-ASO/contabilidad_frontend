@@ -1,4 +1,5 @@
 import Componente from "../components/componente.js";
+import logo from "../images/Cashclick_logo.svg";
 
 class Inicio extends Componente {
     constructor() {
@@ -15,7 +16,7 @@ class Inicio extends Componente {
     configura() {
         this.mensaje.setTexto("Bienvenido al sistema de gestion contable integral.")
 
-        this.imagen.setPropiedad("src", "../images/Cashclick_logo.svg")
+        this.imagen.setPropiedad("src", logo)
         this.imagen.setPropiedad("alt", "Logo Cashclick")
         return this
     }

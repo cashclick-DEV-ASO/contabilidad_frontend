@@ -4,8 +4,7 @@ import cookieParser from "cookie-parser"
 import "dotenv/config"
 
 const createApp = dev_mode => {
-    dev_mode = dev_mode === "true" || dev_mode === true
-    const HOST = process.env.HOST ?? "localhost"
+    const HOST = process.env.HOST ?? "0.0.0.0"
     const PORT = process.env.PORT ?? 0
     const SRV_URL = `http://${HOST}:${PORT}`
     const app = express()
