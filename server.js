@@ -19,7 +19,7 @@ const createApp = dev_mode => {
     app.use(cookieParser())
     app.use((req, res, next) => {
         res.cookie("api", process.env.API_URL ?? SRV_URL)
-        if (dev_mode) res.cookie("dev_mode", true)
+        if (dev_mode) res.cookie("dev_mode", dev_mode)
 
         if (listaBlanca.some(ruta => req.path.startsWith(ruta))) return next()
         
@@ -56,4 +56,4 @@ const desarrollo = (dirname) => {
     ]
 }
 
-createApp(process.argv[2] || process.env.DEV_MODE || false)
+createApp(process.env.DEV_MODE || false)
