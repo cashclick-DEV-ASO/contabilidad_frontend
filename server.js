@@ -3,7 +3,7 @@ import path from "path"
 import cookieParser from "cookie-parser"
 import "dotenv/config"
 
-const createApp = dev_mode => {
+const createApp = (dev_mode) => {
     const HOST = process.env.HOST ?? "0.0.0.0"
     const PORT = process.env.PORT ?? 0
     const SRV_URL = `http://${HOST}:${PORT}`
@@ -21,10 +21,10 @@ const createApp = dev_mode => {
         res.cookie("api", process.env.API_URL ?? SRV_URL)
         if (dev_mode) res.cookie("dev_mode", dev_mode)
 
-        if (listaBlanca.some(ruta => req.path.startsWith(ruta))) return next()
-        
+        if (listaBlanca.some((ruta) => req.path.startsWith(ruta))) return next()
+
         const token = req.cookies.token
-        if (!token) return res.redirect('/login')
+        if (!token) return res.redirect("/login")
         next()
     })
 
@@ -34,7 +34,13 @@ const createApp = dev_mode => {
 
     app.all("*", (req, res) => res.sendFile(indexHtml))
 
-    app.listen(PORT, HOST, () => console.log(`Servidor frontend en linea en modo ${dev_mode ? "desarrollo" : "produccion"}: ${SRV_URL}`))
+    app.listen(PORT, HOST, () =>
+        console.log(
+            `Servidor frontend en linea en modo ${
+                dev_mode ? "desarrollo" : "produccion"
+            }: ${SRV_URL}`
+        )
+    )
 }
 
 const produccion = (dirname) => {
@@ -43,7 +49,7 @@ const produccion = (dirname) => {
         path.resolve(distPath),
         path.resolve(distPath, "login.html"),
         path.resolve(distPath, "index.html"),
-        ["/login", "/assets"]
+        ["/login", "/assets"],
     ]
 }
 
@@ -52,8 +58,19 @@ const desarrollo = (dirname) => {
         dirname,
         path.resolve(dirname, "login.html"),
         path.resolve(dirname, "index.html"),
-        ["/login", "/components", "/controllers", "/models", "/src", "/styles", "/views", "/lib", "/images"]
+        [
+            "/login",
+            "/components",
+            "/controllers",
+            "/models",
+            "/src",
+            "/styles",
+            "/views",
+            "/lib",
+            "/images",
+        ],
     ]
 }
 
 createApp(process.env.DEV_MODE || false)
+// test git
