@@ -17,9 +17,9 @@ const createApp = devMode => {
 	if (!process.env.API_URL)
 		return console.error("No se ha definido la URL para la API")
 
-	const HOST = process.env.HOST ?? "0.0.0.0"
-	const PORT = process.env.PORT ?? 0
-	const SRV_URL = `http://${HOST}:${PORT}`
+	const HOST = process.env.HOST ?? "127.0.0.1"
+	const PORT = process.env.PORT ?? null
+	const SRV_URL = `${HOST}${PORT ? `:${PORT}` : ""}`
 	const app = express()
 
 	app.disable("x-powered-by")
@@ -60,7 +60,7 @@ const createApp = devMode => {
 		res.redirect("/login")
 	})
 
-	app.listen(PORT, HOST, () =>
+	app.listen(PORT, HOST.replace("http://", "").replace("https://", ""), () =>
 		log(`Servidor frontend en linea en: ${SRV_URL}`)
 	)
 }
