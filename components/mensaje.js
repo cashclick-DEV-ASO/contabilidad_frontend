@@ -26,7 +26,7 @@ export class Mensaje extends Componente {
 			msjAdvertencia: "Advertencia",
 			msjInformacion: "Información",
 		}
-		this.tipo = tipo ?? this.tipo.INFORMACION
+		this.tipoSolicitado = tipo ?? this.tipo.INFORMACION
 		this.listo = false
 		this.botones = []
 		this.inicia()
@@ -39,7 +39,7 @@ export class Mensaje extends Componente {
 	}
 
 	setTipo(tipo) {
-		this.tipo = tipo
+		this.tipoSolicitado = tipo
 		this.txtTitulo = this.titulosDefault[tipo]
 		return this
 	}
@@ -63,7 +63,7 @@ export class Mensaje extends Componente {
 	}
 
 	configura() {
-		this.marco.setClase(this.tipo)
+		this.marco.setClase(this.tipoSolicitado)
 		this.titulo.setTexto(this.txtTitulo)
 		this.cerrar.setTexto("X")
 		this.cerrar.setListener("click", this.ocultar.bind(this))
