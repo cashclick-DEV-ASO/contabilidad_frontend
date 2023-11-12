@@ -1,54 +1,54 @@
 .selPeriodo {
-    display: grid;
-    gap: 5px 0;
-    margin: 10px;
+	display: grid;
+	gap: 5px 0;
+	margin: 10px;
 }
 
 .selPeriodo.cuadrado {
-    grid-template-areas: 
-    "titulo titulo"
-    "lblAnio txtAnio"
-    "lblMes txtMes";
-    width: 150px;
-    align-items: center;
-    justify-items: center;
+	grid-template-areas:
+		"titulo titulo"
+		"lblAnio txtAnio"
+		"lblMes txtMes";
+	width: 150px;
+	align-items: center;
+	justify-items: center;
 }
 
 .selPeriodo.largo {
-    grid-template-areas: 
-    "titulo titulo titulo titulo"
-    "lblAnio txtAnio lblMes txtMes";
-    width: 250px;
-    justify-items: center;
-    justify-items: center;
-    align-content: space-around;
-    align-items: center;
-    justify-content: center;
+	grid-template-areas:
+		"titulo titulo titulo titulo"
+		"lblAnio txtAnio lblMes txtMes";
+	width: 250px;
+	justify-items: center;
+	align-content: space-around;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
 }
 
 .tituloPeriodo {
-    grid-area: titulo;
-    font-weight: bold;
+	grid-area: titulo;
+	font-weight: bold;
 }
 
 #lblAnioPeriodo {
-    grid-area: lblAnio;
-    width: 50px;
-    text-align: end;
+	grid-area: lblAnio;
+	width: 50px;
+	text-align: end;
 }
 
 #anioPeriodo {
-    grid-area: txtAnio;
-    width: 50px;
+	grid-area: txtAnio;
+	width: 50px;
 }
 
 #lblMesPeriodo {
-    grid-area: lblMes;
-    width: 50px;
-    text-align: end;
+	grid-area: lblMes;
+	width: 50px;
+	text-align: end;
 }
 
 #mesPeriodo {
-    grid-area: txtMes;
-    width: 50px;
+	grid-area: txtMes;
+	width: 50px;
 }

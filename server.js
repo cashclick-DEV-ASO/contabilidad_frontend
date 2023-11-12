@@ -1,76 +1,290 @@
+import { resolve } from "path"
+import { log, error as cError } from "console"
+import { existsSync } from "node:fs"
 import express from "express"
-import path from "path"
 import cookieParser from "cookie-parser"
 import "dotenv/config"
 
-const createApp = (dev_mode) => {
-    const HOST = process.env.HOST ?? "0.0.0.0"
-    const PORT = process.env.PORT ?? 0
-    const SRV_URL = `http://${HOST}:${PORT}`
-    const app = express()
+const LOGIN = "login.html"
+const INDEX = "index.html"
 
-    app.disable("x-powered-by")
+/**
+ * Crea una instancia de la aplicación Express para el servidor frontend.
+ * @param {boolean} devMode - Indica si se está ejecutando en modo de desarrollo.
+ * @returns {void}
+ */
+const createApp = devMode => {
+	if (!process.env.API_URL)
+		return console.error("No se ha definido la URL para la API")
 
-    const dirname = path.resolve()
-    const [distPath, loginHtml, indexHtml, listaBlanca] = dev_mode
-        ? desarrollo(dirname)
-        : produccion(dirname)
+	const HOST = process.env.HOST ?? "0.0.0.0"
+	const PORT = process.env.PORT ?? 0
+	const SRV_URL = `http://${HOST}:${PORT}`
+	const app = express()
 
-    app.use(cookieParser())
-    app.use((req, res, next) => {
-        res.cookie("api", process.env.API_URL ?? SRV_URL)
-        if (dev_mode) res.cookie("dev_mode", dev_mode)
+	app.disable("x-powered-by")
 
-        if (listaBlanca.some((ruta) => req.path.startsWith(ruta))) return next()
+	const [directorio, loginHtml, indexHtml] = archivosHTML(devMode)
 
-        const token = req.cookies.token
-        if (!token) return res.redirect("/login")
-        next()
-    })
+	app.use(cookieParser())
 
-    app.use(express.static(distPath))
+	app.use((req, res, next) => {
+		res.cookie("API_URL", process.env.API_URL, { secure: true })
+		if (devMode) res.cookie("DEV_MODE", devMode, { secure: true })
+		if (validaToken(req.cookies.TOKEN))
+			res.cookie("RUTAS", JSON.stringify(RUTAS), { secure: true })
 
-    app.get("/login", (req, res) => res.sendFile(loginHtml))
+		next()
+	})
 
-    app.all("*", (req, res) => res.sendFile(indexHtml))
+	app.get("/login", (req, res) => {
+		if (validaToken(req.cookies.TOKEN)) return res.redirect("/")
+		res.cookie("ORIGEN", "login", { secure: true })
+		res.sendFile(loginHtml)
+	})
 
-    app.listen(PORT, HOST, () =>
-        console.log(
-            `Servidor frontend en linea en modo ${
-                dev_mode ? "desarrollo" : "produccion"
-            }: ${SRV_URL}`
-        )
-    )
+	app.get("/", (req, res) => {
+		if (!validaToken(req.cookies.TOKEN)) return res.redirect("/login")
+		res.sendFile(indexHtml)
+	})
+
+	app.all("*", (req, res) => {
+		if (
+			req.path &&
+			(validaToken(req.cookies.TOKEN) || req.cookies.ORIGEN === "login")
+		) {
+			const archivo = ubicaArchivo(directorio, req.path)
+
+			if (archivo) return res.sendFile(archivo)
+		}
+		res.redirect("/login")
+	})
+
+	app.listen(PORT, HOST, () =>
+		log(`Servidor frontend en linea en: ${SRV_URL}`)
+	)
 }
 
-const produccion = (dirname) => {
-    const distPath = path.resolve(dirname, "dist")
-    return [
-        path.resolve(distPath),
-        path.resolve(distPath, "login.html"),
-        path.resolve(distPath, "index.html"),
-        ["/login", "/assets"],
-    ]
+const validaToken = token => {
+	if (!token) return false
+	return true
 }
 
-const desarrollo = (dirname) => {
-    return [
-        dirname,
-        path.resolve(dirname, "login.html"),
-        path.resolve(dirname, "index.html"),
-        [
-            "/login",
-            "/components",
-            "/controllers",
-            "/models",
-            "/src",
-            "/styles",
-            "/views",
-            "/lib",
-            "/images",
-        ],
-    ]
+/**
+ * Función que busca un archivo en la ruta especificada.
+ * @param {string} ruta - La ruta del archivo a buscar.
+ * @returns {string|null} - La ruta completa del archivo si se encuentra, o null si no se encuentra.
+ */
+const ubicaArchivo = (directorio, ruta) => {
+	const archivo = directorio + ruta
+
+	try {
+		if (existsSync(archivo)) return archivo
+	} catch (error) {
+		cError(error)
+		return null
+	}
 }
 
-createApp(process.env.DEV_MODE || false)
-// test git
+/**
+ * Configura el servidor en modo producción.
+ * @returns {Array} Un arreglo con las rutas de los archivos y las rutas de los endpoints.
+ */
+const archivosHTML = modo => {
+	log(
+		`Configurando servidor en modo ${modo ? "desarrollo" : "producción"}...`
+	)
+
+	const ruta = modo ? resolve() : resolve(resolve(), "dist")
+
+	return [ruta, resolve(ruta, LOGIN), resolve(ruta, INDEX)]
+}
+
+const RUTAS = {
+	inicio: {
+		visible: true,
+		titulo: "Inicio",
+		vista: "Inicio",
+	},
+	transacciones: {
+		visible: true,
+		titulo: "Transacciones",
+		vista: {
+			saldos: {
+				visible: true,
+				titulo: "Saldos Contables",
+				vista: {
+					registro: {
+						visible: true,
+						titulo: "Registro",
+						vista: "RegSaldos",
+					},
+					consulta: {
+						visible: true,
+						titulo: "Consulta",
+						vista: "ConSaldos",
+					},
+				},
+			},
+			bancos: {
+				visible: true,
+				titulo: "Bancos",
+				vista: {
+					registro: {
+						visible: true,
+						titulo: "Registro",
+						vista: "RegTrnBancos",
+					},
+					consulta: {
+						visible: true,
+						titulo: "Consulta",
+						vista: "ConTrnBancos",
+					},
+				},
+			},
+			dwh: {
+				visible: true,
+				titulo: "DWH",
+				vista: "TrnDWH",
+			},
+			mambu: {
+				visible: true,
+				titulo: "Mambu",
+				vista: {
+					registro: {
+						visible: true,
+						titulo: "Registro",
+						vista: "RegTrnBancos",
+					},
+					consulta: {
+						visible: true,
+						titulo: "Consulta",
+						vista: "ConTrnBancos",
+					},
+				},
+			},
+		},
+	},
+	conciliacion: {
+		visible: true,
+		titulo: "Conciliación",
+		vista: {
+			conciliar: {
+				visible: true,
+				titulo: "Conciliar",
+				vista: "Conciliar",
+			},
+			consulta: {
+				visible: true,
+				titulo: "Consulta",
+				vista: "Conciliación",
+			},
+			noConciliado: {
+				visible: true,
+				titulo: "No Conciliado",
+				vista: "NoConciliado",
+			},
+		},
+	},
+	reportes: {
+		visible: true,
+		titulo: "Reportes",
+		vista: {
+			resConciliacion: {
+				visible: true,
+				titulo: "Resumen Conciliación",
+				vista: "ResConciliacion",
+			},
+			saf: {
+				visible: true,
+				titulo: "Saldo a Favor",
+				vista: "SaldoFavor",
+			},
+			recalculoInteres: {
+				visible: true,
+				titulo: "Recalculo de Interés",
+				vista: "RecalculoInteres",
+			},
+			recalculoCapital: {
+				visible: true,
+				titulo: "Recalculo de Capital",
+				vista: "RecalculoCapital",
+			},
+			cartera: {
+				visible: true,
+				titulo: "Cartera",
+				vista: "Cartera",
+			},
+			aclaraciones: {
+				visible: true,
+				titulo: "Aclaraciones",
+				vista: "Aclaraciones",
+			},
+			ajustes: {
+				visible: true,
+				titulo: "Ajustes",
+				vista: "Ajustes",
+			},
+			edoCta: {
+				visible: true,
+				titulo: "Estado de Cuenta",
+				vista: "EdoCta",
+			},
+		},
+	},
+	administracion: {
+		visible: true,
+		titulo: "Administración",
+		vista: {
+			cuentasBancarias: {
+				visible: true,
+				titulo: "Cuentas Bancarias",
+				vista: {
+					registro: {
+						visible: true,
+						titulo: "Registro",
+						vista: "RegCtasBancarias",
+					},
+					consulta: {
+						visible: true,
+						titulo: "Consulta",
+						vista: "ConCtasBancarias",
+					},
+				},
+			},
+			cuentasContables: {
+				visible: true,
+				titulo: "Cuentas Contables",
+				vista: {
+					registro: {
+						visible: true,
+						titulo: "Registro",
+						vista: "RegCtasContables",
+					},
+					consulta: {
+						visible: true,
+						titulo: "Consulta",
+						vista: "ConCtasContables",
+					},
+				},
+			},
+			plantillas: {
+				visible: true,
+				titulo: "Plantillas",
+				vista: "Plantillas",
+			},
+			variables: {
+				visible: true,
+				titulo: "Variables",
+				vista: "Variables",
+			},
+		},
+	},
+	logout: {
+		visible: true,
+		titulo: "Salir",
+		vista: "Logout",
+	},
+}
+
+createApp(process.argv[2] === "true")

@@ -1,27 +1,26 @@
 {
-    "name": "contabilidad_cashclick_frontend",
-    "version": "1.0.0",
-    "description": "",
-    "main": "server.js",
-    "type": "module",
-    "scripts": {
-        "start": "node server.js",
-        "start:dev": "node server.js true",
-        "start:prod": "node server.js false",
-        "build": "vite build -c vite.config.js",
-        "preview": "vite preview -c vite.config.js"
-    },
-    "keywords": [],
-    "author": "Alberto Soto",
-    "license": "ISC",
-    "dependencies": {
-        "cookie-parser": "1.4.6",
-        "cors": "2.8.5",
-        "dotenv": "16.3.1",
-        "express": "4.18.2",
-        "nodemon": "3.0.1"
-    },
-    "devDependencies": {
-        "vite": "4.5.0"
-    }
+	"name": "contabilidad_cashclick_frontend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"type": "module",
+	"scripts": {
+		"start": "node server.js",
+		"start:dev": "node --watch server.js true",
+		"build": "vite build -c vite.config.js",
+		"preview": "vite preview -c vite.config.js"
+	},
+	"keywords": [],
+	"author": "Alberto Soto",
+	"license": "ISC",
+	"dependencies": {
+		"cookie-parser": "1.4.6",
+		"cors": "2.8.5",
+		"dotenv": "16.3.1",
+		"express": "4.18.2",
+		"nodemon": "3.0.1"
+	},
+	"devDependencies": {
+		"vite": "4.5.0"
+	}
 }

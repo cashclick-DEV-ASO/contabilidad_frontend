@@ -1,64 +1,20 @@
-// Estructura de rutas
-export const RUTAS = {
-    inicio: {
-        visible: true,
-        titulo: "Inicio",
-        vista: "Inicio"
-    },
-    transacciones: {
-        visible: true,
-        titulo: "Transacciones",
-        vista: {
-            bancos: {
-                visible: true,
-                titulo: "Bancos",
-                vista: "Bancos"
-            },
-            dwh: {
-                visible: true,
-                titulo: "DWH",
-                vista: "DWH"
-            },
-            mambu: {
-                visible: true,
-                titulo: "Mambu",
-                vista: "Mambu"
-            }
-        }
-    },
-    conciliacion: {
-        visible: true,
-        titulo: "Conciliacion",
-        vista: "Conciliacion"
-    },
-    reportes: {
-        visible: true,
-        titulo: "Reportes",
-        vista: {
-            resConciliacion: {
-                visible: true,
-                titulo: "Resumen Conciliacion",
-                vista: "ResConciliacion"
-            },
-            recInteres: {
-                visible: true,
-                titulo: "Recalculo Interes",
-                vista: "RecInteres"
-            }
-        }
-    },
-    configuracion: {
-        visible: true,
-        titulo: "Configuracion",
-        vista: "Configuraciones"
-    }
-}
+// Nombre de galletas
+export const URL_API = "API_URL"
+export const DEV_MODE = "DEV_MODE"
+export const RUTAS = "RUTAS"
 
-// Valores por defecto generales
+// Valores multiproposito
 export const ANIO_MINIMO = 2020
 export const FORMATOS_BBVA = ".txt, .exp"
+export const FORMATOS_DWH = ".json"
 
-// Clases
+// Valores por defecto para los elementos
+export const BTN_TXT_DEFAULT = "Botón"
+export const LBL_TXT_DEFAULT = "Etiqueta"
+export const SPN_TXT_DEFAULT = "Texto"
+export const MSJ_PIE = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`
+
+// Nombres de clases e ID's para elementos HTML
 export const NAVEGACION = "navegacion"
 export const UL_MENU = "ulMenu"
 export const LI_MENU = "liMenu"
@@ -75,9 +31,3 @@ export const MSJ_CONTENEDOR_CLS = "msjContenedor"
 export const PERIODO_ESTILO_1 = "cuadrado"
 export const PERIODO_ESTILO_2 = "largo"
 export const PIE_CLS = "pie"
-
-// Valores por defecto de los elementos
-export const BTN_TXT_DEFAULT = "Botón"
-export const LBL_TXT_DEFAULT = "Etiqueta"
-export const SPN_TXT_DEFAULT = "Texto"
-export const MSJ_PIE = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`

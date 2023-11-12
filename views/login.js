@@ -7,53 +7,50 @@ import Componente from "../components/componente.js"
  * @extends Componente
  * @description Componente para mostrar el fomulario de login
  */
-class Login extends Componente {
-    #controlador
+export class Login extends Componente {
+	#controlador
 
-    constructor() {
-        super("form", { clase: "formulario" })
-        this.#controlador = new LoginController(this)
-        return this.inicia()
-    }
+	constructor() {
+		super("form", { clase: "formulario" })
+		this.#controlador = new LoginController(this)
+		return this.inicia()
+	}
 
-    inicia() {
-        this.titulo = new Componente("label", { clase: "lblTitulo" })
-        this.usuario = new Componente("input", { clase: "inputLogin" })
-        this.password = new Componente("input", { clase: "inputLogin" })
-        this.btnLogin = new Componente("button", { clase: "btnLogin" })
-        return this
-    }
+	inicia() {
+		this.titulo = new Componente("label", { clase: "lblTitulo" })
+		this.usuario = new Componente("input", { clase: "inputLogin" })
+		this.password = new Componente("input", { clase: "inputLogin" })
+		this.btnLogin = new Componente("button", { clase: "btnLogin" })
+		return this
+	}
 
-    configura() {
-        this.titulo.setTexto("Inicio de sesión")
+	configura() {
+		this.titulo.setTexto("Inicio de sesión")
 
-        this.usuario.setPropiedad("placeholder", "Usuario")
+		this.usuario.setPropiedad("placeholder", "Usuario")
 
-        this.password.setPropiedad("type", "password")
-        this.password.setPropiedad("placeholder", "Contraseña")
+		this.password.setPropiedad("type", "password")
+		this.password.setPropiedad("placeholder", "Contraseña")
 
-        this.btnLogin.setTexto("Iniciar sesión")
-        this.setListener("submit", this.#controlador.login)
+		this.btnLogin.setTexto("Iniciar sesión")
+		this.setListener("submit", this.#controlador.login)
 
-        return this
-    }
+		return this
+	}
 
-    crea() {
-        this.addHijos([
-            this.titulo.getComponente(),
-            this.usuario.getComponente(),
-            this.password.getComponente(),
-            this.btnLogin.getComponente()
-        ])
-        return this
-    }
+	crea() {
+		this.addHijos([
+			this.titulo.getComponente(),
+			this.usuario.getComponente(),
+			this.password.getComponente(),
+			this.btnLogin.getComponente(),
+		])
+		return this
+	}
 
-    mostrar() {
-        return this
-            .configura()
-            .crea()
-            .getComponente()
-    }
+	mostrar() {
+		return this.configura().crea().getComponente()
+	}
 }
 
 export default Login

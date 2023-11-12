@@ -1,34 +1,32 @@
 import Mensaje from "../components/mensaje.js"
 
-class Controlador {
-    constructor() {
-        this.elementos = []
-        this.listo = false
-        this.mensaje = new Mensaje()
-    }
+export class Controlador {
+	constructor() {
+		this.elementos = []
+		this.listo = false
+		this.mensaje = new Mensaje()
+	}
 
-    msjError(mensaje) {
-        this.msj(mensaje, this.mensaje.tipos.error)
-    }
+	msjError(mensaje) {
+		this.msj(mensaje, this.mensaje.tipo.ERROR)
+	}
 
-    msjExito(mensaje) {
-        this.msj(mensaje, this.mensaje.tipos.exito)
-    }
+	msjExito(mensaje) {
+		this.msj(mensaje, this.mensaje.tipo.EXITO)
+	}
 
-    msjAdvertencia(mensaje) {
-        this.msj(mensaje, this.mensaje.tipos.advertencia)
-    }
+	msjAdvertencia(mensaje) {
+		this.msj(mensaje, this.mensaje.tipo.ADVERTENCIA)
+	}
 
-    msjInformacion(mensaje) {
-        this.msj(mensaje, this.mensaje.tipos.informacion)
-    }
+	msjInformacion(mensaje) {
+		this.msj(mensaje, this.mensaje.tipo.INFORMACION)
+	}
 
-    msj(mensaje, tipo = mensaje.tipos.informacion) {
-        const msj = new Mensaje()
-        msj.setTipo(tipo)
-            .setMensaje(mensaje)
-            .mostrar()
-    }
+	msj(mensaje, tipo = this.mensaje.tipo.INFORMACION) {
+		const msj = new Mensaje()
+		msj.setTipo(tipo).setMensaje(mensaje).mostrar()
+	}
 }
 
 export default Controlador

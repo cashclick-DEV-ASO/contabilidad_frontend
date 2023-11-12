@@ -1,43 +1,44 @@
+import { leerCookie } from "../src/utils.js"
+
 import Componente from "../components/componente.js"
-// import logo from "../images/Cashclick_logo.svg"
 
 const logo = new URL("../images/Cashclick_logo.svg", import.meta.url).href
 
+export class Inicio extends Componente {
+	constructor() {
+		super("section", { clase: "inicio" })
+		return this.inicia()
+	}
 
-class Inicio extends Componente {
-    constructor() {
-        super("section", { clase: "inicio" })
-        return this.inicia()
-    }
+	inicia() {
+		this.nombre = new Componente("span", { clase: "msjBienvenida" })
+		this.imagen = new Componente("img", { clase: "logo" })
+		this.mensaje = new Componente("span", { clase: "msjBienvenida" })
+		return this
+	}
 
-    inicia() {
-        this.mensaje = new Componente("span", { clase: "msjBienvenida" })
-        this.imagen = new Componente("img", { clase: "logo" })
-        return this
-    }
+	configura() {
+		this.nombre.setTexto(`Bienvenido ${leerCookie("NOMBRE")}`)
 
-    configura() {
-        this.mensaje.setTexto("Bienvenido al sistema de gestion contable integral.")
+		this.imagen.setPropiedad("src", logo)
+		this.imagen.setPropiedad("alt", "Logo Cashclick")
 
-        this.imagen.setPropiedad("src", logo)
-        this.imagen.setPropiedad("alt", "Logo Cashclick")
-        return this
-    }
+		this.mensaje.setTexto("al sistema de gestion contable integral.")
+		return this
+	}
 
-    crea() {
-        this.addHijos([
-            this.mensaje.getComponente(),
-            this.imagen.getComponente()
-        ])
-        return this
-    }
+	crea() {
+		this.addHijos([
+			this.nombre.getComponente(),
+			this.mensaje.getComponente(),
+			this.imagen.getComponente(),
+		])
+		return this
+	}
 
-    mostrar() {
-        return this
-            .configura()
-            .crea()
-            .getComponente()
-    }
+	mostrar() {
+		return this.configura().crea().getComponente()
+	}
 }
 
-export default Inicio;
+export default Inicio

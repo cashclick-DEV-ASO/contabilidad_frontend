@@ -1,6 +1,14 @@
-import { RUTAS, NAVEGACION, UL_MENU, LI_MENU, UL_SUBMENU, LI_SUBMENU } from "../src/constantes.js"
+import {
+	NAVEGACION,
+	UL_MENU,
+	LI_MENU,
+	UL_SUBMENU,
+	LI_SUBMENU,
+} from "../src/constantes.js"
 
-import Componente from "../components/componente.js"
+import { leerCookie } from "../src/utils.js"
+
+import { Componente } from "./componentes.js"
 
 /**
  * @class Menu
@@ -8,48 +16,51 @@ import Componente from "../components/componente.js"
  * @param {object} opciones - Objeto con la clase y el id para el nav
  * @description Componente para mostrar el menú de navegación
  */
-class Menu extends Componente {
-    constructor() {
-        super("nav", { clase: NAVEGACION })
-        this.rutas = RUTAS
-        this.main = null
-        return this
-    }
+export class Menu extends Componente {
+	constructor() {
+		super("nav", { clase: NAVEGACION })
+		this.rutas = JSON.parse(leerCookie("RUTAS"))
+		this.main = null
+		return this
+	}
 
-    crearRutas(rutas = this.rutas, subMenu = false, padre = this.getComponente()) {
-        const ul = document.createElement("ul")
-        ul.classList.add(subMenu ? UL_SUBMENU : UL_MENU)
+	crearRutas(
+		rutas = this.rutas,
+		subMenu = false,
+		padre = this.getComponente()
+	) {
+		const ul = document.createElement("ul")
+		ul.classList.add(subMenu ? UL_SUBMENU : UL_MENU)
 
-        Object.keys(rutas).forEach(ruta => {
-            const { visible, titulo, vista } = rutas[ruta]
-            if (visible === false) return
+		Object.keys(rutas).forEach(ruta => {
+			const { visible, titulo, vista } = rutas[ruta]
+			if (visible === false) return
 
-            const li = document.createElement("li")
-            li.classList.add(subMenu ? LI_SUBMENU : LI_MENU)
-            li.innerHTML = titulo
-            ul.appendChild(li)
+			const li = document.createElement("li")
+			li.classList.add(subMenu ? LI_SUBMENU : LI_MENU)
+			li.innerHTML = titulo
+			ul.appendChild(li)
 
-            if (typeof vista === "object") this.crearRutas(vista, true, li)
-            else li.addEventListener("click", () => this.cambiarVista(vista))
-        })
+			if (typeof vista === "object") this.crearRutas(vista, true, li)
+			else li.addEventListener("click", () => this.cambiarVista(vista))
+		})
 
-        padre.appendChild(ul)
-    }
+		padre.appendChild(ul)
+	}
 
-    cambiarVista(vista) {
-        this.main.setContenido(vista)
-    }
+	cambiarVista(vista) {
+		this.main.setContenido(vista)
+	}
 
-    setMain(main) {
-        this.main = main
-        return this
-    }
+	setMain(main) {
+		this.main = main
+		return this
+	}
 
-    mostrar() {
-        this.crearRutas()
-        return this.getComponente()
-    }
+	mostrar() {
+		this.crearRutas()
+		return this.getComponente()
+	}
 }
 
 export default Menu
-
