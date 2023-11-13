@@ -1,0 +1,21 @@
+.selLayout {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	gap: 5px 0;
+	grid-template-rows: repeat(2, 1fr);
+	grid-template-areas:
+		"titulo"
+		"selector";
+	justify-items: center;
+	align-items: center;
+}
+
+.selLayout .lblLayout {
+	grid-area: titulo;
+	font-weight: bold;
+}
+
+.selLayout .listaDesplegable {
+	grid-area: selector;
+}

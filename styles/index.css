@@ -2,7 +2,7 @@
 @import url("./mensaje.css");
 @import url("./navegacion.css");
 @import url("./inicio.css");
-@import url("./cargaTrnBancos.css");
+@import url("./regTrnBancos.css");
 
 .contenedor {
 	width: 100%;

@@ -58,10 +58,10 @@ export class SelPeriodo extends Componente {
 		this.lblPeriodo.setTexto("Periodo")
 
 		this.lblAnioPeriodo.setTexto("Año")
-		this.lblAnioPeriodo.setPropiedad("htmlFor", this.txtAnioPeriodo.getID())
+		// this.lblAnioPeriodo.setPropiedad("htmlFor", this.txtAnioPeriodo.getID())
 
 		this.lblMesPeriodo.setTexto("Mes")
-		this.lblMesPeriodo.setPropiedad("htmlFor", this.txtMesPeriodo.getID())
+		// this.lblMesPeriodo.setPropiedad("htmlFor", this.txtMesPeriodo.getID())
 
 		this.txtAnioPeriodo.setPropiedad("type", "number")
 		this.txtAnioPeriodo.setPropiedad("min", ANIO_MINIMO)

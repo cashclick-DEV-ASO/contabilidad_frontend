@@ -38,7 +38,9 @@ export class Menu extends Componente {
 
 			const li = document.createElement("li")
 			li.classList.add(subMenu ? LI_SUBMENU : LI_MENU)
-			li.innerHTML = titulo
+			const span = document.createElement("span")
+			span.textContent = titulo
+			li.innerHTML = span.outerHTML
 			ul.appendChild(li)
 
 			if (typeof vista === "object") this.crearRutas(vista, true, li)

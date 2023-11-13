@@ -7,6 +7,9 @@ export const RUTAS = "RUTAS"
 export const ANIO_MINIMO = 2020
 export const FORMATOS_BBVA = ".txt, .exp"
 export const FORMATOS_DWH = ".json"
+export const BBVA = "BBVA"
+export const CONEKTA = "Conekta"
+export const STP = "STP"
 
 // Valores por defecto para los elementos
 export const BTN_TXT_DEFAULT = "Botón"
@@ -31,3 +34,8 @@ export const MSJ_CONTENEDOR_CLS = "msjContenedor"
 export const PERIODO_ESTILO_1 = "cuadrado"
 export const PERIODO_ESTILO_2 = "largo"
 export const PIE_CLS = "pie"
+export const SEL_BANCO_CLS = "selBanco"
+export const TITULO_BANCO_CLS = "lblBanco"
+export const SEL_LAYOUT_CLS = "selLayout"
+export const TITULO_LAYOUT_CLS = "lblLayout"
+export const SEL_LAYOUT_ID = "selLayout"

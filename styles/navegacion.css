@@ -1,71 +1,98 @@
 .ulMenu {
+	margin: 0;
+	padding: 0;
 	background-color: var(--azul_fuerte);
 	border-radius: 0 0 15px 15px;
 	height: 100%;
-	margin: 0;
-	padding: 0;
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	position: relative;
 }
 
-.liMenu {
-	transition: all 0.5s ease-in-out;
-	position: relative;
-	margin: auto;
-	text-align: center;
+.liMenu,
+.liSubMenu {
 	color: white;
 	font-weight: bold;
 	user-select: none;
 	list-style: none;
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
 
-.liMenu:hover {
+.liMenu > span,
+.liSubMenu > span {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.liMenu:hover,
+.liSubMenu:hover {
 	color: var(--azul_claro);
 	cursor: pointer;
+}
+
+.liMenu > .ulSubMenu {
+	border-radius: 0 0 15px 15px;
+	display: none;
 }
 
 .liMenu:hover > .ulSubMenu {
-	top: 73%;
-	left: 0;
-	opacity: 1;
+	display: block;
+	animation: mostrar 0.5s forwards;
 }
 
 .ulSubMenu {
-	background-color: var(--azul_fuerte);
-	border-radius: 0 15px 15px 15px;
-	height: auto;
-	transition: all 0.5s ease-in-out;
-	position: absolute;
-	top: -500%;
 	margin: 0;
 	padding: 0;
-	display: flex;
-	flex-direction: column;
-	opacity: 0;
-	z-index: -1;
+	background-color: var(--azul_fuerte);
+	width: 100%;
+	position: absolute;
+	animation: ocultar 0.5s forwards;
 }
 
 .liSubMenu {
-	text-align: center;
-	color: white;
-	font-weight: bold;
-	user-select: none;
-	list-style: none;
-	margin: 10px;
 	position: relative;
-}
-
-.liSubMenu:hover {
-	opacity: 1;
-	color: var(--azul_claro);
-	cursor: pointer;
+	width: 100%;
+	height: 30px;
 }
 
 .liSubMenu > .ulSubMenu {
-	left: 95%;
-	top: 0;
+	top: 0px;
+	left: 90%;
+	border-radius: 0 15px 15px 15px;
 }
 
 .liSubMenu:hover > .ulSubMenu {
-	/* left: 95%; */
-	opacity: 1;
+	animation: mostrar 0.5s forwards;
+}
+
+.liSubMenu:hover > .ulSubMenu {
+	display: block;
+	animation: mostrar 0.5s forwards;
+}
+
+@keyframes mostrar {
+	from {
+		display: none;
+		opacity: 0;
+	}
+	to {
+		display: block;
+		opacity: 1;
+	}
+}
+
+@keyframes ocultar {
+	from {
+		display: block;
+		opacity: 1;
+	}
+	to {
+		display: none;
+		opacity: 0;
+	}
 }

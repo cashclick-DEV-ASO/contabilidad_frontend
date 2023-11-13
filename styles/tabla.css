@@ -14,10 +14,13 @@
 	justify-items: center;
 	justify-content: center;
 	overflow: hidden;
+	border: 1px solid black;
+	border-radius: 15px;
 }
 
 .controles {
 	grid-area: controles;
+	padding: 5px;
 }
 
 .contenedorTabla {

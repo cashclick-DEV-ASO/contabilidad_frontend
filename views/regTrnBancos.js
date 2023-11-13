@@ -2,22 +2,25 @@ import { FORMATOS_BBVA } from "../src/constantes.js"
 
 import {
 	Componente,
+	SelBanco,
 	SelPeriodo,
 	SelArchivo,
+	SelLayout,
 	Tabla,
 } from "../components/componentes.js"
 
 export class RegTrnBancos extends Componente {
 	constructor() {
-		super("div", { clase: "cargaTrnBancos" })
+		super("div", { clase: "regTrnBancos" })
 		return this.inicia()
 	}
 
 	inicia() {
 		this.titulo = new Componente("h2", { clase: "titulo" })
+		this.selBanco = new SelBanco()
 		this.selPeriodo = new SelPeriodo()
 		this.selArchivo = new SelArchivo({ formato: FORMATOS_BBVA })
-		this.selLayout = new Componente("seleccion", { clase: "layout" })
+		this.selLayout = new SelLayout()
 		this.tabla = new Tabla()
 		return this
 	}
@@ -39,11 +42,11 @@ export class RegTrnBancos extends Componente {
 			alert("Leyendo archivo...")
 		})
 
-		const op1 = new Componente("option")
-		op1.setTexto("Layout 1")
-		const op2 = new Componente("option")
-		op2.setTexto("Layout 2")
-		this.selLayout.addHijos([op1.getComponente(), op2.getComponente()])
+		this.selLayout.setOpciones([
+			{ texto: "Cobranza", valor: "1" },
+			{ texto: "Dispersiones", valor: "2" },
+			{ texto: "Domiciliaciones", valor: "3" },
+		])
 
 		return this
 	}
@@ -51,9 +54,10 @@ export class RegTrnBancos extends Componente {
 	crea() {
 		this.addHijos([
 			this.titulo.getComponente(),
+			this.selBanco.mostrar(),
 			this.selPeriodo.mostrar(),
 			this.selArchivo.mostrar(),
-			this.selLayout.getComponente(),
+			this.selLayout.mostrar(),
 			this.tabla.mostrar(),
 		])
 		return this
