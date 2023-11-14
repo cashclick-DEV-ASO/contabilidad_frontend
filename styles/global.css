@@ -18,6 +18,7 @@ html {
 
 body {
 	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -53,7 +54,12 @@ button:hover {
 	background-color: #07aada;
 }
 
-button:active {
+button:disabled {
+	background: linear-gradient(to bottom, #871d1d 5%, #da0707 100%);
+	background-color: #df5329;
+}
+
+button:not(:disabled):active {
 	position: relative;
 	top: 1px;
 }

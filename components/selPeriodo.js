@@ -58,20 +58,43 @@ export class SelPeriodo extends Componente {
 		this.lblPeriodo.setTexto("Periodo")
 
 		this.lblAnioPeriodo.setTexto("Año")
-		// this.lblAnioPeriodo.setPropiedad("htmlFor", this.txtAnioPeriodo.getID())
 
 		this.lblMesPeriodo.setTexto("Mes")
-		// this.lblMesPeriodo.setPropiedad("htmlFor", this.txtMesPeriodo.getID())
 
 		this.txtAnioPeriodo.setPropiedad("type", "number")
 		this.txtAnioPeriodo.setPropiedad("min", ANIO_MINIMO)
 		this.txtAnioPeriodo.setPropiedad("max", this.periodoActual.anio)
 		this.txtAnioPeriodo.setValor(this.periodoActual.anio)
+		this.txtAnioPeriodo.setListener("change", () => {
+			if (this.txtAnioPeriodo.getValor() > this.periodoActual.anio)
+				this.txtAnioPeriodo.setValor(this.periodoActual.anio)
+
+			if (this.txtAnioPeriodo.getValor() < ANIO_MINIMO)
+				this.txtAnioPeriodo.setValor(ANIO_MINIMO)
+
+			if (this.txtAnioPeriodo.getValor() % 1 !== 0)
+				this.txtAnioPeriodo.setValor(
+					parseInt(this.txtAnioPeriodo.getValor())
+				)
+		})
 
 		this.txtMesPeriodo.setPropiedad("type", "number")
 		this.txtMesPeriodo.setPropiedad("min", 1)
 		this.txtMesPeriodo.setPropiedad("max", 12)
 		this.txtMesPeriodo.setValor(this.periodoActual.mes)
+		this.txtMesPeriodo.setListener("change", () => {
+			if (this.txtMesPeriodo.getValor() > 12)
+				this.txtMesPeriodo.setValor(12)
+
+			if (this.txtMesPeriodo.getValor() < 1)
+				this.txtMesPeriodo.setValor(1)
+
+			if (this.txtMesPeriodo.getValor() % 1 !== 0)
+				this.txtMesPeriodo.setValor(
+					parseInt(this.txtMesPeriodo.getValor())
+				)
+		})
+
 		return this
 	}
 

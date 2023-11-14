@@ -1,31 +1,45 @@
 import Mensaje from "../components/mensaje.js"
 
 export class Controlador {
-	constructor() {
-		this.elementos = []
-		this.listo = false
+	constructor(vista = null) {
 		this.mensaje = new Mensaje()
+		this.vista = vista
+		this.listo = false
 	}
 
-	msjError(mensaje) {
-		this.msj(mensaje, this.mensaje.tipo.ERROR)
+	msjError(mensaje, callback = null) {
+		this.mensaje.setMensaje(mensaje)
+		this.mensaje.setTipo(this.mensaje.tipo.ERROR)
+		this.mensaje.setCallback(callback)
+		return this.mensaje
 	}
 
-	msjExito(mensaje) {
-		this.msj(mensaje, this.mensaje.tipo.EXITO)
+	msjExito(mensaje, callback = null) {
+		this.mensaje.setMensaje(mensaje)
+		this.mensaje.setTipo(this.mensaje.tipo.EXITO)
+		this.mensaje.setCallback(callback)
+		return this.mensaje
 	}
 
-	msjAdvertencia(mensaje) {
-		this.msj(mensaje, this.mensaje.tipo.ADVERTENCIA)
+	msjAdvertencia(mensaje, callback = null) {
+		this.mensaje.setMensaje(mensaje)
+		this.mensaje.setTipo(this.mensaje.tipo.ADVERTENCIA)
+		this.mensaje.setCallback(callback)
+		return this.mensaje
 	}
 
-	msjInformacion(mensaje) {
-		this.msj(mensaje, this.mensaje.tipo.INFORMACION)
+	msjInformacion(mensaje, callback = null) {
+		this.mensaje.setMensaje(mensaje)
+		this.mensaje.setTipo(this.mensaje.tipo.INFORMACION)
+		this.mensaje.setCallback(callback)
+		return this.mensaje
 	}
 
-	msj(mensaje, tipo = this.mensaje.tipo.INFORMACION) {
-		const msj = new Mensaje()
-		msj.setTipo(tipo).setMensaje(mensaje).mostrar()
+	msj(mensaje, tipo = this.mensaje.tipo.INFORMACION, callback = null) {
+		this.mensaje.setMensaje(mensaje)
+		this.mensaje.setTipo(tipo)
+		this.mensaje.setCallback(callback)
+		return this.mensaje
 	}
 }
 

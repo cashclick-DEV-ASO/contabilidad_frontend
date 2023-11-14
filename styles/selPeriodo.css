@@ -1,7 +1,8 @@
 .selPeriodo {
+	width: 100%;
+	height: 100%;
 	display: grid;
-	gap: 5px 0;
-	margin: 10px;
+	align-content: center;
 }
 
 .selPeriodo.cuadrado {
@@ -9,21 +10,17 @@
 		"titulo titulo"
 		"lblAnio txtAnio"
 		"lblMes txtMes";
-	width: 150px;
 	align-items: center;
 	justify-items: center;
+	justify-content: center;
 }
 
 .selPeriodo.largo {
 	grid-template-areas:
 		"titulo titulo titulo titulo"
 		"lblAnio txtAnio lblMes txtMes";
-	width: 250px;
 	justify-items: center;
-	align-content: space-around;
 	align-items: center;
-	justify-content: center;
-	margin: 0;
 }
 
 .tituloPeriodo {

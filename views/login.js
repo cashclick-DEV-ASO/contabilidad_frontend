@@ -5,7 +5,7 @@ import Componente from "../components/componente.js"
 /**
  * @class Login
  * @extends Componente
- * @description Componente para mostrar el fomulario de login
+ * @description Vista para mostrar el fomulario de login
  */
 export class Login extends Componente {
 	#controlador

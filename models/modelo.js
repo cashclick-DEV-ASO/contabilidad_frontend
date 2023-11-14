@@ -1,5 +1,7 @@
+import { getURL } from "../src/utils.js"
+
 export class Modelo {
-	constructor(url) {
+	constructor(url = getURL()) {
 		this.api = url
 		this.resultado = null
 		this.error = null

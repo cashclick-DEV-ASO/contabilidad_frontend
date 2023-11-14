@@ -12,7 +12,7 @@ export class SelLayout extends Componente {
 
 	inicia() {
 		this.lblLayout = new Componente("label", { clase: TITULO_LAYOUT_CLS })
-		this.selLayout = new ListaDesplegable()
+		this.selLayout = new ListaDesplegable("Sin layout")
 
 		return this
 	}
@@ -49,4 +49,21 @@ export class SelLayout extends Componente {
 
 		return this
 	}
+
+	limpiar() {
+		this.opciones = []
+		this.selLayout.limpiar()
+
+		return this
+	}
+
+	getValorLayout() {
+		return this.selLayout.getValor()
+	}
+
+	getTextoLayout() {
+		return this.selLayout.getTexto()
+	}
 }
+
+export default SelLayout

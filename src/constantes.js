@@ -5,7 +5,7 @@ export const RUTAS = "RUTAS"
 
 // Valores multiproposito
 export const ANIO_MINIMO = 2020
-export const FORMATOS_BBVA = ".txt, .exp"
+export const FORMATOS_BBVA = ".txt,.exp"
 export const FORMATOS_DWH = ".json"
 export const BBVA = "BBVA"
 export const CONEKTA = "Conekta"

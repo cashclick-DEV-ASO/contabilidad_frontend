@@ -1,14 +1,10 @@
-import {
-	getURL,
-	limipiarCookies,
-	escribirCookie,
-	mostrarError,
-} from "../src/utils.js"
 import Modelo from "./modelo.js"
+
+import { limipiarCookies, escribirCookie, mostrarError } from "../src/utils.js"
 
 export class LoginModel extends Modelo {
 	constructor() {
-		super(getURL())
+		super()
 		this.user = ""
 		this.pass = ""
 		this.mensaje = "No se han proporcionado credenciales de acceso."

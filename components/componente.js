@@ -203,6 +203,29 @@ export class Componente {
 	getComponente() {
 		return this.#componente
 	}
+
+	/**
+	 * Habilita o deshabilita el componente.
+	 * @param {boolean|null} estado - Si es null, alterna el estado actual del componente. Si es boolean, establece el estado del componente.
+	 * @returns {this} - El objeto actual para encadenamiento.
+	 */
+	habilitar(estado = null) {
+		if (estado === null)
+			this.#componente.disabled = !this.#componente.disabled
+		else this.#componente.disabled = !estado
+
+		return this
+	}
+
+	/**
+	 * Inserta el componente en el DOM.
+	 * @param {HTMLElement} [padre=document.body] - El elemento padre donde se insertará el componente.
+	 * @returns {this} - El objeto actual para encadenar métodos.
+	 */
+	insertarEnDOM(padre = document.body) {
+		padre.appendChild(this.#componente)
+		return this
+	}
 }
 
 export default Componente

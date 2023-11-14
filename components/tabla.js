@@ -1,35 +1,125 @@
-import { Componente } from "./componentes.js"
+import { Componente, ListaDesplegable } from "./componentes.js"
 
 export class Tabla extends Componente {
-	constructor() {
+	constructor(filtro = true) {
 		super("section", { clase: "tablaDatos" })
+		this.encabezados = []
+		this.filas = []
+		this.mostrarFiltro = filtro
+		this.detalles = null
+
 		return this.inicia()
 	}
 
-	parseaJSON(json) {
-		const keys = Object.keys(json[0])
-
-		const filas = json.map(f => {
-			keys.map(k => f[k])
+	inicia() {
+		this.controles = new Componente("section", { clase: "controles" })
+		this.lblColFiltro = new Componente("label", {
+			clase: "lblConcepto parametros",
 		})
+		this.selColFiltro = new ListaDesplegable()
+		this.lblFiltro = new Componente("label", {
+			clase: "lblFiltro parametros",
+		})
+		this.txtFiltro = new Componente("input", {
+			clase: "txtFiltro parametros",
+		})
+		this.btnFiltro = new Componente("button", {
+			clase: "btnFiltro parametros",
+		})
+		this.btnLimpiar = new Componente("button", {
+			clase: "btnLimpiar parametros",
+		})
+		this.btnExportar = new Componente("button", {
+			clase: "btnExportar parametros",
+		})
+		this.contenedorDetalles = new Componente("section", {
+			clase: "contenedorDetalles",
+		})
+		this.contenedor = new Componente("section", {
+			clase: "contenedorTabla",
+		})
+		this.tablaSinDatos()
+		return this
+	}
 
-		this.tablaTmp = this.contruirTabla(keys, filas)
+	configura() {
+		this.lblColFiltro.setTexto("Concepto")
+
+		this.selColFiltro.setClase("selConcepto parametros")
+
+		this.lblFiltro.setTexto("Filtro")
+		this.btnFiltro.setTexto("Filtrar")
+		this.btnLimpiar.setTexto("Limpiar")
+		this.btnExportar.setTexto("Exportar")
+		return this
+	}
+
+	crear() {
+		this.addHijos([
+			this.filtro
+				? this.controles
+						.addHijos([
+							this.lblColFiltro.getComponente(),
+							this.selColFiltro.mostrar(),
+							this.lblFiltro.getComponente(),
+							this.txtFiltro.getComponente(),
+							this.btnFiltro.getComponente(),
+							this.btnLimpiar.getComponente(),
+							this.btnExportar.getComponente(),
+						])
+						.getComponente()
+				: null,
+			this.contenedorDetalles.getComponente(),
+			this.contenedor.addHijo(this.tabla.getComponente()).getComponente(),
+		])
+		return this
+	}
+
+	mostrar() {
+		return this.configura().crear().getComponente()
+	}
+
+	parseaJSON(datos = [], titulos = null, formatoEspecial = null) {
+		this.encabezados = []
+		this.filas = []
+
+		if (!datos || typeof datos !== "object" || datos.length === 0)
+			return this
+
+		if (titulos) {
+			this.encabezados = Object.keys(titulos).forEach(key => {
+				return titulos[key]
+			})
+		} else {
+			this.encabezados = Object.keys(datos[0])
+		}
+
+		this.filas = datos.map(f =>
+			this.encabezados.map(k => {
+				if (formatoEspecial && formatoEspecial[k]) {
+					if (formatoEspecial[k]) return formatoEspecial[k](f[k])
+				}
+				return f[k]
+			})
+		)
 
 		return this
 	}
 
-	parseaTexto(texto) {
+	parseaTexto(texto, separador = "\t") {
+		this.encabezados = []
+		this.filas = []
+		if (!texto || texto === "") return this
+
 		const lineas = texto.split("\r\n")
-		const encabezados = lineas[0].split(" ")
+		this.encabezados = lineas[0].split(separador)
+		this.filas = lineas.slice(1).map(l => l.split(separador))
 
-		const filas = lineas.slice(1).map(l => l.split(" "))
-
-		this.tablaTmp = this.contruirTabla(encabezados, filas)
 		return this
 	}
 
-	contruirTabla(encabezados = [], filas = [], claseEstilo = "") {
-		const tbl = new Componente("table", { id: "tabla" })
+	contruirTabla(encabezados = this.encabezados, filas = this.filas) {
+		this.tabla = new Componente("table", { id: "tabla" })
 		const tblEncabezdos = new Componente("thead", {
 			clase: "tblEncabezados",
 		})
@@ -40,7 +130,7 @@ export class Tabla extends Componente {
 				.addHijos(
 					encabezados.map(e =>
 						new Componente("th", { clase: "celdaEncabezado" })
-							.setTexto(e)
+							.setTexto(this.limpiarTitulo(e))
 							.getComponente()
 					)
 				)
@@ -51,9 +141,9 @@ export class Tabla extends Componente {
 			filas.map(f => {
 				const fila = new Componente("tr", { clase: "fila" })
 				fila.addHijos(
-					f.map(e =>
+					f.map(c =>
 						new Componente("td", { clase: "celda" })
-							.setTexto(e)
+							.setTexto(c)
 							.getComponente()
 					)
 				)
@@ -61,87 +151,119 @@ export class Tabla extends Componente {
 			})
 		)
 
-		tbl.addHijos([tblEncabezdos.getComponente(), tblCuerpo.getComponente()])
+		this.tabla.addHijos([
+			tblEncabezdos.getComponente(),
+			tblCuerpo.getComponente(),
+		])
 
-		return tbl
+		return this
 	}
 
 	tablaSinDatos() {
-		this.tablaTmp = new Componente("div", { clase: "tablaSinDatos" })
-		this.tablaTmp.setTexto("No hay datos para mostrar")
-		this.tablaTmp.setPropiedad(
+		this.tabla = new Componente("div", { clase: "tablaSinDatos" })
+		this.tabla.setTexto("No hay datos para mostrar")
+		this.tabla.setPropiedad(
 			"style",
-			"width: 100%;height: 100%;text-align: center;font-weight: bold;inset: 0px;margin: auto;display: flex;align-items: center;justify-content: center;"
+			"width: 100%;height: 100%;text-align: center;font-weight: bold;inset: 0px;margin: auto;display: flex;align-items: center;justify-content: center;user-select: none;"
 		)
+
+		return this
+	}
+
+	limpiar() {
+		this.encabezados = []
+		this.filas = []
+		this.detalles = null
+		this.formatoDetalles = null
+		this.actualizaTabla()
 		return this
 	}
 
 	actualizaTabla() {
-		if (this.tablaTmp.getComponente().rows.length == 0) this.tablaSinDatos()
 		this.tabla.removeComponente()
-		this.tabla = this.tablaTmp
+		if (this.filas.length == 0) this.tablaSinDatos()
+		else this.contruirTabla()
+
+		this.mostrarDetalles()
 		this.contenedor.addHijo(this.tabla.getComponente())
+		const colFiltro = this.encabezados.map((titulo, indice) => {
+			return { valor: indice, texto: this.limpiarTitulo(titulo) }
+		})
+		this.selColFiltro.setOpciones(colFiltro).mostrar()
+
 		return this
 	}
 
-	inicia() {
-		this.controles = new Componente("section", { clase: "controles" })
-		this.lblConcepto = new Componente("label", {
-			clase: "lblConcepto parametros",
-		})
-		this.selConcepto = new Componente("select", {
-			clase: "selConcepto parametros",
-		})
-		this.lblFiltro = new Componente("label", {
-			clase: "lblFiltro parametros",
-		})
-		this.txtFiltro = new Componente("input", {
-			clase: "txtFiltro parametros",
-		})
-		this.btnFiltro = new Componente("button", {
-			clase: "btnFiltro parametros",
-		})
-		this.contenedor = new Componente("div", { clase: "contenedorTabla" })
-		this.tablaSinDatos()
-		this.tabla = this.tablaTmp
+	eliminaFila(indice) {
+		this.filas.splice(indice, 1)
 		return this
 	}
 
-	configura() {
-		this.lblConcepto.setTexto("Concepto")
-		this.selctionVacio()
-		this.lblFiltro.setTexto("Filtro")
-		this.btnFiltro.setTexto("Filtrar")
+	agregaFila(fila, indice = this.filas.length) {
+		this.filas.splice(indice, 0, fila)
 		return this
 	}
 
-	crear() {
-		this.addHijos([
-			this.controles
-				.addHijos([
-					this.lblConcepto.getComponente(),
-					this.selConcepto.getComponente(),
-					this.lblFiltro.getComponente(),
-					this.txtFiltro.getComponente(),
-					this.btnFiltro.getComponente(),
-				])
-				.getComponente(),
-			this.contenedor.addHijo(this.tabla.getComponente()).getComponente(),
-		])
+	getFila(indice) {
+		return this.filas[indice]
+	}
+
+	modificaFila(fila, indice) {
+		this.filas[indice] = fila
 		return this
 	}
 
-	mostrar() {
-		return this.configura().crear().getComponente()
+	filtrar() {
+		const col = this.selColFiltro.getValor()
+		const filtro = this.txtFiltro.getValor()
+		const filasFiltradas = this.filas.filter(f => f[col].includes(filtro))
+		this.contruirTabla(this.encabezados, filasFiltradas)
+		return this
 	}
 
-	selctionVacio() {
-		const opcionPredeterminada = new Componente("option", {
-			clase: "opcionPredeterminada",
+	setDetalles(detalles, formatoDetalles = null) {
+		this.detalles = detalles
+		this.formatoDetalles = formatoDetalles
+		return this
+	}
+
+	limpiarTitulo(titulo) {
+		return titulo.replace(/_/g, " ")
+	}
+
+	mostrarDetalles() {
+		this.contenedorDetalles.vaciar()
+		if (!this.detalles) return this
+		Object.keys(this.detalles).forEach(key => {
+			const contenedor = new Componente("div", {
+				clase: "contenedorDetalle",
+			})
+
+			const lblTitulo = new Componente("label", {
+				clase: "lblDetalleTitulo",
+			})
+			const lblValor = new Componente("label", {
+				clase: "lblDetalleValor",
+			})
+
+			const valor =
+				this.formatoDetalles && this.formatoDetalles[key]
+					? this.formatoDetalles[key](this.detalles[key])
+					: this.detalles[key]
+
+			lblTitulo.setTexto(`${this.limpiarTitulo(key)}:`)
+			lblValor.setTexto(valor)
+
+			this.contenedorDetalles.addHijo(
+				contenedor
+					.addHijos([
+						lblTitulo.getComponente(),
+						lblValor.getComponente(),
+					])
+					.getComponente()
+			)
 		})
-		opcionPredeterminada.setTexto("Seleccionar")
-		opcionPredeterminada.setValor("Seleccionar")
-		this.selConcepto.addHijo(opcionPredeterminada.getComponente())
+		return this
 	}
 }
 

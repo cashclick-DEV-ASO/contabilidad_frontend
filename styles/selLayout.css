@@ -2,13 +2,11 @@
 	width: 100%;
 	height: 100%;
 	display: grid;
-	gap: 5px 0;
-	grid-template-rows: repeat(2, 1fr);
 	grid-template-areas:
 		"titulo"
 		"selector";
+	align-content: center;
 	justify-items: center;
-	align-items: center;
 }
 
 .selLayout .lblLayout {
@@ -18,4 +16,5 @@
 
 .selLayout .listaDesplegable {
 	grid-area: selector;
+	width: 80%;
 }

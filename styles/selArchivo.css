@@ -1,53 +1,71 @@
 .selArchivo {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    gap: 5px 0; 
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-areas: 
-    "titulo titulo"
-    "ruta ruta"
-    "selector boton";
-    justify-items: center;
-    align-items: center;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-areas:
+		"titulo titulo"
+		"ruta ruta"
+		"selector boton";
+	position: relative;
+	text-align: center;
+	align-content: center;
+	align-items: center;
+	justify-items: center;
 }
 
 .selArchivo #titulo {
-    grid-area: titulo;
-    font-weight: bold;
+	grid-area: titulo;
+	font-weight: bold;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
 }
 
 .selArchivo #lblRuta {
-    grid-area: ruta;
+	grid-area: ruta;
+	height: 100%;
+	width: 100%;
+	font-size: 12px;
 }
 
 .selArchivo #lblArchivo {
-    grid-area: selector;
-    cursor: pointer;
-    box-shadow: inset 0px -3px 7px 0px #1d4387;
-    background: linear-gradient(to bottom, #1d4387 5%, #07aada 100%);
-    background-color: #1d4387;
-    border-radius: 3px;
-    border: 0;
-    display: inline-block;
-    cursor: pointer;
-    color: white;
-    padding: 3px 5px;
-    text-decoration: none;
-    text-shadow: 0px 1px 0px #263666;
-    font-size: medium;
+	grid-area: selector;
+	box-shadow: inset 0px -3px 7px 0px #1d4387;
+	background: linear-gradient(to bottom, #1d4387 5%, #07aada 100%);
+	background-color: #1d4387;
+	border-radius: 3px;
+	border: 0;
+	display: inline-block;
+	cursor: pointer;
+	color: white;
+	padding: 3px 5px;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #263666;
+	font-size: medium;
+	user-select: none;
 }
 
 .selArchivo #lblArchivo:hover {
-    background: linear-gradient(to bottom, #07aada 5%, #1d4387 100%);
-    background-color: #07aada;
+	background: linear-gradient(to bottom, #07aada 5%, #1d4387 100%);
+	background-color: #07aada;
 }
 
-
-.selArchivo #btnSeleccionar{
-    grid-area: boton;
+.selArchivo #lblArchivo:not(.disabled):active {
+	position: relative;
+	top: 1px;
 }
 
-.selArchivo #selArchivo {
-    display: none;
+.selArchivo .disabled {
+	background: linear-gradient(to bottom, #871d1d 5%, #da0707 100%) !important;
+	background-color: #df5329 !important;
+}
+
+.selArchivo #btnAbrir {
+	grid-area: boton;
+}
+
+.selArchivo #inpArchivo {
+	display: none;
 }

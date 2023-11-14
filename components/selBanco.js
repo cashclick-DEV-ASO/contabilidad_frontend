@@ -43,4 +43,12 @@ export class SelBanco extends Componente {
 	mostrar() {
 		return this.configura().crea().getComponente()
 	}
+
+	getValorBanco() {
+		return this.selBanco.getValor()
+	}
+
+	getTextoBanco() {
+		return this.selBanco.getTexto()
+	}
 }

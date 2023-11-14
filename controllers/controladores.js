@@ -1,1 +1,1 @@
-export { Controlador } from "./controlador.js"
+export { RegTrnBancosController as RegTrnBancos } from "./regTrnBancos.js"
