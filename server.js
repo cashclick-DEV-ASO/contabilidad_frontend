@@ -31,8 +31,6 @@ const createApp = devMode => {
 	app.use((req, res, next) => {
 		res.cookie("API_URL", process.env.API_URL, { secure: true })
 		if (devMode) res.cookie("DEV_MODE", devMode, { secure: true })
-		if (validaToken(req.cookies.TOKEN))
-			res.cookie("RUTAS", JSON.stringify(RUTAS), { secure: true })
 
 		next()
 	})
@@ -63,6 +61,27 @@ const createApp = devMode => {
 	app.listen(PORT, HOST.replace("http://", "").replace("https://", ""), () =>
 		log(`Servidor frontend en linea en: ${SRV_URL}`)
 	)
+}
+
+const generarInsert = (rutas, padre = null) => {
+	let insert = !padre
+		? "INSERT INTO mapa_navegacion_frontend (grupo, titulo, vista, padre, orden) VALUES "
+		: ""
+
+	Object.keys(rutas).forEach((ruta, index) => {
+		if (typeof rutas[ruta].vista === "string") {
+			insert += `('${ruta}', '${rutas[ruta].titulo}', '${
+				rutas[ruta].vista
+			}', ${!padre ? "NULL" : `'${padre}'`}, ${index}), `
+		} else {
+			insert += `('${ruta}', '${rutas[ruta].titulo}', NULL, ${
+				!padre ? "NULL" : `'${padre}'`
+			}, ${index}), `
+			insert += generarInsert(rutas[ruta].vista, rutas[ruta].titulo)
+		}
+	})
+
+	return !padre ? `${insert.slice(0, -2)};` : insert
 }
 
 const validaToken = token => {
@@ -98,193 +117,6 @@ const archivosHTML = modo => {
 	const ruta = modo ? resolve() : resolve(resolve(), "dist")
 
 	return [ruta, resolve(ruta, LOGIN), resolve(ruta, INDEX)]
-}
-
-const RUTAS = {
-	inicio: {
-		visible: true,
-		titulo: "Inicio",
-		vista: "Inicio",
-	},
-	transacciones: {
-		visible: true,
-		titulo: "Transacciones",
-		vista: {
-			saldos: {
-				visible: true,
-				titulo: "Saldos Contables",
-				vista: {
-					registro: {
-						visible: true,
-						titulo: "Registro",
-						vista: "RegSaldos",
-					},
-					consulta: {
-						visible: true,
-						titulo: "Consulta",
-						vista: "ConSaldos",
-					},
-				},
-			},
-			bancos: {
-				visible: true,
-				titulo: "Bancos",
-				vista: {
-					registro: {
-						visible: true,
-						titulo: "Registro",
-						vista: "RegTrnBancos",
-					},
-					consulta: {
-						visible: true,
-						titulo: "Consulta",
-						vista: "ConTrnBancos",
-					},
-				},
-			},
-			dwh: {
-				visible: true,
-				titulo: "DWH",
-				vista: "TrnDWH",
-			},
-			mambu: {
-				visible: true,
-				titulo: "Mambu",
-				vista: {
-					registro: {
-						visible: true,
-						titulo: "Registro",
-						vista: "RegTrnBancos",
-					},
-					consulta: {
-						visible: true,
-						titulo: "Consulta",
-						vista: "ConTrnBancos",
-					},
-				},
-			},
-		},
-	},
-	conciliacion: {
-		visible: true,
-		titulo: "Conciliación",
-		vista: {
-			conciliar: {
-				visible: true,
-				titulo: "Conciliar",
-				vista: "Conciliar",
-			},
-			consulta: {
-				visible: true,
-				titulo: "Consulta",
-				vista: "Conciliación",
-			},
-			noConciliado: {
-				visible: true,
-				titulo: "No Conciliado",
-				vista: "NoConciliado",
-			},
-		},
-	},
-	reportes: {
-		visible: true,
-		titulo: "Reportes",
-		vista: {
-			resConciliacion: {
-				visible: true,
-				titulo: "Resumen Conciliación",
-				vista: "ResConciliacion",
-			},
-			saf: {
-				visible: true,
-				titulo: "Saldo a Favor",
-				vista: "SaldoFavor",
-			},
-			recalculoInteres: {
-				visible: true,
-				titulo: "Recalculo de Interés",
-				vista: "RecalculoInteres",
-			},
-			recalculoCapital: {
-				visible: true,
-				titulo: "Recalculo de Capital",
-				vista: "RecalculoCapital",
-			},
-			cartera: {
-				visible: true,
-				titulo: "Cartera",
-				vista: "Cartera",
-			},
-			aclaraciones: {
-				visible: true,
-				titulo: "Aclaraciones",
-				vista: "Aclaraciones",
-			},
-			ajustes: {
-				visible: true,
-				titulo: "Ajustes",
-				vista: "Ajustes",
-			},
-			edoCta: {
-				visible: true,
-				titulo: "Estado de Cuenta",
-				vista: "EdoCta",
-			},
-		},
-	},
-	administracion: {
-		visible: true,
-		titulo: "Administración",
-		vista: {
-			cuentasBancarias: {
-				visible: true,
-				titulo: "Cuentas Bancarias",
-				vista: {
-					registro: {
-						visible: true,
-						titulo: "Registro",
-						vista: "RegCtasBancarias",
-					},
-					consulta: {
-						visible: true,
-						titulo: "Consulta",
-						vista: "ConCtasBancarias",
-					},
-				},
-			},
-			cuentasContables: {
-				visible: true,
-				titulo: "Cuentas Contables",
-				vista: {
-					registro: {
-						visible: true,
-						titulo: "Registro",
-						vista: "RegCtasContables",
-					},
-					consulta: {
-						visible: true,
-						titulo: "Consulta",
-						vista: "ConCtasContables",
-					},
-				},
-			},
-			plantillas: {
-				visible: true,
-				titulo: "Plantillas",
-				vista: "Plantillas",
-			},
-			variables: {
-				visible: true,
-				titulo: "Variables",
-				vista: "Variables",
-			},
-		},
-	},
-	logout: {
-		visible: true,
-		titulo: "Salir",
-		vista: "Logout",
-	},
 }
 
 createApp(process.argv[2] === "true")

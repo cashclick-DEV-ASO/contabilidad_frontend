@@ -40,6 +40,7 @@ export class LoginModel extends Modelo {
 				secure: true,
 			})
 			escribirCookie("NOMBRE", this.informacion.nombre)
+			escribirCookie("RUTAS", this.informacion.mapa)
 		} else {
 			this.mensaje = "Credenciales incorrectas."
 			mostrarError(this.informacion)

@@ -2,7 +2,7 @@ import { Componente } from "../components/componentes.js"
 
 import Inicio from "./inicio.js"
 import RegTrnBancos from "./regTrnBancos.js"
-
+import Layout from "./layout.js"
 import Logout from "./logout.js"
 
 class VistaTemporal extends Componente {
@@ -42,6 +42,7 @@ const VISTAS = {
 	RegTrnBancos,
 	TrnDWH: VistaTemporal,
 	TrnMambu: VistaTemporal,
+	Layout,
 	Logout,
 	OOPS,
 }

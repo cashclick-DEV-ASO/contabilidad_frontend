@@ -1,4 +1,4 @@
-import { limipiarCookies } from "../src/utils.js"
+import { cerrarSesion } from "../src/utils.js"
 
 import { Componente } from "../components/componentes.js"
 
@@ -9,7 +9,7 @@ export class Logout extends Componente {
 	}
 
 	inicia() {
-		this.titulo = new Componente("h3", { clase: "titulo" })
+		this.titulo = new Componente("h3", { clase: "tituloLgt" })
 		this.boton = new Componente("button", { clase: "boton" })
 
 		return this
@@ -19,10 +19,7 @@ export class Logout extends Componente {
 		this.titulo.setTexto("Seguro que desea salir?")
 
 		this.boton.setTexto("Salir")
-		this.boton.setListener("click", () => {
-			limipiarCookies()
-			window.location.href = "/login"
-		})
+		this.boton.setListener("click", cerrarSesion)
 
 		return this
 	}

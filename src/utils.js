@@ -22,6 +22,11 @@ export const limipiarCookies = () => {
 	})
 }
 
+export const cerrarSesion = () => {
+	limipiarCookies()
+	window.location.href = "/login"
+}
+
 export const escribirCookie = (nombre, valor, opciones = {}) => {
 	let cookie = `${nombre}=${encodeURIComponent(valor)}`
 

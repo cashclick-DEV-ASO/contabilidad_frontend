@@ -33,8 +33,7 @@ export class Menu extends Componente {
 		ul.classList.add(subMenu ? UL_SUBMENU : UL_MENU)
 
 		Object.keys(rutas).forEach(ruta => {
-			const { visible, titulo, vista } = rutas[ruta]
-			if (visible === false) return
+			const { titulo, vista } = rutas[ruta]
 
 			const li = document.createElement("li")
 			li.classList.add(subMenu ? LI_SUBMENU : LI_MENU)

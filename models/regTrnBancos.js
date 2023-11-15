@@ -1,7 +1,7 @@
 import Modelo from "./modelo.js"
 
 import { mostrarError } from "../src/utils.js"
-import { anchoBBVA } from "../src/layouts.js"
+import { anchoBBVA } from "../src/layoutParser.js"
 
 export class RegTrnBancosModel extends Modelo {
 	constructor() {
@@ -10,7 +10,6 @@ export class RegTrnBancosModel extends Modelo {
 		this.periodo = ""
 		this.archivo = {}
 		this.layout = null
-		this.layouts = null
 		this.mensaje = ""
 		this.contenidoArchivo = null
 	}
@@ -29,21 +28,6 @@ export class RegTrnBancosModel extends Modelo {
 
 	setLayout(layout) {
 		this.layout = layout
-	}
-
-	async getLayouts(banco) {
-		this.mensaje = "No se proporcionó el banco."
-		if (!banco) return false
-
-		this.mensaje = "Ocurrió un problema al obtener los layouts."
-		this.banco = banco
-		this.layouts = []
-
-		if (banco === "BBVA") this.layouts = layoutBBVA
-		else if (banco === "Conekta") this.layouts = [layoutConekta]
-		else if (banco === "Mambu") this.layouts = [layoutMambu]
-
-		return true
 	}
 
 	async leerArchivo(archivo) {
@@ -68,28 +52,28 @@ export class RegTrnBancosModel extends Modelo {
 			this.mensaje = "No se ha proporcionado un archivo."
 			return false
 		}
-		const layout = this.layouts.find(
-			layout => layout.id === Number(idLayout)
-		)
 
-		if (!layout) {
+		if (!this.layout) {
 			this.mensaje = "No se ha encontrado el layout."
 			return false
 		}
 
-		if (this.banco === "BBVA" && layout.layout.tipo === "ancho") {
-			const r = anchoBBVA(this.contenidoArchivo, layout.layout)
+		if (this.banco.nombre === "BBVA" && this.layout.tipo === "ancho") {
+			const r = anchoBBVA(
+				this.contenidoArchivo,
+				JSON.parse(this.layout.layout)
+			)
 			this.mensaje = r.mensaje
 			this.movimientos = r.movimientos
 			this.informacion = r.informacion
 			return r.success
 		}
 
-		if (layout.tipo === "delimitado")
+		if (this.layout.tipo === "delimitado")
 			this.contenidoArchivo = this.layoutDelimitado(
 				this.contenidoArchivo,
-				layout.campos,
-				layout.separador
+				this.layout.campos,
+				this.layout.separador
 			)
 
 		this.mensaje =
@@ -97,12 +81,14 @@ export class RegTrnBancosModel extends Modelo {
 		return false
 	}
 
-	async pruebaAceptar() {
+	async pruebaAceptar(e, cierre) {
 		console.log("Botón Aceptar")
+		cierre()
 	}
 
-	async pruebaCancelar() {
+	async pruebaCancelar(e, cierre) {
 		console.log("Botón Cancelar")
+		cierre()
 	}
 
 	async guardar() {

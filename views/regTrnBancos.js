@@ -1,7 +1,5 @@
 import { RegTrnBancos as Controlador } from "../controllers/controladores.js"
 
-import { FORMATOS_BBVA } from "../src/constantes.js"
-
 import {
 	Componente,
 	SelBanco,
@@ -39,6 +37,7 @@ export class RegTrnBancos extends Componente {
 		this.titulo.setTexto("Registro de Transacciones Bancarias")
 		this.selPeriodo.setEstilo2()
 
+		this.#controlador.rellenaBanco()
 		this.selBanco.setListener("change", this.#controlador.cambioBanco)
 
 		this.selLayout.selLayout.setListener(

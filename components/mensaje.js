@@ -19,12 +19,14 @@ export class Mensaje extends Componente {
 			EXITO: "msjExito",
 			ADVERTENCIA: "msjAdvertencia",
 			INFORMACION: "msjInformacion",
+			SOLICITAR: "msjSolicitar",
 		}
 		this.titulosDefault = {
 			msjError: "Error",
 			msjExito: "Éxito",
 			msjAdvertencia: "Advertencia",
 			msjInformacion: "Información",
+			msjSolicitar: "Solicitud",
 		}
 		this.tipoSolicitado = tipo ?? this.tipo.INFORMACION
 		this.listo = false
@@ -44,6 +46,7 @@ export class Mensaje extends Componente {
 
 		this.mensaje = new Componente("section", { clase: "msjTexto" })
 		this.txtMensaje = new Componente("span", { clase: "msjTexto" })
+		this.captura = new Componente("input", { clase: "msjCaptura" })
 
 		this.botones = new Componente("section", { clase: "msjBotones" })
 
@@ -58,6 +61,8 @@ export class Mensaje extends Componente {
 		this.cerrar.setListener("click", this.ocultar.bind(this))
 
 		this.txtMensaje.setTexto(this.txtMsj)
+		this.captura.setPropiedad("type", "text")
+
 		return this
 	}
 
@@ -67,7 +72,12 @@ export class Mensaje extends Componente {
 			this.cerrar.getComponente(),
 		])
 
-		this.mensaje.addHijo(this.txtMensaje.getComponente())
+		this.mensaje.addHijos([
+			this.txtMensaje.getComponente(),
+			this.tipo.SOLICITAR === this.tipoSolicitado
+				? this.captura.getComponente()
+				: null,
+		])
 
 		if (this.botonesConfigurados.length > 0) {
 			this.botonesConfigurados.forEach(boton => {
@@ -117,6 +127,11 @@ export class Mensaje extends Componente {
 		return this
 	}
 
+	setPlaceholder(placeholder) {
+		this.captura.setPropiedad("placeholder", placeholder)
+		return this
+	}
+
 	setBoton(accion) {
 		this.botonesConfigurados.push(boton)
 		return this
@@ -128,13 +143,17 @@ export class Mensaje extends Componente {
 	}
 
 	addBoton(texto = "Aceptar", callback = null) {
-		const accion = callback ?? this.setRespuesta.bind(this, true)
+		const accion =
+			callback ??
+			((e, cerrar) => {
+				this.setRespuesta(true)
+				cerrar()
+			})
 
 		const boton = new Componente("button", { clase: "msjBoton" })
 		boton.setTexto(texto)
 		boton.setListener("click", e => {
-			accion(e)
-			this.ocultar.bind(this)()
+			accion(e, this.ocultar.bind(this))
 		})
 
 		this.botonesConfigurados.push(boton)

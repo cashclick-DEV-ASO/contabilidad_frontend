@@ -11,6 +11,12 @@ import { Componente, ListaDesplegable } from "./componentes.js"
 export class SelBanco extends Componente {
 	constructor() {
 		super("section", { clase: SEL_BANCO_CLS })
+		this.opcionesDefault = []
+		// 	{ valor: 1, texto: BBVA },
+		// 	{ valor: 2, texto: CONEKTA },
+		// 	{ valor: 3, texto: STP },
+		// ]
+
 		return this.inicia()
 	}
 
@@ -26,11 +32,9 @@ export class SelBanco extends Componente {
 	configura() {
 		this.lblBanco.setTexto("Banco")
 
-		this.selBanco.setOpciones([
-			{ texto: BBVA },
-			{ texto: CONEKTA },
-			{ texto: STP },
-		])
+		this.selBanco.setOpciones(
+			this.opciones ? this.opciones : this.opcionesDefault
+		)
 
 		return this
 	}
