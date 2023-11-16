@@ -8,7 +8,8 @@
 		"start": "node server.js",
 		"start:dev": "node --watch server.js true",
 		"build": "vite build -c vite.config.js",
-		"preview": "vite preview -c vite.config.js"
+		"preview": "vite preview -c vite.config.js",
+		"actualizar": "git pull"
 	},
 	"keywords": [],
 	"author": "Alberto Soto",
