@@ -1,0 +1,45 @@
+@import url("./selBanco.css");
+@import url("./selPeriodo.css");
+@import url("./selArchivo.css");
+@import url("./selLayout.css");
+@import url("./tabla.css");
+
+@import url("./regTrnBancos.css");
+
+.vista {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	display: grid;
+	grid-template-rows: max-content max-content 1fr;
+	grid-template-areas:
+		"titulo"
+		"acciones"
+		"datos";
+	justify-items: center;
+}
+
+.contenedorTitulo {
+	grid-area: titulo;
+	width: 100%;
+	margin: 5px;
+}
+
+.contenedorTitulo .tituloVista {
+	text-align: center;
+	margin: 0;
+}
+
+.contenedorAcciones {
+	grid-area: acciones;
+	width: 100%;
+	margin: 5px;
+}
+
+.contenedorDatos {
+	grid-area: datos;
+	width: 100%;
+	height: 100%;
+}

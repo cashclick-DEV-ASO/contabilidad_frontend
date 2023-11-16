@@ -1,4 +1,6 @@
+import Vista from "./vista.js"
 import { RegTrnBancos as Controlador } from "../controllers/controladores.js"
+import { RegTrnBancos as Modelo } from "../models/modelos.js"
 
 import {
 	Componente,
@@ -9,65 +11,54 @@ import {
 	Tabla,
 } from "../components/componentes.js"
 
-export class RegTrnBancos extends Componente {
-	#controlador
-
+export class RegTrnBancos extends Vista {
 	constructor() {
-		super("div", { clase: "regTrnBancos" })
-		this.#controlador = new Controlador(this)
-
+		super()
+		this.controlador = new Controlador(this, new Modelo())
 		return this.inicia()
 	}
 
 	inicia() {
-		this.titulo = new Componente("h2", { clase: "titulo" })
-		this.selPeriodo = new SelPeriodo()
-		this.selBanco = new SelBanco()
-		this.selLayout = new SelLayout()
-		this.selArchivo = new SelArchivo()
-		this.contenedorGuardar = new Componente("section", {
-			clase: "contenedorGuardar",
-		})
-		this.guardar = new Componente("button", { clase: "btnGuardar" })
-		this.tabla = new Tabla()
-		return this
-	}
-
-	configura() {
 		this.titulo.setTexto("Registro de Transacciones Bancarias")
-		this.selPeriodo.setEstilo2()
 
-		this.#controlador.rellenaBanco()
-		this.selBanco.setListener("change", this.#controlador.cambioBanco)
+		this.acciones.selPeriodo = new SelPeriodo()
+		this.acciones.selPeriodo.setEstilo2()
 
-		this.selLayout.selLayout.setListener("change", this.#controlador.cambioLayout)
+		this.acciones.selBanco = new SelBanco()
+		this.controlador.rellenaBanco()
+		this.acciones.selBanco.setListener("change", this.controlador.cambioBanco)
 
-		this.selArchivo.accionAbrir(this.#controlador.leerArchivo)
-		this.selArchivo.setMensaje("Selecciona un Banco y un Layout.")
+		this.acciones.selLayout = new SelLayout()
+		this.acciones.selLayout.selLayout.setListener("change", this.controlador.cambioLayout)
 
-		this.guardar.setTexto("Guardar")
-		this.guardar.setPropiedad("disabled", "true")
-		this.guardar.setListener("click", this.#controlador.guardar)
+		this.acciones.selArchivo = new SelArchivo()
+		this.acciones.selArchivo.accionAbrir(this.controlador.leerArchivo)
+		this.acciones.selArchivo.setMensaje("Selecciona un Banco y un Layout.")
 
-		this.tabla.mostrarFiltro = true
+		this.btnGuardar = new Componente("button", { clase: "btnGuardar" })
+		this.btnGuardar.setTexto("Guardar")
+		this.btnGuardar.setPropiedad("disabled", "true")
+		this.btnGuardar.setListener("click", this.controlador.guardar)
+
+		this.acciones.guardar = new Componente("section", {
+			clase: "guardar",
+		})
+		this.acciones.guardar.addHijo(this.btnGuardar.mostrar())
+
+		this.datos.tabla = new Tabla()
+		this.datos.tabla.mostrarFiltro = true
+
 		return this
 	}
 
-	crea() {
-		this.addHijos([
-			this.titulo.mostrar(),
-			this.selPeriodo.mostrar(),
-			this.selBanco.mostrar(),
-			this.selLayout.mostrar(),
-			this.selArchivo.mostrar(),
-			this.contenedorGuardar.addHijos([this.guardar.mostrar()]).mostrar(),
-			this.tabla.mostrar(),
-		])
+	setOpcionesBanco(bancos) {
+		this.acciones.selBanco.opciones = bancos
 		return this
 	}
 
-	mostrar() {
-		return this.configura().crea().getComponente()
+	setOpcionesLayout(layouts) {
+		this.acciones.selLayout.opciones = layouts
+		return this
 	}
 }
 

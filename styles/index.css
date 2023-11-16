@@ -1,11 +1,9 @@
 @import url("./global.css");
 @import url("./mensaje.css");
 @import url("./navegacion.css");
+@import url("./vista.css");
 @import url("./inicio.css");
-@import url("./regTrnBancos.css");
-
 @import url("./layout.css");
-
 @import url("./logout.css");
 
 .contenedor {
@@ -28,11 +26,6 @@
 	width: 100%;
 	height: 100%;
 	position: relative;
-}
-
-.main:first-child {
-	width: 100%;
-	height: 100%;
 }
 
 .pie {

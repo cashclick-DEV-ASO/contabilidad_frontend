@@ -7,7 +7,6 @@ export class LoginModel extends Modelo {
 		super()
 		this.user = ""
 		this.pass = ""
-		this.mensaje = "No se han proporcionado credenciales de acceso."
 		limipiarCookies()
 	}
 
@@ -27,19 +26,21 @@ export class LoginModel extends Modelo {
 			pass: this.pass,
 		})
 
-		if (!this.resultado.success) {
+		if (this.error) {
 			this.mensaje =
+				this.mensaje ??
 				"Ocurrió un problema al validar la información.\nIntente nuevamente o contacte al administrador."
 			return false
 		}
 
 		if (this.resultado.success) {
-			escribirCookie("TOKEN", this.informacion.token, {
+			const { token, nombre, mapa } = this.resultado.informacion
+			escribirCookie("TOKEN", token, {
 				"max-age": 30 * 60 * 1000,
 				secure: true,
 			})
-			escribirCookie("NOMBRE", this.informacion.nombre)
-			escribirCookie("RUTAS", this.informacion.mapa)
+			escribirCookie("NOMBRE", nombre)
+			escribirCookie("RUTAS", mapa)
 		} else {
 			this.mensaje = "Credenciales incorrectas."
 		}

@@ -1,3 +1,4 @@
+import Mensaje from "../components/mensaje.js"
 import { getURL, cerrarSesion, mostrarError } from "../src/utils.js"
 
 export class Modelo {
@@ -6,12 +7,20 @@ export class Modelo {
 		this.response = null
 		this.resultado = null
 		this.error = null
+		this.mensaje = null
+		this.mensajesError = {
+			401: "Necesita una sesión activa para acceder a este recurso o no tiene los permisos necesarios.",
+			404: "No se encontró el recurso solicitado.",
+			500: "El servicio no está disponible.<br>Verifique su conexión a internet o intente más tarde.",
+		}
 	}
 
 	async envia(recurso, datos, metodo) {
 		this.resultado = null
 		this.error = null
-		this.response = await this.enviaSync(recurso, datos, metodo)
+		this.mensaje = null
+
+		await this.enviaSync(recurso, datos, metodo)
 
 		if (this.error) return this
 		if (this.response.redirected && !this.response.url.startsWith(this.api)) {
@@ -24,7 +33,7 @@ export class Modelo {
 
 	async enviaSync(recurso, datos, metodo) {
 		try {
-			const response = await fetch(`${this.api}/${recurso}`, {
+			this.response = await fetch(`${this.api}/${recurso}`, {
 				method: metodo,
 				credentials: "include",
 				headers: {
@@ -32,10 +41,15 @@ export class Modelo {
 				},
 				body: metodo === "GET" ? null : JSON.stringify(datos),
 			})
-			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-			return response
+
+			if (!this.response.ok) throw new Error(`HTTP error! status: ${this.response.status}`)
 		} catch (error) {
-			return this.preocesaError(error)
+			if (this.response) this.resultado = await this.response.json()
+
+			const mensaje = this.response
+				? this.mensajesError[this.response.status]
+				: this.mensajesError[500]
+			this.preocesaError(error, mensaje)
 		}
 	}
 
@@ -44,25 +58,17 @@ export class Modelo {
 			const r = this.procesaRespuestaSync(respuesta)
 
 			if (r.tipo === "json") {
-				r.resultado = await r.respuesta
-				if (r.sesionCaducada) {
-					cerrarSesion()
-					return this
-				}
-				this.success = r.success
-				this.informacion = r.informacion
-				this.error = null
+				this.resultado = await r.respuesta
+				if (this.resultado.sesionCaducada) cerrarSesion()
 				return this
 			}
 
 			if (r.tipo === "html") {
-				this.success = false
-				this.informacion = r.resultado
-				this.error = null
+				this.resultado = r.respuesta
 				return this
 			}
 
-			return this.preocesaError(r.resultado)
+			return this.preocesaError(r.respuesta)
 		} catch (error) {
 			return this.preocesaError(error)
 		}
@@ -93,14 +99,21 @@ export class Modelo {
 		}
 	}
 
-	preocesaError(error) {
+	preocesaError(error, mensaje = null) {
+		if (this.resultado && this.resultado.informacion.sesionCaducada) {
+			this.resultado = null
+			cerrarSesion()
+			return this
+		}
+
 		mostrarError(error)
+		this.mensaje = mensaje
 		this.error = error
 		this.resultado = {
 			success: false,
 			informacion: null,
 		}
-		return null
+		return this
 	}
 
 	async post(recurso, datos) {

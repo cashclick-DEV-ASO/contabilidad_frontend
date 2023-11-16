@@ -1,63 +1,65 @@
 import Controlador from "./controlador.js"
 
-import { RegTrnBancos as Modelo } from "../models/modelos.js"
-
 export class RegTrnBancosController extends Controlador {
-	constructor(vista) {
-		super(vista, new Modelo())
+	constructor(vista, modelo) {
+		super(vista, modelo)
+		this.acciones = this.vista.acciones
+		this.datos = this.vista.datos
 	}
 
 	limpiaCampos = (lyt = true) => {
-		lyt && this.vista.selLayout.limpiar()
-		this.vista.selArchivo.limpiar()
-		this.vista.tabla.limpiar()
+		lyt && this.acciones.selLayout.limpiar()
+		this.acciones.selArchivo.limpiar()
+		this.datos.tabla.limpiar()
 	}
 
 	rellenaBanco = async () => {
-		await this.llenaBanco()
+		await this.llenaListaBancos()
 	}
 
 	cambioBanco = async () => {
 		this.limpiaCampos()
 		this.modelo.banco = {
-			id: this.vista.selBanco.getValorSeleccionado(),
-			nombre: this.vista.selBanco.getTextoSeleccionado(),
+			id: this.acciones.selBanco.getValorSeleccionado(),
+			nombre: this.acciones.selBanco.getTextoSeleccionado(),
 		}
-		await this.llenaLayout(this.modelo.banco.id)
+		await this.llenaListaLayouts(this.modelo.banco.id)
 
 		if (this.layouts.length === 0) this.msjError("No hay layouts disponibles.")
 
-		this.vista.selArchivo.setMensaje("Selecciona un Layout.")
+		this.acciones.selArchivo.setMensaje("Selecciona un Layout.")
 	}
 
 	cambioLayout = () => {
 		this.limpiaCampos(false)
 
 		this.modelo.layout = this.layouts.find(
-			layout => layout.id === Number(this.vista.selLayout.getValorLayout())
+			layout => layout.id === Number(this.acciones.selLayout.getValorSeleccionado())
 		)
 
 		if (this.modelo.layout.extensiones === "")
 			return this.msjError("El layout no indican las extensiones validas.")
-		else this.vista.selArchivo.setFormato(this.modelo.layout.extensiones.split(","))
+		else this.acciones.selArchivo.setFormato(this.modelo.layout.extensiones.split(","))
 
-		this.vista.selArchivo.habilitaSelector()
-		this.vista.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
+		this.acciones.selArchivo.habilitaSelector()
+		this.acciones.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
 	}
 
 	leerArchivo = async () => {
-		if (this.vista.selLayout.getValorLayout() === "default") {
+		if (this.acciones.selLayout.getValorSeleccionado() === "default") {
 			this.msjError("Se debe seleccionar un layout.")
 			return
 		}
 
-		const lecturaOK = await this.modelo.leerArchivo(this.vista.selArchivo.ruta)
+		const lecturaOK = await this.modelo.leerArchivo(this.acciones.selArchivo.ruta)
 
 		if (lecturaOK) {
-			const layoutOK = await this.modelo.aplicaLayout(this.vista.selLayout.getValorLayout())
+			const layoutOK = await this.modelo.aplicaLayout(
+				this.acciones.selLayout.getValorSeleccionado()
+			)
 
 			if (layoutOK) {
-				this.vista.tabla.setDetalles(
+				this.datos.tabla.setDetalles(
 					Object.assign(
 						{},
 						this.modelo.informacion.apertura,
@@ -66,11 +68,11 @@ export class RegTrnBancosController extends Controlador {
 					this.formatoDetalles()
 				)
 
-				this.vista.tabla
+				this.datos.tabla
 					.parseaJSON(this.modelo.movimientos, null, this.formatoTabla())
 					.actualizaTabla()
 
-				this.vista.guardar.setPropiedad("disabled", false)
+				this.acciones.guardar.setPropiedad("disabled", false)
 				return
 			}
 		}
@@ -79,13 +81,18 @@ export class RegTrnBancosController extends Controlador {
 	}
 
 	guardar = async () => {
-		this.modelo.setBanco(this.vista.selBanco.getValor())
-		this.modelo.setPeriodo(this.vista.selPeriodo.getValor())
-		this.modelo.setArchivo(this.vista.selArchivo.ruta.name)
-		this.modelo.setLayout(this.vista.selLayout.getValor())
+		this.modelo.setBanco(this.acciones.selBanco.getValor())
+		this.modelo.setPeriodo(this.acciones.selPeriodo.getValor())
+		this.modelo.setArchivo(this.acciones.selArchivo.ruta.name)
+		this.modelo.setLayout(this.acciones.selLayout.getValor())
 
 		this.msjContinuar(
-			`Se guardará la información del archivo:<br>${this.modelo.archivo}<br>¿Deseas continuar?`
+			`Se guardará la información del archivo:<br><br>${this.modelo.archivo}<br><br>¿Deseas continuar?`,
+			{
+				txtSi: "Si, guardar",
+				txtNo: "No, cancelar",
+				callbackSi: this.modelo.pruebaAceptar,
+			}
 		)
 	}
 

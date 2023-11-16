@@ -5,7 +5,7 @@ import { Componente, ListaDesplegable } from "./componentes.js"
 export class SelBanco extends Componente {
 	constructor() {
 		super("section", { clase: SEL_BANCO_CLS })
-		this.opcionesDefault = []
+		this.opciones = []
 
 		return this.inicia()
 	}
@@ -22,7 +22,7 @@ export class SelBanco extends Componente {
 	configura() {
 		this.lblBanco.setTexto("Banco")
 
-		this.selBanco.setOpciones(this.opciones ? this.opciones : this.opcionesDefault)
+		this.selBanco.setOpciones(this.opciones)
 
 		return this
 	}

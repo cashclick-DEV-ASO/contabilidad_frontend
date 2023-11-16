@@ -47,7 +47,7 @@ export class RegTrnBancosModel extends Modelo {
 		}
 	}
 
-	async aplicaLayout(banco = this.banco, layout = this.layout) {
+	async aplicaLayout() {
 		if (!this.contenidoArchivo) {
 			this.mensaje = "No se ha proporcionado un archivo."
 			return false
@@ -58,20 +58,19 @@ export class RegTrnBancosModel extends Modelo {
 			return false
 		}
 
-		if (banco.nombre === "BBVA" && layout.tipo === "ancho") {
-			const r = anchoBBVA(this.contenidoArchivo, JSON.parse(layout.layout))
+		const { tipo, layout } = this.layout
+
+		if (this.banco.nombre === "BBVA" && tipo === "fijo") {
+			const r = anchoBBVA(this.contenidoArchivo, JSON.parse(layout))
+
 			this.mensaje = r.mensaje
 			this.movimientos = r.movimientos
 			this.informacion = r.informacion
 			return r.success
 		}
 
-		if (layout.tipo === "delimitado")
-			this.contenidoArchivo = this.layoutDelimitado(
-				this.contenidoArchivo,
-				layout.campos,
-				layout.separador
-			)
+		if (tipo === "delimitado")
+			this.contenidoArchivo = this.layoutDelimitado(this.contenidoArchivo, layout)
 
 		this.mensaje =
 			"No se cuenta con la configuración necesaria para ese layout.\nFavor de notificar al administrador."

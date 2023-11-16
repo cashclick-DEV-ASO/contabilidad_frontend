@@ -8,23 +8,18 @@ export class Index extends Componente {
 
 	inicia() {
 		this.menu = new Menu()
+
 		this.main = new Main()
-		this.pie = new Pie()
-		return this
-	}
-
-	configura() {
 		this.menu.setMain(this.main)
-		return this
-	}
 
-	crea() {
+		this.pie = new Pie()
+
 		this.addHijos([this.menu.mostrar(), this.main.mostrar(), this.pie.mostrar()])
 		return this
 	}
 
 	mostrar() {
-		return this.configura().crea().getComponente()
+		return this.getComponente()
 	}
 }
 

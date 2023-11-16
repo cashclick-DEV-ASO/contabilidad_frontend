@@ -36,7 +36,14 @@ export class LayoutController extends Controlador {
 	}
 
 	informacionModificada = () => {
-		this.vista.guardar.habilitar(true)
+		const chek = () => {
+			if (this.vista.selBanco.getValorSeleccionado() === "default") return false
+			if (this.vista.selLayout.getValorSeleccionado() === "default") return false
+			if (this.vista.extensiones.getValor() === "") return false
+			if (this.vista.editor.getValor() === "") return false
+			return true
+		}
+		this.vista.guardar.habilitar(chek())
 	}
 
 	/**
@@ -60,7 +67,7 @@ export class LayoutController extends Controlador {
 
 		await this.modelo.actualizaLayout(layout)
 
-		if (this.modelo.success) {
+		if (this.modelo.resultado.success) {
 			this.vista.guardar.habilitar(false)
 			this.vista.selLayout.setValor(layout.id)
 			this.msjExito("El layout se ha actualizado correctamente.")
@@ -85,7 +92,7 @@ export class LayoutController extends Controlador {
 
 		await this.modelo.nuevoLayout(layout)
 
-		if (this.modelo.success) {
+		if (this.modelo.resultado.success) {
 			this.limpiaCampos()
 			this.msjExito("El layout se ha registrado correctamente.")
 			this.limpiaCampos({ bnk: true })
@@ -112,7 +119,7 @@ export class LayoutController extends Controlador {
 			return
 		}
 
-		this.msjSolicitar(
+		this.mensaje = this.msjSolicitar(
 			"Indique el alias para el nuevo layout.",
 			this.nuevoLayout.bind(this),
 			"Alias"

@@ -18,27 +18,19 @@ export class Login extends Componente {
 
 	inicia() {
 		this.titulo = new Componente("label", { clase: "lblTitulo" })
-		this.usuario = new Componente("input", { clase: "inputLogin" })
-		this.password = new Componente("input", { clase: "inputLogin" })
-		this.btnLogin = new Componente("button", { clase: "btnLogin" })
-		return this
-	}
-
-	configura() {
 		this.titulo.setTexto("Inicio de sesión")
 
+		this.usuario = new Componente("input", { clase: "inputLogin" })
 		this.usuario.setPropiedad("placeholder", "Usuario")
 
+		this.password = new Componente("input", { clase: "inputLogin" })
 		this.password.setPropiedad("type", "password")
 		this.password.setPropiedad("placeholder", "Contraseña")
 
+		this.btnLogin = new Componente("button", { clase: "btnLogin" })
 		this.btnLogin.setTexto("Iniciar sesión")
 		this.setListener("submit", this.#controlador.login)
 
-		return this
-	}
-
-	crea() {
 		this.addHijos([
 			this.titulo.mostrar(),
 			this.usuario.mostrar(),
@@ -49,7 +41,7 @@ export class Login extends Componente {
 	}
 
 	mostrar() {
-		return this.configura().crea().getComponente()
+		return this.getComponente()
 	}
 }
 
