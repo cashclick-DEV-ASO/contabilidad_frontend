@@ -26,10 +26,7 @@ export class SelLayout extends Componente {
 	}
 
 	crea() {
-		this.addHijos([
-			this.lblLayout.getComponente(),
-			this.selLayout.mostrar(),
-		])
+		this.addHijos([this.lblLayout.getComponente(), this.selLayout.mostrar()])
 
 		return this
 	}
@@ -57,12 +54,26 @@ export class SelLayout extends Componente {
 		return this
 	}
 
-	getValorLayout() {
+	reinicia() {
+		this.selLayout.reinicia()
+
+		return this
+	}
+
+	getValor() {
 		return this.selLayout.getValor()
 	}
 
-	getTextoLayout() {
+	getTexto() {
 		return this.selLayout.getTexto()
+	}
+
+	getValorSeleccionado() {
+		return this.selLayout.getValorSeleccionado()
+	}
+
+	getTextoSeleccionado() {
+		return this.selLayout.getTextoSeleccionado()
 	}
 }
 

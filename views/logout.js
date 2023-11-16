@@ -25,7 +25,7 @@ export class Logout extends Componente {
 	}
 
 	crea() {
-		this.addHijos([this.titulo.getComponente(), this.boton.getComponente()])
+		this.addHijos([this.titulo.mostrar(), this.boton.mostrar()])
 		return this
 	}
 

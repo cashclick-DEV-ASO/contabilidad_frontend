@@ -11,9 +11,9 @@ export class LoginController extends Controlador {
 		this.modelo.setUsuario(this.vista.usuario.getValor())
 		this.modelo.setPassword(this.vista.password.getValor())
 
-		const resultado = await this.modelo.login()
-		if (resultado) {
-			window.location.href = "/"
+		await this.modelo.login()
+		if (!this.modelo.resultado.success) {
+			//window.location.href = "/"
 		} else this.msjError(this.modelo.mensaje).mostrar()
 	}
 }

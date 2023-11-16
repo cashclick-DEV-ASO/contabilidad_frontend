@@ -8,8 +8,8 @@
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 2fr 1fr;
-	grid-template-rows: max-content 1fr 87%;
+	grid-template-columns: 1fr 1fr 1fr 2fr .5fr;
+	grid-template-rows: max-content 1fr 88%;
 	grid-template-areas:
 		"titulo titulo titulo titulo titulo"
 		"periodo banco layout archivo guardar"

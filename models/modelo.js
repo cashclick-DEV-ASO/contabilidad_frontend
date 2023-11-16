@@ -3,22 +3,28 @@ import { getURL, cerrarSesion, mostrarError } from "../src/utils.js"
 export class Modelo {
 	constructor(url = getURL()) {
 		this.api = url
+		this.response = null
 		this.resultado = null
 		this.error = null
 	}
 
 	async envia(recurso, datos, metodo) {
-		const res = await this.enviaSync(recurso, datos, metodo)
-		if (res && res.redirected && !res.url.startsWith(this.api))
-			cerrarSesion()
-		if (res) await this.procesaResultado(res)
+		this.resultado = null
+		this.error = null
+		this.response = await this.enviaSync(recurso, datos, metodo)
 
-		return this
+		if (this.error) return this
+		if (this.response.redirected && !this.response.url.startsWith(this.api)) {
+			cerrarSesion()
+			return this
+		}
+
+		return await this.procesaRespuesta()
 	}
 
-	enviaSync(recurso, datos, metodo) {
+	async enviaSync(recurso, datos, metodo) {
 		try {
-			return fetch(`${this.api}/${recurso}`, {
+			const response = await fetch(`${this.api}/${recurso}`, {
 				method: metodo,
 				credentials: "include",
 				headers: {
@@ -26,37 +32,75 @@ export class Modelo {
 				},
 				body: metodo === "GET" ? null : JSON.stringify(datos),
 			})
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+			return response
 		} catch (error) {
-			mostrarError(error)
-			this.error = error
-			this.resultado = null
-			return null
+			return this.preocesaError(error)
 		}
 	}
 
-	async procesaResultado(resultado) {
+	async procesaRespuesta(respuesta = this.response) {
 		try {
-			const r = await this.procesaResultadoSync(resultado)
-			if (r.sesionCaducada) return cerrarSesion()
-			this.success = r.success
-			this.informacion = r.informacion
-			this.error = null
-		} catch (error) {
-			mostrarError(error)
-			this.error = error
-			this.success = false
-			this.informacion = null
-		}
+			const r = this.procesaRespuestaSync(respuesta)
 
-		return this
+			if (r.tipo === "json") {
+				r.resultado = await r.respuesta
+				if (r.sesionCaducada) {
+					cerrarSesion()
+					return this
+				}
+				this.success = r.success
+				this.informacion = r.informacion
+				this.error = null
+				return this
+			}
+
+			if (r.tipo === "html") {
+				this.success = false
+				this.informacion = r.resultado
+				this.error = null
+				return this
+			}
+
+			return this.preocesaError(r.resultado)
+		} catch (error) {
+			return this.preocesaError(error)
+		}
 	}
 
-	procesaResultadoSync(resultado) {
-		if (resultado.headers.get("content-type").includes("application/json"))
-			return resultado.json()
-		if (resultado.headers.get("content-type").includes("text/html"))
-			return resultado.text()
-		return resultado
+	procesaRespuestaSync(respuesta) {
+		if (!respuesta.headers)
+			return {
+				respuesta: respuesta,
+				tipo: "desconocido",
+			}
+
+		if (respuesta.headers.get("content-type").includes("application/json"))
+			return {
+				respuesta: respuesta.json(),
+				tipo: "json",
+			}
+
+		if (respuesta.headers.get("content-type").includes("text/html"))
+			return {
+				respuesta: respuesta.text(),
+				tipo: "html",
+			}
+
+		return {
+			respuesta,
+			tipo: "indefinido",
+		}
+	}
+
+	preocesaError(error) {
+		mostrarError(error)
+		this.error = error
+		this.resultado = {
+			success: false,
+			informacion: null,
+		}
+		return null
 	}
 
 	async post(recurso, datos) {
@@ -100,9 +144,7 @@ export class Modelo {
 	}
 
 	async getLayouts(idBanco = null) {
-		const query = `SELECT * FROM layout ${
-			idBanco ? "WHERE id_banco = ?" : ""
-		} ORDER BY alias`
+		const query = `SELECT * FROM layout ${idBanco ? "WHERE id_banco = ?" : ""} ORDER BY alias`
 		const parametros = idBanco ? [idBanco] : []
 		return this.getInformacionComponentes(query, parametros)
 	}

@@ -15,6 +15,7 @@ class VistaTemporal extends Componente {
 		)
 		return this
 	}
+
 	mostrar() {
 		return this.getComponente()
 	}
@@ -32,6 +33,7 @@ class OOPS extends Componente {
 		)
 		return this
 	}
+
 	mostrar() {
 		return this.getComponente()
 	}

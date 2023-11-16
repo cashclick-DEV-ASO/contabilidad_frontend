@@ -40,10 +40,7 @@ export class RegTrnBancos extends Componente {
 		this.#controlador.rellenaBanco()
 		this.selBanco.setListener("change", this.#controlador.cambioBanco)
 
-		this.selLayout.selLayout.setListener(
-			"change",
-			this.#controlador.cambioLayout
-		)
+		this.selLayout.selLayout.setListener("change", this.#controlador.cambioLayout)
 
 		this.selArchivo.accionAbrir(this.#controlador.leerArchivo)
 		this.selArchivo.setMensaje("Selecciona un Banco y un Layout.")
@@ -58,14 +55,12 @@ export class RegTrnBancos extends Componente {
 
 	crea() {
 		this.addHijos([
-			this.titulo.getComponente(),
+			this.titulo.mostrar(),
 			this.selPeriodo.mostrar(),
 			this.selBanco.mostrar(),
 			this.selLayout.mostrar(),
 			this.selArchivo.mostrar(),
-			this.contenedorGuardar
-				.addHijos([this.guardar.getComponente()])
-				.getComponente(),
+			this.contenedorGuardar.addHijos([this.guardar.mostrar()]).mostrar(),
 			this.tabla.mostrar(),
 		])
 		return this

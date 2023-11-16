@@ -11,11 +11,9 @@ export class Componente {
 	 * @description Crea un elemento HTML del tipo solicitado
 	 * @returns {Componente} Componente
 	 */
-	constructor(contenedor = null, { clase = "", id = "" } = {}) {
+	constructor(elemento = null, { clase = "", id = "" } = {}) {
 		this.#componente =
-			typeof contenedor === "string"
-				? document.createElement(contenedor)
-				: contenedor
+			typeof elemento === "string" ? document.createElement(elemento) : elemento
 
 		if (clase !== "") this.setClase(clase)
 		if (id !== "") this.setID(id)
@@ -98,6 +96,11 @@ export class Componente {
 		return this
 	}
 
+	/**
+	 * Obtiene el valor de una propiedad del componente.
+	 * @param {string} prop - El nombre de la propiedad a obtener.
+	 * @returns {*} El valor de la propiedad especificada.
+	 */
 	getPropiedad(prop) {
 		return this.#componente[prop]
 	}
@@ -113,11 +116,13 @@ export class Componente {
 		return this
 	}
 
+	/**
+	 * Obtiene el texto del componente.
+	 * @returns {string} El texto del componente.
+	 */
 	getTexto() {
 		return (
-			this.#componente.textContent ||
-			this.#componente.innerText ||
-			this.#componente.innerHTML
+			this.#componente.textContent || this.#componente.innerText || this.#componente.innerHTML
 		)
 	}
 
@@ -205,13 +210,20 @@ export class Componente {
 	}
 
 	/**
+	 * Muestra el componente.
+	 * @returns {Componente} El componente a mostrar.
+	 */
+	mostrar() {
+		return this.getComponente()
+	}
+
+	/**
 	 * Habilita o deshabilita el componente.
 	 * @param {boolean|null} estado - Si es null, alterna el estado actual del componente. Si es boolean, establece el estado del componente.
 	 * @returns {this} - El objeto actual para encadenamiento.
 	 */
 	habilitar(estado = null) {
-		if (estado === null)
-			this.#componente.disabled = !this.#componente.disabled
+		if (estado === null) this.#componente.disabled = !this.#componente.disabled
 		else this.#componente.disabled = !estado
 
 		return this

@@ -20,54 +20,41 @@ export class RegTrnBancosController extends Controlador {
 	cambioBanco = async () => {
 		this.limpiaCampos()
 		this.modelo.banco = {
-			id: this.vista.selBanco.selBanco.getValorSeleccionado(),
-			nombre: this.vista.selBanco.selBanco.getTextoSeleccionado(),
+			id: this.vista.selBanco.getValorSeleccionado(),
+			nombre: this.vista.selBanco.getTextoSeleccionado(),
 		}
 		await this.llenaLayout(this.modelo.banco.id)
 
-		if (this.layouts.length === 0)
-			this.msjError("No hay layouts disponibles.").mostrar()
+		if (this.layouts.length === 0) this.msjError("No hay layouts disponibles.")
 
-		this.vista.selArchivo.setMensaje("Selecciona un Layout.").mostrar()
+		this.vista.selArchivo.setMensaje("Selecciona un Layout.")
 	}
 
 	cambioLayout = () => {
 		this.limpiaCampos(false)
 
 		this.modelo.layout = this.layouts.find(
-			layout =>
-				layout.id === Number(this.vista.selLayout.getValorLayout())
+			layout => layout.id === Number(this.vista.selLayout.getValorLayout())
 		)
 
 		if (this.modelo.layout.extensiones === "")
-			return this.msjError(
-				"El layout no indican las extensiones validas."
-			).mostrar()
-		else
-			this.vista.selArchivo.setFormato(
-				this.modelo.layout.extensiones.split(",")
-			)
+			return this.msjError("El layout no indican las extensiones validas.")
+		else this.vista.selArchivo.setFormato(this.modelo.layout.extensiones.split(","))
 
 		this.vista.selArchivo.habilitaSelector()
-		this.vista.selArchivo.setMensaje(
-			"Oprime el botón para seleccionar un archivo."
-		)
+		this.vista.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
 	}
 
 	leerArchivo = async () => {
 		if (this.vista.selLayout.getValorLayout() === "default") {
-			this.msjError("Se debe seleccionar un layout.").mostrar()
+			this.msjError("Se debe seleccionar un layout.")
 			return
 		}
 
-		const lecturaOK = await this.modelo.leerArchivo(
-			this.vista.selArchivo.ruta
-		)
+		const lecturaOK = await this.modelo.leerArchivo(this.vista.selArchivo.ruta)
 
 		if (lecturaOK) {
-			const layoutOK = await this.modelo.aplicaLayout(
-				this.vista.selLayout.getValorLayout()
-			)
+			const layoutOK = await this.modelo.aplicaLayout(this.vista.selLayout.getValorLayout())
 
 			if (layoutOK) {
 				this.vista.tabla.setDetalles(
@@ -80,12 +67,7 @@ export class RegTrnBancosController extends Controlador {
 				)
 
 				this.vista.tabla
-					//.parseaTexto(this.modelo.contenidoArchivo)
-					.parseaJSON(
-						this.modelo.movimientos,
-						null,
-						this.formatoTabla()
-					)
+					.parseaJSON(this.modelo.movimientos, null, this.formatoTabla())
 					.actualizaTabla()
 
 				this.vista.guardar.setPropiedad("disabled", false)
@@ -93,7 +75,7 @@ export class RegTrnBancosController extends Controlador {
 			}
 		}
 
-		this.msjError(this.modelo.mensaje).mostrar()
+		this.msjError(this.modelo.mensaje)
 	}
 
 	guardar = async () => {
@@ -102,12 +84,9 @@ export class RegTrnBancosController extends Controlador {
 		this.modelo.setArchivo(this.vista.selArchivo.ruta.name)
 		this.modelo.setLayout(this.vista.selLayout.getValor())
 
-		this.msjAdvertencia(
+		this.msjContinuar(
 			`Se guardará la información del archivo:<br>${this.modelo.archivo}<br>¿Deseas continuar?`
 		)
-			.addBoton("Aceptar", this.modelo.pruebaAceptar)
-			.addBoton("Cancelar", this.modelo.pruebaCancelar)
-			.mostrar()
 	}
 
 	formatoDetalles = () => {

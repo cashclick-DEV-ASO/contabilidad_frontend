@@ -40,10 +40,10 @@ export class Login extends Componente {
 
 	crea() {
 		this.addHijos([
-			this.titulo.getComponente(),
-			this.usuario.getComponente(),
-			this.password.getComponente(),
-			this.btnLogin.getComponente(),
+			this.titulo.mostrar(),
+			this.usuario.mostrar(),
+			this.password.mostrar(),
+			this.btnLogin.mostrar(),
 		])
 		return this
 	}

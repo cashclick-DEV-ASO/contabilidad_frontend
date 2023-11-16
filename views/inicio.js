@@ -46,10 +46,10 @@ export class Inicio extends Componente {
 
 	crea() {
 		this.addHijos([
-			this.nombre.getComponente(),
-			this.mensaje.getComponente(),
-			this.imagen.getComponente(),
-			this.recomendacion.getComponente(),
+			this.nombre.mostrar(),
+			this.mensaje.mostrar(),
+			this.imagen.mostrar(),
+			this.recomendacion.mostrar(),
 		])
 		return this
 	}

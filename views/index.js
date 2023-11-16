@@ -19,11 +19,7 @@ export class Index extends Componente {
 	}
 
 	crea() {
-		this.addHijos([
-			this.menu.mostrar(),
-			this.main.mostrar(),
-			this.pie.mostrar(),
-		])
+		this.addHijos([this.menu.mostrar(), this.main.mostrar(), this.pie.mostrar()])
 		return this
 	}
 

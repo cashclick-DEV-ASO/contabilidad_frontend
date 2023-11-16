@@ -15,6 +15,7 @@ export class Mensaje extends Componente {
 		this.txtTtl = "Mensaje de sistema"
 		this.txtMsj = ""
 		this.tipo = {
+			NEUTRO: "msjNeutro",
 			ERROR: "msjError",
 			EXITO: "msjExito",
 			ADVERTENCIA: "msjAdvertencia",
@@ -67,16 +68,11 @@ export class Mensaje extends Componente {
 	}
 
 	crea() {
-		this.titulo.addHijos([
-			this.txtTitulo.getComponente(),
-			this.cerrar.getComponente(),
-		])
+		this.titulo.addHijos([this.txtTitulo.getComponente(), this.cerrar.getComponente()])
 
 		this.mensaje.addHijos([
 			this.txtMensaje.getComponente(),
-			this.tipo.SOLICITAR === this.tipoSolicitado
-				? this.captura.getComponente()
-				: null,
+			this.tipo.SOLICITAR === this.tipoSolicitado ? this.captura.getComponente() : null,
 		])
 
 		if (this.botonesConfigurados.length > 0) {
@@ -99,8 +95,7 @@ export class Mensaje extends Componente {
 	}
 
 	mostrar() {
-		if (this.botonesConfigurados.length === 0)
-			this.addBoton("Aceptar", this.callback)
+		if (this.botonesConfigurados.length === 0) this.addBoton("Aceptar", this.callback)
 		return this.configura().crea().insertarEnDOM()
 	}
 
@@ -132,7 +127,7 @@ export class Mensaje extends Componente {
 		return this
 	}
 
-	setBoton(accion) {
+	setBoton(boton) {
 		this.botonesConfigurados.push(boton)
 		return this
 	}
@@ -143,12 +138,7 @@ export class Mensaje extends Componente {
 	}
 
 	addBoton(texto = "Aceptar", callback = null) {
-		const accion =
-			callback ??
-			((e, cerrar) => {
-				this.setRespuesta(true)
-				cerrar()
-			})
+		const accion = callback ?? this.respuestaTrue
 
 		const boton = new Componente("button", { clase: "msjBoton" })
 		boton.setTexto(texto)
@@ -169,6 +159,16 @@ export class Mensaje extends Componente {
 	setCallback(callback) {
 		this.callback = callback
 		return this
+	}
+
+	respuestaTrue = (e, cierre) => {
+		this.setRespuesta(true)
+		cierre()
+	}
+
+	respuestaFalse = (e, cierre) => {
+		this.setRespuesta(false)
+		cierre()
 	}
 }
 
