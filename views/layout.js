@@ -1,60 +1,55 @@
-import { Layout as LayoutCtrl } from "../controllers/controladores.js"
+import Vista from "./vista.js"
+import { Layout as Controlador } from "../controllers/controladores.js"
+import { Layout as Modelo } from "../models/modelos.js"
 
 import { Componente, ListaDesplegable, SelBanco, SelLayout } from "../components/componentes.js"
 
-export class Layout extends Componente {
-	#controlador
-
+export class Layout extends Vista {
 	constructor() {
-		super("section", { clase: "contenedorLayout" })
-		this.#controlador = new LayoutCtrl(this)
-
+		super()
+		this.controlador = new Controlador(this, new Modelo())
 		return this.inicia()
 	}
 
 	inicia() {
 		this.titulo = new Componente("h2", { clase: "titulo" })
-		this.selBanco = new SelBanco()
-		this.selLayout = new SelLayout()
+		this.titulo.setTexto("Administración de Layout's")
 
-		this.contenedorExt = new Componente("section", {
-			clase: "contenedorExt",
-		})
+		this.btnNuevo = new Componente("button", { clase: "btnNuevo" })
+		this.btnNuevo.setTexto("Nuevo")
+		this.btnNuevo.setListener("click", this.controlador.solicitaNombre)
+		this.acciones.nuevo = new Componente("section", { clase: "nuevo" }).addHijo(
+			this.btnNuevo.mostrar()
+		)
+
+		this.acciones.selBanco = new SelBanco()
+		this.acciones.selBanco.setListener("change", this.controlador.cambioBanco)
+
+		this.acciones.selLayout = new SelLayout()
+		this.acciones.selLayout.setListener("change", this.controlador.cambioLayout)
+
 		this.lblExtensiones = new Componente("label", {
 			clase: "lblExtensiones",
 		})
+		this.lblExtensiones.setTexto("Extensiones")
 		this.extensiones = new Componente("input", { clase: "extensiones" })
+		this.extensiones.setPropiedad("type", "text")
+		this.extensiones.setListener("input", this.controlador.informacionModificada)
+		this.acciones.contenedorExt = new Componente("section", {
+			clase: "contenedorExt",
+		}).addHijos([this.lblExtensiones.mostrar(), this.extensiones.mostrar()])
+
+		this.btnGuardar = new Componente("button", { clase: "btnGuardar" })
+		this.btnGuardar.setTexto("Guardar")
+		this.btnGuardar.setPropiedad("disabled", "true")
+		this.btnGuardar.setListener("click", this.controlador.guardarCambios)
 		this.contenedorGuardar = new Componente("section", {
 			clase: "contenedorGuardar",
-		})
-		this.contenedorTipo = new Componente("section", { clase: "contenedorTipo" })
+		}).addHijo(this.btnGuardar.mostrar())
+
 		this.lblTipo = new Componente("label", { clase: "lblTipo" })
-		this.tipo = new ListaDesplegable()
-		this.guardar = new Componente("button", { clase: "btnGuardar" })
-		this.contenedorNuevo = new Componente("section", {
-			clase: "contenedorNuevo",
-		})
-		this.nuevo = new Componente("button", { clase: "btnNuevo" })
-		this.contenedorEditor = new Componente("section", {
-			clase: "contenedorEditor",
-		})
-		this.editor = new Componente("textarea", { clase: "editor" })
-
-		return this
-	}
-
-	configura() {
-		this.titulo.setTexto("Administración de Layout's")
-
-		this.#controlador.rellenaBanco()
-		this.selBanco.setListener("change", this.#controlador.cambioBanco)
-		this.selLayout.setListener("change", this.#controlador.cambioLayout)
-
-		this.lblExtensiones.setTexto("Extensiones")
-		this.extensiones.setPropiedad("type", "text")
-		this.extensiones.setListener("input", this.#controlador.informacionModificada)
-
 		this.lblTipo.setTexto("Tipo")
+		this.tipo = new ListaDesplegable()
 		this.tipo.setOpciones([
 			{ texto: "excel", valor: "excel" },
 			{ texto: "delimitado", valor: "delimitado" },
@@ -62,43 +57,28 @@ export class Layout extends Componente {
 			{ texto: "json", valor: "json" },
 			{ texto: "xml", valor: "xml" },
 		])
+		this.acciones.contenedorTipo = new Componente("section", {
+			clase: "contenedorTipo",
+		}).addHijos([this.lblTipo.mostrar(), this.tipo.mostrar()])
 
+		this.datos.contenedorEditor = new Componente("section", {
+			clase: "contenedorEditor",
+		})
+		this.editor = new Componente("textarea", { clase: "editor" })
 		this.editor.setPropiedad("contenteditable", "true")
 		this.editor.setPropiedad("spellcheck", "false")
 		this.editor.setPropiedad("autocorrect", "off")
 		this.editor.setPropiedad("autocapitalize", "off")
 		this.editor.setPropiedad("autocomplete", "off")
 		this.editor.setPropiedad("wrap", "off")
-		this.editor.setListener("input", this.#controlador.informacionModificada)
+		this.editor.setListener("input", this.controlador.informacionModificada)
 
-		this.guardar.setTexto("Guardar")
-		this.guardar.setPropiedad("disabled", "true")
-		this.guardar.setListener("click", this.#controlador.guardarCambios)
-
-		this.nuevo.setTexto("Nuevo")
-		this.nuevo.setListener("click", this.#controlador.solicitaNombre)
-
-		return this
-	}
-
-	crea() {
-		this.addHijos([
-			this.titulo.mostrar(),
-			this.contenedorNuevo.addHijo(this.nuevo.mostrar()).mostrar(),
-			this.selBanco.mostrar(),
-			this.selLayout.mostrar(),
-			this.contenedorTipo.addHijos([this.lblTipo.mostrar(), this.tipo.mostrar()]).mostrar(),
-			this.contenedorExt
-				.addHijos([this.lblExtensiones.mostrar(), this.extensiones.mostrar()])
-				.mostrar(),
-			this.contenedorGuardar.addHijo(this.guardar.mostrar()).mostrar(),
-			this.contenedorEditor.addHijo(this.editor.mostrar()).mostrar(),
-		])
+		this.controlador.cargaInicial()
 		return this
 	}
 
 	mostrar() {
-		return this.configura().crea().getComponente()
+		return this.configura().getComponente()
 	}
 }
 

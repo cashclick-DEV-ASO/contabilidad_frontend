@@ -83,8 +83,7 @@ export class Tabla extends Componente {
 		this.encabezados = []
 		this.filas = []
 
-		if (!datos || typeof datos !== "object" || datos.length === 0)
-			return this
+		if (!datos || typeof datos !== "object" || datos.length === 0) return this
 
 		if (titulos) {
 			this.encabezados = Object.keys(titulos).forEach(key => {
@@ -141,20 +140,13 @@ export class Tabla extends Componente {
 			filas.map(f => {
 				const fila = new Componente("tr", { clase: "fila" })
 				fila.addHijos(
-					f.map(c =>
-						new Componente("td", { clase: "celda" })
-							.setTexto(c)
-							.getComponente()
-					)
+					f.map(c => new Componente("td", { clase: "celda" }).setTexto(c).getComponente())
 				)
 				return fila.getComponente()
 			})
 		)
 
-		this.tabla.addHijos([
-			tblEncabezdos.getComponente(),
-			tblCuerpo.getComponente(),
-		])
+		this.tabla.addHijos([tblEncabezdos.getComponente(), tblCuerpo.getComponente()])
 
 		return this
 	}
@@ -189,7 +181,7 @@ export class Tabla extends Componente {
 		const colFiltro = this.encabezados.map((titulo, indice) => {
 			return { valor: indice, texto: this.limpiarTitulo(titulo) }
 		})
-		this.selColFiltro.setOpciones(colFiltro).mostrar()
+		this.selColFiltro.actulizaOpciones(colFiltro)
 
 		return this
 	}
@@ -256,10 +248,7 @@ export class Tabla extends Componente {
 
 			this.contenedorDetalles.addHijo(
 				contenedor
-					.addHijos([
-						lblTitulo.getComponente(),
-						lblValor.getComponente(),
-					])
+					.addHijos([lblTitulo.getComponente(), lblValor.getComponente()])
 					.getComponente()
 			)
 		})

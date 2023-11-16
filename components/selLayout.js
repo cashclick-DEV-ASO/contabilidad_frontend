@@ -13,26 +13,30 @@ export class SelLayout extends Componente {
 	inicia() {
 		this.lblLayout = new Componente("label", { clase: TITULO_LAYOUT_CLS })
 		this.selLayout = new ListaDesplegable("Sin layout")
+		this.lblLayout.setTexto("Layout")
 
 		return this
 	}
 
 	configura() {
-		this.lblLayout.setTexto("Layout")
-
-		this.selLayout.setOpciones(this.opciones)
-
-		return this
-	}
-
-	crea() {
+		this.selLayout.opciones = this.opciones
 		this.addHijos([this.lblLayout.getComponente(), this.selLayout.mostrar()])
 
 		return this
 	}
 
 	mostrar() {
-		return this.configura().crea().getComponente()
+		return this.configura().getComponente()
+	}
+
+	actualilzaLayouts(layouts) {
+		this.selLayout.actulizaOpciones(layouts)
+		return this
+	}
+
+	setTemporalPH(ph) {
+		this.selLayout.setPhTmp(ph)
+		return this
 	}
 
 	setOpcion(opcion) {
@@ -48,7 +52,7 @@ export class SelLayout extends Componente {
 	}
 
 	limpiar() {
-		this.opciones = []
+		// this.opciones = []
 		this.selLayout.limpiar()
 
 		return this
@@ -74,6 +78,10 @@ export class SelLayout extends Componente {
 
 	getTextoSeleccionado() {
 		return this.selLayout.getTextoSeleccionado()
+	}
+
+	getNumeroOpciones() {
+		return this.selLayout.getNumeroOpciones()
 	}
 }
 

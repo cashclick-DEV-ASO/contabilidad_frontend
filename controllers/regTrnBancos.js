@@ -7,42 +7,65 @@ export class RegTrnBancosController extends Controlador {
 		this.datos = this.vista.datos
 	}
 
-	limpiaCampos = (lyt = true) => {
-		lyt && this.acciones.selLayout.limpiar()
-		this.acciones.selArchivo.limpiar()
-		this.datos.tabla.limpiar()
-	}
-
-	rellenaBanco = async () => {
-		await this.llenaListaBancos()
+	cargaInicial = () => {
+		this.acciones.selBanco.setTemporalPH("Cargando bancos...")
+		this.llenaListaBancos().then(() => {
+			this.acciones.selBanco.actualilzaBancos(this.bancos)
+		})
 	}
 
 	cambioBanco = async () => {
 		this.limpiaCampos()
-		this.modelo.banco = {
-			id: this.acciones.selBanco.getValorSeleccionado(),
-			nombre: this.acciones.selBanco.getTextoSeleccionado(),
+		this.acciones.selLayout.setTemporalPH("Cargando layout...")
+
+		this.banco = this.bancos.find(
+			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
+		)
+
+		if (this.banco === undefined) {
+			this.msjError("No se encontró información del banco seleccionado.")
+			this.acciones.selLayout.setMensaje("Selecciona un Banco.")
+			return
 		}
-		await this.llenaListaLayouts(this.modelo.banco.id)
 
-		if (this.layouts.length === 0) this.msjError("No hay layouts disponibles.")
+		this.llenaListaLayouts(this.banco.id).then(() => {
+			if (this.layouts.length === 0) {
+				this.msjError("No hay layouts disponibles.")
+				this.acciones.selLayout.setMensaje("Selecciona un Banco.")
+				return
+			}
 
-		this.acciones.selArchivo.setMensaje("Selecciona un Layout.")
+			this.acciones.selLayout.actualilzaLayouts(this.layouts)
+			this.acciones.selArchivo.setMensaje("Selecciona un Layout.")
+		})
 	}
 
 	cambioLayout = () => {
-		this.limpiaCampos(false)
+		this.limpiaCampos({ lyt: false })
 
-		this.modelo.layout = this.layouts.find(
-			layout => layout.id === Number(this.acciones.selLayout.getValorSeleccionado())
+		this.layout = this.layouts.find(
+			layout => layout.valor === Number(this.acciones.selLayout.getValorSeleccionado())
 		)
 
-		if (this.modelo.layout.extensiones === "")
-			return this.msjError("El layout no indican las extensiones validas.")
-		else this.acciones.selArchivo.setFormato(this.modelo.layout.extensiones.split(","))
+		if (this.layout === undefined) {
+			this.msjError("No se encontró información del layout seleccionado.")
+			this.acciones.selArchivo.setMensaje("Selecciona un Layout.")
+			return
+		}
+
+		if (this.layout.extension === "")
+			return this.msjError("El layout no indican las extensiones soportadas.")
+		else this.acciones.selArchivo.setFormato(this.layout.extension.split(","))
 
 		this.acciones.selArchivo.habilitaSelector()
 		this.acciones.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
+	}
+
+	limpiaCampos = ({ lyt = true, bnk = false } = {}) => {
+		bnk && this.acciones.selBanco.reinicia()
+		lyt && this.acciones.selLayout.reinicia()
+		this.acciones.selArchivo.limpiar()
+		this.datos.tabla.limpiar()
 	}
 
 	leerArchivo = async () => {
@@ -54,25 +77,19 @@ export class RegTrnBancosController extends Controlador {
 		const lecturaOK = await this.modelo.leerArchivo(this.acciones.selArchivo.ruta)
 
 		if (lecturaOK) {
-			const layoutOK = await this.modelo.aplicaLayout(
-				this.acciones.selLayout.getValorSeleccionado()
-			)
+			await this.modelo.aplicaLayout(this.banco, this.layout, lecturaOK)
 
-			if (layoutOK) {
+			if (this.modelo.resultado) {
+				const { informacion, movimientos } = this.modelo.resultado
+
 				this.datos.tabla.setDetalles(
-					Object.assign(
-						{},
-						this.modelo.informacion.apertura,
-						this.modelo.informacion.cierre
-					),
+					Object.assign({}, informacion.apertura, informacion.cierre),
 					this.formatoDetalles()
 				)
 
-				this.datos.tabla
-					.parseaJSON(this.modelo.movimientos, null, this.formatoTabla())
-					.actualizaTabla()
+				this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla()).actualizaTabla()
 
-				this.acciones.guardar.setPropiedad("disabled", false)
+				this.vista.btnGuardar.setPropiedad("disabled", false)
 				return
 			}
 		}
@@ -81,13 +98,8 @@ export class RegTrnBancosController extends Controlador {
 	}
 
 	guardar = async () => {
-		this.modelo.setBanco(this.acciones.selBanco.getValor())
-		this.modelo.setPeriodo(this.acciones.selPeriodo.getValor())
-		this.modelo.setArchivo(this.acciones.selArchivo.ruta.name)
-		this.modelo.setLayout(this.acciones.selLayout.getValor())
-
 		this.msjContinuar(
-			`Se guardará la información del archivo:<br><br>${this.modelo.archivo}<br><br>¿Deseas continuar?`,
+			`Se guardará la información del archivo:<br><br>${this.acciones.selArchivo.ruta.name}<br><br>¿Deseas continuar?`,
 			{
 				txtSi: "Si, guardar",
 				txtNo: "No, cancelar",

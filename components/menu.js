@@ -1,12 +1,6 @@
-import {
-	NAVEGACION,
-	UL_MENU,
-	LI_MENU,
-	UL_SUBMENU,
-	LI_SUBMENU,
-} from "../src/constantes.js"
+import { NAVEGACION, UL_MENU, LI_MENU, UL_SUBMENU, LI_SUBMENU } from "../src/constantes.js"
 
-import { leerCookie } from "../src/utils.js"
+import { leerCookie, cerrarSesion } from "../src/utils.js"
 
 import { Componente } from "./componentes.js"
 
@@ -24,11 +18,9 @@ export class Menu extends Componente {
 		return this
 	}
 
-	crearRutas(
-		rutas = this.rutas,
-		subMenu = false,
-		padre = this.getComponente()
-	) {
+	crearRutas(rutas = this.rutas, subMenu = false, padre = this.getComponente()) {
+		if (!rutas) return cerrarSesion()
+
 		const ul = document.createElement("ul")
 		ul.classList.add(subMenu ? UL_SUBMENU : UL_MENU)
 

@@ -13,27 +13,29 @@ export class SelBanco extends Componente {
 	inicia() {
 		this.lblBanco = new Componente("label", { clase: TITULO_BANCO_CLS })
 		this.selBanco = new ListaDesplegable()
-		this.opcBBVA = new Componente("option")
-		this.opcConekta = new Componente("option")
-		this.opcSTP = new Componente("option")
+		this.lblBanco.setTexto("Banco")
+
 		return this
 	}
 
 	configura() {
-		this.lblBanco.setTexto("Banco")
-
-		this.selBanco.setOpciones(this.opciones)
-
-		return this
-	}
-
-	crea() {
+		this.selBanco.opciones = this.opciones
 		this.addHijos([this.lblBanco.getComponente(), this.selBanco.mostrar()])
 		return this
 	}
 
 	mostrar() {
-		return this.configura().crea().getComponente()
+		return this.configura().getComponente()
+	}
+
+	actualilzaBancos(bancos) {
+		this.selBanco.actulizaOpciones(bancos)
+		return this
+	}
+
+	setTemporalPH(ph) {
+		this.selBanco.setPhTmp(ph)
+		return this
 	}
 
 	getValor() {

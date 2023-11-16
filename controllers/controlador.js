@@ -19,8 +19,6 @@ export class Controlador {
 		this.mensaje = new Mensaje()
 		this.vista = vista
 		this.modelo = modelo
-		this.bancos = []
-		this.layouts = []
 	}
 
 	/**
@@ -130,7 +128,7 @@ export class Controlador {
 	async llenaListaBancos(id = null) {
 		await this.modelo.getBancos(id)
 
-		this.bancos = this.llenaLista(this.vista.setOpcionesBanco.bind(this.vista), banco => ({
+		this.bancos = this.getLista(banco => ({
 			valor: banco.id,
 			texto: banco.nombre,
 		}))
@@ -145,9 +143,12 @@ export class Controlador {
 	async llenaListaLayouts(id = null) {
 		await this.modelo.getLayouts(id)
 
-		this.layouts = this.llenaLista(this.vista.setOpcionesLayout.bind(this.vista), layout => ({
+		this.layouts = this.getLista(layout => ({
 			valor: layout.id,
 			texto: layout.alias,
+			layout: layout.layout,
+			extension: layout.extensiones,
+			tipo: layout.tipo,
 		}))
 	}
 
@@ -157,19 +158,15 @@ export class Controlador {
 	 * @param {function} extractor - Función que extrae la información necesaria de cada registro.
 	 * @returns {Array} - Los registros obtenidos del modelo.
 	 */
-	llenaLista(agregaOpciones, extractor) {
+	getLista(extractor) {
 		if (!this.modelo.resultado.success) return []
 
 		const { informacion } = this.modelo.resultado
 		const registros = informacion.resultado
 
-		agregaOpciones(
-			registros.map(registro => {
-				return extractor(registro)
-			})
-		).mostrar()
-
-		return registros
+		return registros.map(registro => {
+			return extractor(registro)
+		})
 	}
 }
 

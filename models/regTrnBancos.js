@@ -6,71 +6,53 @@ import { anchoBBVA } from "../src/layoutParser.js"
 export class RegTrnBancosModel extends Modelo {
 	constructor() {
 		super()
-		this.banco = ""
-		this.periodo = ""
-		this.archivo = {}
-		this.layout = null
-		this.mensaje = ""
-		this.contenidoArchivo = null
-	}
-
-	setBanco(banco) {
-		this.banco = banco
-	}
-
-	setPeriodo(periodo) {
-		this.periodo = periodo
-	}
-
-	setArchivo(archivo) {
-		this.archivo = archivo
-	}
-
-	setLayout(layout) {
-		this.layout = layout
 	}
 
 	async leerArchivo(archivo) {
-		this.contenidoArchivo = null
 		if (!archivo) {
 			this.mensaje = "No se ha seleccionado un archivo."
-			return false
+			return null
 		}
 
 		try {
-			this.contenidoArchivo = await archivo.text()
-			return true
+			return await archivo.text()
 		} catch (error) {
 			mostrarError(error)
 			this.mensaje = "Ocurrió un problema al leer el archivo."
-			return false
+			return null
 		}
 	}
 
-	async aplicaLayout() {
-		if (!this.contenidoArchivo) {
+	async aplicaLayout(banco, lyt, contenidoArchivo) {
+		this.resultado = null
+
+		if (!contenidoArchivo) {
 			this.mensaje = "No se ha proporcionado un archivo."
 			return false
 		}
 
-		if (!this.layout) {
+		if (!lyt) {
 			this.mensaje = "No se ha encontrado el layout."
 			return false
 		}
 
-		const { tipo, layout } = this.layout
+		const { tipo, layout } = lyt
 
-		if (this.banco.nombre === "BBVA" && tipo === "fijo") {
-			const r = anchoBBVA(this.contenidoArchivo, JSON.parse(layout))
+		if (banco.texto === "BBVA" && tipo === "fijo") {
+			const r = anchoBBVA(contenidoArchivo, JSON.parse(layout))
 
 			this.mensaje = r.mensaje
-			this.movimientos = r.movimientos
-			this.informacion = r.informacion
-			return r.success
+
+			this.resultado = {
+				success: r.success,
+				informacion: r.informacion,
+				movimientos: r.movimientos,
+			}
+			return this.resultado.success
 		}
 
 		if (tipo === "delimitado")
-			this.contenidoArchivo = this.layoutDelimitado(this.contenidoArchivo, layout)
+			contenidoArchivo = this.layoutDelimitado(contenidoArchivo, layout)
 
 		this.mensaje =
 			"No se cuenta con la configuración necesaria para ese layout.\nFavor de notificar al administrador."
@@ -87,14 +69,14 @@ export class RegTrnBancosModel extends Modelo {
 		cierre()
 	}
 
-	async guardar() {
+	async guardar(banco, periodo, archivo, layout, contenidoArchivo = this.contenidoArchivo) {
 		if (this.valida() !== true) return false
 
 		await this.post("trnBancos", {
-			banco: this.banco,
-			periodo: this.periodo,
-			archivo: this.archivo,
-			layout: this.layout,
+			banco,
+			periodo,
+			archivo,
+			layout,
 		})
 
 		if (!this.informacion) {
@@ -114,11 +96,12 @@ export class RegTrnBancosModel extends Modelo {
 		return this.success
 	}
 
-	valida() {
-		if (this.banco === "") return (this.mensaje = "No se ha seleccionado un banco.")
-		else if (this.periodo === "") return (this.mensaje = "No se ha seleccionado un periodo.")
-		else if (this.archivo === "") return (this.mensaje = "No se ha seleccionado un archivo.")
-		else if (this.layout === "") return (this.mensaje = "No se ha seleccionado un layout.")
+	valida(banco, periodo, archivo, layout, contenidoArchivo = this.contenidoArchivo) {
+		if (banco === "") return (this.mensaje = "No se ha seleccionado un banco.")
+		else if (periodo === "") return (this.mensaje = "No se ha seleccionado un periodo.")
+		else if (archivo === "") return (this.mensaje = "No se ha seleccionado un archivo.")
+		else if (layout === "") return (this.mensaje = "No se ha seleccionado un layout.")
+		else if (!contenidoArchivo) return (this.mensaje = "No se ha proporcionado un archivo.")
 		else return true
 	}
 }

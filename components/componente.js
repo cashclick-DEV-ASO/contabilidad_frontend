@@ -238,6 +238,11 @@ export class Componente {
 		padre.appendChild(this.#componente)
 		return this
 	}
+
+	setPrimerHijo(hijo) {
+		this.#componente.insertBefore(hijo, this.#componente.firstChild)
+		return this
+	}
 }
 
 export default Componente

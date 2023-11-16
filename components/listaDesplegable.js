@@ -1,11 +1,7 @@
 import { Componente } from "./componentes.js"
 
 export class ListaDesplegable extends Componente {
-	constructor(
-		phVacio = "Sin opciones",
-		phLleno = "Selecciona",
-		mostrarPh = true
-	) {
+	constructor(phVacio = "Sin opciones", phLleno = "Selecciona", mostrarPh = true) {
 		super("select", { clase: "listaDesplegable" })
 		this.txtPhVacio = phVacio
 		this.txtPhLleno = phLleno
@@ -17,37 +13,54 @@ export class ListaDesplegable extends Componente {
 
 	inicia() {
 		this.placeholder = new Componente("option")
+		this.placeholder.setValor("default")
+		this.placeholder.setPropiedad("disabled", true)
+
 		return this
 	}
 
 	configura() {
-		if (this.mostrarPh) this.generaPlaceholder()
+		this.vaciar()
 
-		return this
-	}
+		this.configuraPlaceholder()
 
-	crea() {
 		this.opciones.forEach(opcion => {
-			this.addHijo(opcion.getComponente())
+			this.addHijo(this.setOpcion(opcion).mostrar())
 		})
+
 		return this
 	}
 
 	mostrar() {
-		return this.configura().crea().getComponente()
+		return this.configura().getComponente()
 	}
 
-	generaPlaceholder() {
-		this.placeholder.setTexto(
-			this.opciones.length ? this.txtPhLleno : this.txtPhVacio
-		)
-		this.placeholder.setValor("default")
-		this.placeholder.setPropiedad("disabled", true)
-		this.placeholder.setPropiedad("selected", true)
+	actulizaOpciones(opciones) {
+		this.opciones = opciones
+		this.vaciar()
+		this.configuraPlaceholder()
+		opciones.forEach(opcion => {
+			this.addHijo(this.setOpcion(opcion).mostrar())
+		})
+	}
 
-		this.addHijo(this.placeholder.getComponente())
-
+	addOpcion(opcion) {
+		this.addHijo(this.setOpcion(opcion).mostrar())
 		return this
+	}
+
+	setPhTmp(ph) {
+		// this.removePrimerHijo()
+		this.placeholder.setTexto(ph).mostrar()
+		// this.setPrimerHijo(this.placeholder.mostrar())
+	}
+
+	configuraPlaceholder() {
+		if (this.mostrarPh) {
+			this.placeholder.setTexto(this.opciones.length ? this.txtPhLleno : this.txtPhVacio)
+			this.placeholder.setPropiedad("selected", true)
+			this.addHijo(this.placeholder.getComponente())
+		}
 	}
 
 	setPhVacio(placeholder) {
@@ -63,19 +76,14 @@ export class ListaDesplegable extends Componente {
 	setOpcion(atributos) {
 		const opcion = new Componente("option")
 		opcion.setTexto(atributos.texto)
-
-		if (atributos.valor) opcion.setValor(atributos.valor)
-
-		this.opciones.push(opcion)
-		return this
+		opcion.setValor(atributos.valor ?? atributos.texto)
+		return opcion
 	}
 
 	setOpciones(opciones) {
-		opciones.forEach(opcion => {
+		return opciones.map(opcion => {
 			this.setOpcion(opcion)
 		})
-
-		return this
 	}
 
 	reinicia() {
@@ -86,13 +94,16 @@ export class ListaDesplegable extends Componente {
 	limpiar() {
 		this.opciones = []
 		this.vaciar()
-		this.generaPlaceholder()
-
+		this.configuraPlaceholder()
 		return this
 	}
 
 	getValorSeleccionado() {
 		return this.getComponente().value
+	}
+
+	getNumeroOpciones() {
+		return this.getComponente().length
 	}
 
 	getTextoSeleccionado() {

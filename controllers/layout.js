@@ -1,32 +1,63 @@
 import Controlador from "./controlador.js"
 
-import { Layout as LayoutMdl } from "../models/modelos.js"
 import { mostrarError } from "../src/utils.js"
 
 export class LayoutController extends Controlador {
-	constructor(vista) {
-		super(vista, new LayoutMdl())
-		this.bancos = []
-		this.layouts = []
+	constructor(vista, modelo) {
+		super(vista, modelo)
+		this.acciones = this.vista.acciones
+		this.datos = this.vista.datos
 	}
 
-	rellenaBanco = async () => {
-		await this.llenaBanco()
+	cargaInicial = () => {
+		this.acciones.selBanco.setTemporalPH("Cargando bancos...")
+		this.llenaListaBancos().then(() => {
+			this.acciones.selBanco.actualilzaBancos(this.bancos)
+		})
 	}
 
 	cambioBanco = async () => {
 		this.limpiaCampos()
-		this.llenaLayout(this.vista.selBanco.getValor())
+		this.acciones.selLayout.setTemporalPH("Cargando layout...")
+
+		this.banco = this.bancos.find(
+			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
+		)
+
+		if (this.banco === undefined) {
+			this.msjError("No se encontró información del banco seleccionado.")
+			this.acciones.selLayout.setMensaje("Selecciona un Banco.")
+			return
+		}
+
+		this.llenaListaLayouts(this.banco.id).then(() => {
+			if (this.layouts.length === 0) {
+				this.msjError("No hay layouts disponibles.")
+				this.acciones.selLayout.setMensaje("Selecciona un Banco.")
+				return
+			}
+
+			this.acciones.selLayout.actualilzaLayouts(this.layouts)
+		})
 	}
 
 	cambioLayout = () => {
 		this.limpiaCampos({ lyt: false })
-		const layout = this.layouts.find(layout => layout.id == this.vista.selLayout.getValor())
-		this.vista.extensiones.setValor(layout.extensiones)
-		if (layout.layout) {
-			let texto = layout.layout
+
+		this.layout = this.layouts.find(
+			layout => layout.valor === Number(this.acciones.selLayout.getValorSeleccionado())
+		)
+
+		if (this.layout === undefined) {
+			this.msjError("No se encontró información del layout seleccionado.")
+			this.acciones.selArchivo.setMensaje("Selecciona un Layout.")
+			return
+		}
+
+		if (this.layout) {
+			let texto = this.layout.layout
 			try {
-				texto = JSON.stringify(JSON.parse(layout.layout), null, 2)
+				texto = JSON.stringify(JSON.parse(this.layout.layout), null, 2)
 			} catch (e) {
 				mostrarError("El layout no es un JSON válido, se muestra el texto plano.")
 			}
@@ -37,13 +68,13 @@ export class LayoutController extends Controlador {
 
 	informacionModificada = () => {
 		const chek = () => {
-			if (this.vista.selBanco.getValorSeleccionado() === "default") return false
-			if (this.vista.selLayout.getValorSeleccionado() === "default") return false
-			if (this.vista.extensiones.getValor() === "") return false
-			if (this.vista.editor.getValor() === "") return false
+			if (this.acciones.selBanco.getValorSeleccionado() === "default") return false
+			if (this.acciones.selLayout.getValorSeleccionado() === "default") return false
+			if (this.acciones.extensiones.getValor() === "") return false
+			if (this.datos.editor.getValor() === "") return false
 			return true
 		}
-		this.vista.guardar.habilitar(chek())
+		this.acciones.btnGuardar.habilitar(chek())
 	}
 
 	/**
@@ -53,23 +84,23 @@ export class LayoutController extends Controlador {
 	 * @param {boolean} opciones.bnk - Indica si se debe limpiar el campo de selección de banco.
 	 */
 	limpiaCampos = ({ lyt = true, bnk = false } = {}) => {
-		bnk && this.vista.selBanco.reinicia()
-		lyt && this.vista.selLayout.limpiar()
+		bnk && this.acciones.selBanco.reinicia()
+		lyt && this.acciones.selLayout.limpiar()
 		this.vista.extensiones.setValor("")
+		this.vista.btnGuardar.habilitar(false)
 		this.vista.editor.setValor("")
-		this.vista.guardar.habilitar(false)
 	}
 
 	guardarCambios = async () => {
-		const layout = this.layouts.find(layout => layout.id == this.vista.selLayout.getValor())
-		layout.extensiones = this.vista.extensiones.getValor()
-		layout.layout = this.vista.editor.getValor()
+		const layout = this.layouts
+		layout.extension = this.acciones.extensiones.getValor()
+		layout.layout = this.datos.editor.getValor()
 
 		await this.modelo.actualizaLayout(layout)
 
 		if (this.modelo.resultado.success) {
-			this.vista.guardar.habilitar(false)
-			this.vista.selLayout.setValor(layout.id)
+			this.acciones.guardar.habilitar(false)
+			this.acciones.selLayout.setValor(layout.id)
 			this.msjExito("El layout se ha actualizado correctamente.")
 			this.limpiaCampos({ bnk: true })
 		} else {
@@ -84,10 +115,10 @@ export class LayoutController extends Controlador {
 		}
 
 		const layout = {
-			id_banco: this.vista.selBanco.getValorSeleccionado(),
+			id_banco: this.acciones.selBanco.getValorSeleccionado(),
 			alias: this.mensaje.captura.getValor(),
-			extensiones: this.vista.extensiones.getValor(),
-			layout: this.vista.editor.getValor(),
+			extensiones: this.acciones.extensiones.getValor(),
+			layout: this.datos.editor.getValor(),
 		}
 
 		await this.modelo.nuevoLayout(layout)
@@ -104,17 +135,17 @@ export class LayoutController extends Controlador {
 	}
 
 	solicitaNombre = async () => {
-		if (!this.vista.selBanco.getValorSeleccionado()) {
+		if (!this.acciones.selBanco.getValorSeleccionado()) {
 			this.msjError("Se debe seleccionar un banco.")
 			return
 		}
 
-		if (this.vista.extensiones.getValor() === "") {
+		if (this.acciones.extensiones.getValor() === "") {
 			this.msjError("Se debe indicar las extensiones de archivo.")
 			return
 		}
 
-		if (this.vista.editor.getValor() === "") {
+		if (this.datos.editor.getValor() === "") {
 			this.msjError("Se debe indicar el contenido del layout.")
 			return
 		}

@@ -25,7 +25,6 @@ export class RegTrnBancos extends Vista {
 		this.acciones.selPeriodo.setEstilo2()
 
 		this.acciones.selBanco = new SelBanco()
-		this.controlador.rellenaBanco()
 		this.acciones.selBanco.setListener("change", this.controlador.cambioBanco)
 
 		this.acciones.selLayout = new SelLayout()
@@ -40,24 +39,14 @@ export class RegTrnBancos extends Vista {
 		this.btnGuardar.setPropiedad("disabled", "true")
 		this.btnGuardar.setListener("click", this.controlador.guardar)
 
-		this.acciones.guardar = new Componente("section", {
-			clase: "guardar",
-		})
-		this.acciones.guardar.addHijo(this.btnGuardar.mostrar())
+		this.acciones.guardar = new Componente("section", { clase: "contenedorGuardar" }).addHijo(
+			this.btnGuardar.mostrar()
+		)
 
 		this.datos.tabla = new Tabla()
 		this.datos.tabla.mostrarFiltro = true
 
-		return this
-	}
-
-	setOpcionesBanco(bancos) {
-		this.acciones.selBanco.opciones = bancos
-		return this
-	}
-
-	setOpcionesLayout(layouts) {
-		this.acciones.selLayout.opciones = layouts
+		this.controlador.cargaInicial()
 		return this
 	}
 }
