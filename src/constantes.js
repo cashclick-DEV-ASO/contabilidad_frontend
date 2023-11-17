@@ -3,8 +3,129 @@ export const URL_API = "API_URL"
 export const DEV_MODE = "DEV_MODE"
 export const RUTAS = "RUTAS"
 
+// Recurrentes del sistema
+export const SYS = {
+	LI: "li",
+	UL: "ul",
+	BTN: "button",
+	DIV: "div",
+	IN: "input",
+	LBL: "label",
+	SCTN: "section",
+	SPAN: "span",
+	LST: "select",
+	OPT: "option",
+	TXT: "textarea",
+	CHK: "checkbox",
+	RAD: "radio",
+	TBL: "table",
+	THD: "thead",
+	TBD: "tbody",
+	TR: "tr",
+	TH: "th",
+	TD: "td",
+	FLE: "file",
+	CHNG: "change",
+	CLK: "click",
+	DSBL: "disabled",
+	DFLT: "default",
+	STRNG: "string",
+	NMBR: "number",
+	OBJ: "object",
+}
+
+//Selector de Peridos
+export const LSTPERIODO = {
+	CONTENEDOR: "contenedorPeriodo",
+	TITULO: "tituloPeriodo",
+	TXTTITULO: "Período",
+	LBLANIO: "lblAnioPeriodo",
+	TXTANIO: "anioPeriodo",
+	LBLMES: "lblMesPeriodo",
+	TXTMES: "mesPeriodo",
+	ANIO_MINIMO: 2020,
+	A: "Año",
+	M: "Mes",
+	ESTILO_1: "cuadrado",
+	ESTILO_2: "largo",
+}
+
+//Lista desplegable
+export const LST = {
+	CONTENEDOR: "contenedorLista",
+	SIN_OPT: "Sin opciones",
+	SEL: "Selecciona",
+}
+
+//Selector de Bancos
+export const LSTBANCO = {
+	CONTENEDOR: "contenedorBancos",
+	LBL: "lblBanco",
+	TXTTITULO: "Banco",
+}
+
+//Selector de Layouts
+export const LSTLAYOUT = {
+	CONTENEDOR: "contenedorLayouts",
+	TXTTITULO: "Layout",
+	LBL: "lblLayout",
+	PH_VACIO: "Sin Layout",
+	PH_LLENO: "Selecciona un Layout",
+}
+
+//Selector de Archivos
+export const SLCTARCHIVO = {
+	CONTENEDOR: "contenedorArchivo",
+	TITULO: "titulo",
+	TXTTITULO: "Archivo",
+	LBLARCHIVO: "lblArchivo",
+	TXTARCHIVO: "Selecciona",
+	LBLRUTA: "lblRuta",
+	BTNABRIR: "btnAbrir",
+	TXTABRIR: "Abrir",
+	MSJINICIAL: "Seleccione un archivo..",
+	INARCHIVO: "inArchivo",
+	MSJ_SIN_FORMATO: "No se ha definido un formato válido para la selección de archivos.",
+	MSJ_ERROR_FORMATO: "El archivo seleccionado no es válido.",
+	MSJ_ERROR_ARCHIVO: "Se debe seleccionar un archivo valido.",
+}
+
+//Tabla
+export const TABLA = {
+	CONTENEDOR: "contenedorTablaDatos",
+	CONTROLES: "contenedorControles",
+	DETALLES: "contenedorDetalle",
+	DETALLE: "detalle",
+	LBL_DETALLE: "lblDetalle",
+	TXT_DETALLE: "txtDetalle",
+	TABLA: "contenedorTabla",
+	ID_TABLA: "tablaDatos",
+	TBL_ENC: "encabezadoTabla",
+	TBL_FILA_HDR: "filaEncabezado",
+	TBL_CELDA_HDR: "celdaEncabezado",
+	TBL_CUERPO: "cuerpoTabla",
+	TBL_FILA: "fila",
+	TBL_CELDA: "celda",
+	LBL_VALOR_PARAMETRO: "lblFiltro",
+	TXT_VALOR_PARAMETRO: "Valor",
+	IN_VALOR_PARAMETRO: "inFiltro",
+	BTN_FILTRO: "btnFiltrar",
+	TXT_BTN_FILTRO: "Filtrar",
+	BTN_LIMPIAR: "btnLimpiar",
+	TXT_BTN_LIMPIAR: "Limpiar",
+	BTN_EXPORTAR: "btnExportar",
+	TXT_BTN_EXPORTAR: "Exportar",
+	PARAMETROS: "parametros",
+	LBL_PARAMETRO: "lblParametro",
+	SLCT_PARAMETRO: "slctParametro",
+	PARAMETRO: "Parámetro",
+	SIN_DATOS: "sinDatos",
+	TXT_SIN_DATOS: "No hay datos para mostrar",
+	ESTILO_SIN_DATOS:
+		"width: 100%;height: 100%;text-align: center;font-weight: bold;inset: 0px;margin: auto;display: flex;align-items: center;justify-content: center;user-select: none;",
+}
+
 // Valores multiproposito
-export const ANIO_MINIMO = 2020
 export const FORMATOS_BBVA = ".txt,.exp"
 export const FORMATOS_DWH = ".json"
 export const BBVA = "BBVA"
@@ -25,14 +146,12 @@ export const UL_SUBMENU = "ulSubMenu"
 export const LI_SUBMENU = "liSubMenu"
 export const TXT_DEFAULT_CLS = "txtDefault"
 export const SEL_PERIODO_CLS = "selPeriodo"
-export const TITULO_PERIODO_CLS = "tituloPeriodo"
 export const ANIO_PERIODO_ID = "anioPeriodo"
 export const MES_PERIODO_ID = "mesPeriodo"
 export const ANIO_PERIODO_LBL_ID = "lblAnioPeriodo"
 export const MES_PERIODO_LBL_ID = "lblMesPeriodo"
 export const MSJ_CONTENEDOR_CLS = "msjContenedor"
-export const PERIODO_ESTILO_1 = "cuadrado"
-export const PERIODO_ESTILO_2 = "largo"
+
 export const PIE_CLS = "pie"
 export const SEL_BANCO_CLS = "selBanco"
 export const TITULO_BANCO_CLS = "lblBanco"

@@ -1,4 +1,4 @@
-.inicio {
+#inicio {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -7,18 +7,19 @@
 	align-items: center;
 }
 
-.logo {
+#inicio > #spnBienvenida * {
+	font-size: 3vh;
+	font-weight: bold;
+	color: #1e1e1e;
+	text-align: center;
+}
+
+#inicio > #logo {
 	width: 50%;
 	height: 50%;
 }
 
-.msjBienvenida {
-	font-size: 1.5em;
-	font-weight: bold;
-	color: #1e1e1e;
-}
-
-.msjRecomendacion {
+#inicio > #contenedorRecomendacion {
 	text-align: center;
 	font-size: 1.2em;
 	color: #1e1e1e;

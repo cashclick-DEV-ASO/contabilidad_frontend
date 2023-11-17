@@ -19,14 +19,14 @@ export class Vista extends Componente {
 	 * @param {Object} controlador - El controlador asociado a la vista.
 	 */
 	constructor() {
-		super("div", { clase: "vista" })
+		super("div", { id: "vista" })
 		this.controlador = null
 
-		this.contenedorTitulo = new Componente("section", { clase: "contenedorTitulo" })
-		this.contenedorAcciones = new Componente("section", { clase: "contenedorAcciones" })
-		this.contenedorDatos = new Componente("section", { clase: "contenedorDatos" })
+		this.contenedorTitulo = new Componente("section", { id: "contenedorTitulo" })
+		this.contenedorAcciones = new Componente("section", { id: "contenedorAcciones" })
+		this.contenedorDatos = new Componente("section", { id: "contenedorDatos" })
 
-		this.titulo = new Componente("h3", { clase: "tituloVista" })
+		this.titulo = new Componente("h3", { id: "tituloVista" })
 		this.acciones = {}
 		this.datos = {}
 	}
@@ -36,14 +36,22 @@ export class Vista extends Componente {
 	 * @returns {Vista} - La vista actualizada.
 	 */
 	configura() {
+		this.agrupado = false
 		this.contenedorTitulo.addHijo(this.titulo.mostrar())
 
+		if (Object.keys(this.acciones).some(accion => this.acciones[accion].hijos))
+			this.encubadora(this.acciones)
+
+		if (Object.keys(this.datos).some(dato => this.datos[dato].hijos))
+			this.encubadora(this.datos)
+
 		Object.keys(this.acciones).forEach(accion => {
-			this.contenedorAcciones.addHijo(this.acciones[accion].mostrar())
+			if (!this.acciones[accion].hijo)
+				this.contenedorAcciones.addHijo(this.acciones[accion].mostrar())
 		})
 
 		Object.keys(this.datos).forEach(dato => {
-			this.contenedorDatos.addHijo(this.datos[dato].mostrar())
+			if (!this.datos[dato].hijo) this.contenedorDatos.addHijo(this.datos[dato].mostrar())
 		})
 
 		this.addHijos([
@@ -53,6 +61,17 @@ export class Vista extends Componente {
 		])
 
 		return this
+	}
+
+	encubadora(lista) {
+		const padres = Object.keys(lista).filter(elemento => lista[elemento].hijos)
+
+		padres.forEach(padre => {
+			lista[padre].hijos.forEach(hijo => {
+				hijo.hijo = true
+				lista[padre].addHijo(hijo.mostrar())
+			})
+		})
 	}
 
 	/**

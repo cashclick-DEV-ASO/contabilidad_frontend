@@ -1,19 +1,19 @@
-import { TITULO_LAYOUT_CLS, SEL_LAYOUT_CLS } from "../src/constantes.js"
-
 import { Componente, ListaDesplegable } from "./componentes.js"
 
-export class SelLayout extends Componente {
+import { SYS, LSTLAYOUT } from "../src/constantes.js"
+
+export class LstLayout extends Componente {
 	constructor() {
-		super("section", { clase: SEL_LAYOUT_CLS })
+		super(SYS.SCTN, { id: LSTLAYOUT.CONTENEDOR })
 		this.opciones = []
 
 		return this.inicia()
 	}
 
 	inicia() {
-		this.lblLayout = new Componente("label", { clase: TITULO_LAYOUT_CLS })
-		this.selLayout = new ListaDesplegable("Sin layout")
-		this.lblLayout.setTexto("Layout")
+		this.lblLayout = new Componente(SYS.LBL, { id: LSTLAYOUT.LBL })
+		this.lblLayout.setTexto(LSTLAYOUT.TXTTITULO)
+		this.selLayout = new ListaDesplegable(LSTLAYOUT.PH_VACIO, LSTLAYOUT.PH_LLENO)
 
 		return this
 	}
@@ -52,7 +52,6 @@ export class SelLayout extends Componente {
 	}
 
 	limpiar() {
-		// this.opciones = []
 		this.selLayout.limpiar()
 
 		return this
@@ -85,4 +84,4 @@ export class SelLayout extends Componente {
 	}
 }
 
-export default SelLayout
+export default LstLayout

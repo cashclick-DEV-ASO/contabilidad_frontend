@@ -100,7 +100,17 @@ export class Modelo {
 	}
 
 	preocesaError(error, mensaje = null) {
-		if (this.resultado && this.resultado.informacion.sesionCaducada) {
+		if (!this.resultado) {
+			this.mensaje = mensaje
+			this.resultado = {
+				success: false,
+				informacion: null,
+			}
+
+			cerrarSesion()
+		}
+
+		if (this.resultado.informacion.sesionCaducada) {
 			this.resultado = null
 			cerrarSesion()
 			return this

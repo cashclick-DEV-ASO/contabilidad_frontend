@@ -4,11 +4,11 @@ import { RegTrnBancos as Modelo } from "../models/modelos.js"
 
 import {
 	Componente,
-	SelBanco,
-	SelPeriodo,
-	SelArchivo,
-	SelLayout,
-	Tabla,
+	LstPeriodo,
+	LstBanco,
+	LstLayout,
+	SlctArchivo,
+	TablaDatos,
 } from "../components/componentes.js"
 
 export class RegTrnBancos extends Vista {
@@ -21,29 +21,28 @@ export class RegTrnBancos extends Vista {
 	inicia() {
 		this.titulo.setTexto("Registro de Transacciones Bancarias")
 
-		this.acciones.selPeriodo = new SelPeriodo()
+		this.acciones.selPeriodo = new LstPeriodo()
 		this.acciones.selPeriodo.setEstilo2()
 
-		this.acciones.selBanco = new SelBanco()
+		this.acciones.selBanco = new LstBanco()
 		this.acciones.selBanco.setListener("change", this.controlador.cambioBanco)
 
-		this.acciones.selLayout = new SelLayout()
+		this.acciones.selLayout = new LstLayout()
 		this.acciones.selLayout.selLayout.setListener("change", this.controlador.cambioLayout)
 
-		this.acciones.selArchivo = new SelArchivo()
+		this.acciones.selArchivo = new SlctArchivo()
 		this.acciones.selArchivo.accionAbrir(this.controlador.leerArchivo)
 		this.acciones.selArchivo.setMensaje("Selecciona un Banco y un Layout.")
 
-		this.btnGuardar = new Componente("button", { clase: "btnGuardar" })
-		this.btnGuardar.setTexto("Guardar")
-		this.btnGuardar.setPropiedad("disabled", "true")
-		this.btnGuardar.setListener("click", this.controlador.guardar)
+		this.acciones.guardar = new Componente("section", {
+			id: "contenedorGuardar",
+			hijos: [(this.acciones.btnGuardar = new Componente("button"))],
+		})
+		this.acciones.btnGuardar.setTexto("Guardar")
+		// this.btnGuardar.setPropiedad("disabled", "true")
+		this.acciones.btnGuardar.setListener("click", this.controlador.guardar)
 
-		this.acciones.guardar = new Componente("section", { clase: "contenedorGuardar" }).addHijo(
-			this.btnGuardar.mostrar()
-		)
-
-		this.datos.tabla = new Tabla()
+		this.datos.tabla = new TablaDatos()
 		this.datos.tabla.mostrarFiltro = true
 
 		this.controlador.cargaInicial()

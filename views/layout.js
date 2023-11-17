@@ -2,7 +2,7 @@ import Vista from "./vista.js"
 import { Layout as Controlador } from "../controllers/controladores.js"
 import { Layout as Modelo } from "../models/modelos.js"
 
-import { Componente, ListaDesplegable, SelBanco, SelLayout } from "../components/componentes.js"
+import { Componente, ListaDesplegable, LstBanco, LstLayout } from "../components/componentes.js"
 
 export class Layout extends Vista {
 	constructor() {
@@ -15,65 +15,69 @@ export class Layout extends Vista {
 		this.titulo = new Componente("h2", { clase: "titulo" })
 		this.titulo.setTexto("Administración de Layout's")
 
-		this.btnNuevo = new Componente("button", { clase: "btnNuevo" })
-		this.btnNuevo.setTexto("Nuevo")
-		this.btnNuevo.setListener("click", this.controlador.solicitaNombre)
-		this.acciones.nuevo = new Componente("section", { clase: "nuevo" }).addHijo(
-			this.btnNuevo.mostrar()
-		)
+		this.acciones.nuevo = new Componente("section", {
+			clase: "contenedorNuevo",
+			hijos: [(this.acciones.btnNuevo = new Componente("button", { clase: "btnNuevo" }))],
+		})
+		this.acciones.btnNuevo.setTexto("Nuevo")
+		this.acciones.btnNuevo.setListener("click", this.controlador.solicitaNombre)
 
-		this.acciones.selBanco = new SelBanco()
+		this.acciones.selBanco = new LstBanco()
 		this.acciones.selBanco.setListener("change", this.controlador.cambioBanco)
 
-		this.acciones.selLayout = new SelLayout()
+		this.acciones.selLayout = new LstLayout()
 		this.acciones.selLayout.setListener("change", this.controlador.cambioLayout)
 
-		this.lblExtensiones = new Componente("label", {
-			clase: "lblExtensiones",
-		})
-		this.lblExtensiones.setTexto("Extensiones")
-		this.extensiones = new Componente("input", { clase: "extensiones" })
-		this.extensiones.setPropiedad("type", "text")
-		this.extensiones.setListener("input", this.controlador.informacionModificada)
 		this.acciones.contenedorExt = new Componente("section", {
 			clase: "contenedorExt",
-		}).addHijos([this.lblExtensiones.mostrar(), this.extensiones.mostrar()])
+			hijos: [
+				(this.acciones.lblExtensiones = new Componente("label", {
+					clase: "lblExtensiones",
+				})),
+				(this.acciones.extensiones = new Componente("input", { clase: "extensiones" })),
+			],
+		})
+		this.acciones.lblExtensiones.setTexto("Extensiones")
+		this.acciones.extensiones.setPropiedad("type", "text")
+		this.acciones.extensiones.setListener("input", this.controlador.informacionModificada)
 
-		this.btnGuardar = new Componente("button", { clase: "btnGuardar" })
-		this.btnGuardar.setTexto("Guardar")
-		this.btnGuardar.setPropiedad("disabled", "true")
-		this.btnGuardar.setListener("click", this.controlador.guardarCambios)
-		this.contenedorGuardar = new Componente("section", {
+		this.acciones.contenedorGuardar = new Componente("section", {
 			clase: "contenedorGuardar",
-		}).addHijo(this.btnGuardar.mostrar())
+			hijos: [(this.acciones.btnGuardar = new Componente("button", { clase: "btnGuardar" }))],
+		})
+		this.acciones.btnGuardar.setTexto("Guardar")
+		this.acciones.btnGuardar.setPropiedad("disabled", "true")
+		this.acciones.btnGuardar.setListener("click", this.controlador.guardarCambios)
 
-		this.lblTipo = new Componente("label", { clase: "lblTipo" })
-		this.lblTipo.setTexto("Tipo")
-		this.tipo = new ListaDesplegable()
-		this.tipo.setOpciones([
+		this.acciones.contenedorTipo = new Componente("section", {
+			clase: "contenedorTipo",
+			hijos: [
+				(this.acciones.lblTipo = new Componente("label", { clase: "lblTipo" })),
+				(this.acciones.tipo = new ListaDesplegable()),
+			],
+		})
+		this.acciones.lblTipo.setTexto("Tipo")
+		this.acciones.tipo.setOpciones([
 			{ texto: "excel", valor: "excel" },
 			{ texto: "delimitado", valor: "delimitado" },
 			{ texto: "fijo", valor: "fijo" },
 			{ texto: "json", valor: "json" },
 			{ texto: "xml", valor: "xml" },
 		])
-		this.acciones.contenedorTipo = new Componente("section", {
-			clase: "contenedorTipo",
-		}).addHijos([this.lblTipo.mostrar(), this.tipo.mostrar()])
 
 		this.datos.contenedorEditor = new Componente("section", {
 			clase: "contenedorEditor",
+			hijos: [(this.datos.editor = new Componente("textarea", { clase: "editor" }))],
 		})
-		this.editor = new Componente("textarea", { clase: "editor" })
-		this.editor.setPropiedad("contenteditable", "true")
-		this.editor.setPropiedad("spellcheck", "false")
-		this.editor.setPropiedad("autocorrect", "off")
-		this.editor.setPropiedad("autocapitalize", "off")
-		this.editor.setPropiedad("autocomplete", "off")
-		this.editor.setPropiedad("wrap", "off")
-		this.editor.setListener("input", this.controlador.informacionModificada)
+		this.datos.editor.setPropiedad("contenteditable", "true")
+		this.datos.editor.setPropiedad("spellcheck", "false")
+		this.datos.editor.setPropiedad("autocorrect", "off")
+		this.datos.editor.setPropiedad("autocapitalize", "off")
+		this.datos.editor.setPropiedad("autocomplete", "off")
+		this.datos.editor.setPropiedad("wrap", "off")
+		this.datos.editor.setListener("input", this.controlador.informacionModificada)
 
-		this.controlador.cargaInicial()
+		this.controlador.datosInicio()
 		return this
 	}
 

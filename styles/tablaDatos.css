@@ -1,4 +1,4 @@
-.tablaDatos {
+#contenedorTablaDatos {
 	inset: 0;
 	margin: auto;
 	width: 95%;
@@ -18,10 +18,10 @@
 	border-radius: 15px;
 }
 
-.controles {
+#contenedorTablaDatos > #contenedorControles {
 	grid-area: controles;
 	margin: 0;
-	padding: 0;
+	padding: 5px;
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -29,27 +29,36 @@
 	justify-content: center;
 }
 
-.contenedorDetalles {
+#contenedorTablaDatos > #contenedorControles > * {
+	margin-right: 10px;
+}
+
+#contenedorTablaDatos > #contenedorControles > label {
+	font-weight: bold;
+}
+
+#contenedorTablaDatos > #contenedorDetalle {
 	grid-area: detalles;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
-	gap: 10px;
+	gap: 5px;
+	padding: 5px;
 }
 
-.contenedorDetalles .contenedorDetalle {
+#contenedorTablaDatos > #contenedorDetalle > .detalle {
 	display: flex;
 	flex-basis: calc(100% / 6);
 	justify-content: center;
 	align-items: center;
 }
 
-.contenedorDetalles .lblDetalleTitulo {
+#contenedorTablaDatos > #contenedorDetalle > .detalle > .lblDetalle {
 	font-weight: bold;
 }
 
-.contenedorTabla {
+#contenedorTablaDatos > #contenedorTabla {
 	grid-area: tabla;
 	width: 100%;
 	height: 100%;
@@ -57,34 +66,34 @@
 	overflow: auto;
 }
 
-.contenedorTabla #tabla {
+#contenedorTablaDatos > #contenedorTabla > #tablaDatos {
 	border-collapse: collapse;
 	width: 100%;
+	border: 1px solid #000;
 }
 
-.contenedorTabla .tblEncabezados {
+#contenedorTablaDatos > #contenedorTabla > #tablaDatos > .encabezadoTabla {
 	background-color: var(--azul_medio_1);
 	color: white;
 	position: sticky;
 	top: 0;
+	border: 1px solid #000;
 }
 
-.contenedorTabla .fila:nth-child(even) {
+#contenedorTablaDatos > #contenedorTabla .fila:nth-child(even) {
 	background-color: #d6d6d6e3;
 }
 
-.contenedorTabla .fila:hover {
+#contenedorTablaDatos > #contenedorTabla .fila:hover {
 	background-color: #a0a0a0;
 }
 
-.contenedorTabla .celda:hover {
+#contenedorTablaDatos > #contenedorTabla .celda:hover {
 	background-color: #797979;
 }
 
-.contenedorTabla .celda {
-	padding: 5px;
-}
-
-.controles > * {
-	margin-right: 10px;
+#contenedorTablaDatos > #contenedorTabla > #tablaDatos .celda,
+.celdaEncabezado {
+	border-left: 1px solid #000;
+	border-right: 1px solid #000;
 }

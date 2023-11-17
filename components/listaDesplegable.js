@@ -1,8 +1,11 @@
 import { Componente } from "./componentes.js"
 
+import { SYS, LST } from "../src/constantes.js"
+
 export class ListaDesplegable extends Componente {
-	constructor(phVacio = "Sin opciones", phLleno = "Selecciona", mostrarPh = true) {
-		super("select", { clase: "listaDesplegable" })
+	constructor(phVacio = LST.SIN_OPT, phLleno = LST.SEL, mostrarPh = true) {
+		super(SYS.LST, { clase: LST.CONTENEDOR })
+		this.default = SYS.DFLT
 		this.txtPhVacio = phVacio
 		this.txtPhLleno = phLleno
 		this.mostrarPh = mostrarPh
@@ -12,9 +15,9 @@ export class ListaDesplegable extends Componente {
 	}
 
 	inicia() {
-		this.placeholder = new Componente("option")
-		this.placeholder.setValor("default")
-		this.placeholder.setPropiedad("disabled", true)
+		this.placeholder = new Componente(SYS.OPT)
+		this.placeholder.setValor(this.default)
+		this.placeholder.setPropiedad(SYS.DSBL, true)
 
 		return this
 	}
@@ -74,7 +77,7 @@ export class ListaDesplegable extends Componente {
 	}
 
 	setOpcion(atributos) {
-		const opcion = new Componente("option")
+		const opcion = new Componente(SYS.OPT)
 		opcion.setTexto(atributos.texto)
 		opcion.setValor(atributos.valor ?? atributos.texto)
 		return opcion
@@ -87,7 +90,7 @@ export class ListaDesplegable extends Componente {
 	}
 
 	reinicia() {
-		this.getComponente().value = "default"
+		this.getComponente().value = this.default
 		return this
 	}
 

@@ -9,7 +9,7 @@ export class LayoutController extends Controlador {
 		this.datos = this.vista.datos
 	}
 
-	cargaInicial = () => {
+	datosInicio = () => {
 		this.acciones.selBanco.setTemporalPH("Cargando bancos...")
 		this.llenaListaBancos().then(() => {
 			this.acciones.selBanco.actualilzaBancos(this.bancos)
@@ -20,17 +20,17 @@ export class LayoutController extends Controlador {
 		this.limpiaCampos()
 		this.acciones.selLayout.setTemporalPH("Cargando layout...")
 
-		this.banco = this.bancos.find(
+		this.acciones.banco = this.acciones.bancos.find(
 			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
 		)
 
-		if (this.banco === undefined) {
+		if (this.acciones.banco === undefined) {
 			this.msjError("No se encontró información del banco seleccionado.")
 			this.acciones.selLayout.setMensaje("Selecciona un Banco.")
 			return
 		}
 
-		this.llenaListaLayouts(this.banco.id).then(() => {
+		this.llenaListaLayouts(this.acciones.banco.id).then(() => {
 			if (this.layouts.length === 0) {
 				this.msjError("No hay layouts disponibles.")
 				this.acciones.selLayout.setMensaje("Selecciona un Banco.")
@@ -86,9 +86,9 @@ export class LayoutController extends Controlador {
 	limpiaCampos = ({ lyt = true, bnk = false } = {}) => {
 		bnk && this.acciones.selBanco.reinicia()
 		lyt && this.acciones.selLayout.limpiar()
-		this.vista.extensiones.setValor("")
-		this.vista.btnGuardar.habilitar(false)
-		this.vista.editor.setValor("")
+		this.acciones.extensiones.setValor("")
+		this.acciones.btnGuardar.habilitar(false)
+		this.datos.editor.setValor("")
 	}
 
 	guardarCambios = async () => {

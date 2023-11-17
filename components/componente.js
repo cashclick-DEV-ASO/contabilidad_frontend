@@ -11,12 +11,15 @@ export class Componente {
 	 * @description Crea un elemento HTML del tipo solicitado
 	 * @returns {Componente} Componente
 	 */
-	constructor(elemento = null, { clase = "", id = "" } = {}) {
+	constructor(elemento = null, { clase = "", id = "", hijos = null } = {}) {
 		this.#componente =
 			typeof elemento === "string" ? document.createElement(elemento) : elemento
 
 		if (clase !== "") this.setClase(clase)
 		if (id !== "") this.setID(id)
+
+		this.hijos = hijos
+		this.hijo = false
 
 		return this
 	}
@@ -54,7 +57,7 @@ export class Componente {
 	 * @description Agrega un ID al elemento
 	 */
 	setID(id) {
-		if (!id && id === "") return this
+		if (!id || id === "") return this
 		this.#componente.id = id
 		return this
 	}

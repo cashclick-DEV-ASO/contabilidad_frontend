@@ -10,10 +10,9 @@ import Vistas from "../views/vistas.js"
  */
 export class Main extends Componente {
 	constructor() {
-		super("main", { clase: "main" })
+		super("main", { id: "main" })
 		this.vistas = Vistas
-		this.activa = new (this.vistas[leerCookie("vista")] ??
-			this.vistas.Inicio)()
+		this.activa = new (this.vistas[leerCookie("vista")] ?? this.vistas.Inicio)()
 		return this
 	}
 

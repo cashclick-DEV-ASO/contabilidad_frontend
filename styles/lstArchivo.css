@@ -1,4 +1,4 @@
-.selArchivo {
+#contenedorArchivo {
 	width: 100%;
 	height: 100%;
 	display: grid;
@@ -13,7 +13,7 @@
 	justify-items: center;
 }
 
-.selArchivo #titulo {
+#contenedorArchivo #titulo {
 	grid-area: titulo;
 	font-weight: bold;
 	height: 100%;
@@ -23,14 +23,14 @@
 	justify-content: center;
 }
 
-.selArchivo #lblRuta {
+#contenedorArchivo #lblRuta {
 	grid-area: ruta;
 	height: 100%;
 	width: 100%;
 	font-size: 12px;
 }
 
-.selArchivo #lblArchivo {
+#contenedorArchivo #lblArchivo {
 	grid-area: selector;
 	box-shadow: inset 0px -3px 7px 0px #1d4387;
 	background: linear-gradient(to bottom, #1d4387 5%, #07aada 100%);
@@ -47,25 +47,25 @@
 	user-select: none;
 }
 
-.selArchivo #lblArchivo:hover {
+#contenedorArchivo #lblArchivo:hover {
 	background: linear-gradient(to bottom, #07aada 5%, #1d4387 100%);
 	background-color: #07aada;
 }
 
-.selArchivo #lblArchivo:not(.disabled):active {
+#contenedorArchivo #lblArchivo:not(.disabled):active {
 	position: relative;
 	top: 1px;
 }
 
-.selArchivo .disabled {
+#contenedorArchivo .disabled {
 	background: linear-gradient(to bottom, #871d1d 5%, #da0707 100%) !important;
 	background-color: #df5329 !important;
 }
 
-.selArchivo #btnAbrir {
+#contenedorArchivo #btnAbrir {
 	grid-area: boton;
 }
 
-.selArchivo #inpArchivo {
+#contenedorArchivo #inpArchivo {
 	display: none;
 }

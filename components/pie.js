@@ -9,7 +9,7 @@ import { Componente } from "./componentes.js"
  */
 export class Pie extends Componente {
 	constructor() {
-		super("footer", { clase: PIE_CLS })
+		super("footer", { id: PIE_CLS })
 		return this
 	}
 

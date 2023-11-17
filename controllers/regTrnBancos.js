@@ -89,7 +89,7 @@ export class RegTrnBancosController extends Controlador {
 
 				this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla()).actualizaTabla()
 
-				this.vista.btnGuardar.setPropiedad("disabled", false)
+				this.acciones.btnGuardar.setPropiedad("disabled", false)
 				return
 			}
 		}

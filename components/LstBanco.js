@@ -1,19 +1,19 @@
-import { TITULO_BANCO_CLS, SEL_BANCO_CLS, BBVA, CONEKTA, STP } from "../src/constantes.js"
-
 import { Componente, ListaDesplegable } from "./componentes.js"
 
-export class SelBanco extends Componente {
+import { SYS, LSTBANCO } from "../src/constantes.js"
+
+export class LstBanco extends Componente {
 	constructor() {
-		super("section", { clase: SEL_BANCO_CLS })
+		super(SYS.SCTN, { id: LSTBANCO.CONTENEDOR })
 		this.opciones = []
 
 		return this.inicia()
 	}
 
 	inicia() {
-		this.lblBanco = new Componente("label", { clase: TITULO_BANCO_CLS })
+		this.lblBanco = new Componente(SYS.LBL, { id: LSTBANCO.LBL })
 		this.selBanco = new ListaDesplegable()
-		this.lblBanco.setTexto("Banco")
+		this.lblBanco.setTexto(LSTBANCO.TXTTITULO)
 
 		return this
 	}
@@ -59,3 +59,5 @@ export class SelBanco extends Componente {
 		return this
 	}
 }
+
+export default LstBanco

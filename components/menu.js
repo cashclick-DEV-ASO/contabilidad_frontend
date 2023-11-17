@@ -12,7 +12,7 @@ import { Componente } from "./componentes.js"
  */
 export class Menu extends Componente {
 	constructor() {
-		super("nav", { clase: NAVEGACION })
+		super("nav", { id: NAVEGACION })
 		this.rutas = JSON.parse(leerCookie("RUTAS"))
 		this.main = null
 		return this

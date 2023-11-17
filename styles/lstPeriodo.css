@@ -1,11 +1,11 @@
-.selPeriodo {
+#contenedorPeriodo {
 	width: 100%;
 	height: 100%;
 	display: grid;
 	align-content: center;
 }
 
-.selPeriodo.cuadrado {
+#contenedorPeriodo.cuadrado {
 	grid-template-areas:
 		"titulo titulo"
 		"lblAnio txtAnio"
@@ -15,7 +15,7 @@
 	justify-content: center;
 }
 
-.selPeriodo.largo {
+#contenedorPeriodo.largo {
 	grid-template-areas:
 		"titulo titulo titulo titulo"
 		"lblAnio txtAnio lblMes txtMes";
@@ -34,15 +34,15 @@
 	text-align: end;
 }
 
-#anioPeriodo {
-	grid-area: txtAnio;
-	width: 50px;
-}
-
-#lblMesPeriodo {
+#lblPeriodo {
 	grid-area: lblMes;
 	width: 50px;
 	text-align: end;
+}
+
+#anioPeriodo {
+	grid-area: txtAnio;
+	width: 50px;
 }
 
 #mesPeriodo {
