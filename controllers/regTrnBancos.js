@@ -10,7 +10,7 @@ export class RegTrnBancosController extends Controlador {
 	cargaInicial = () => {
 		this.acciones.selBanco.setTemporalPH("Cargando bancos...")
 		this.llenaListaBancos().then(() => {
-			this.acciones.selBanco.actualilzaBancos(this.bancos)
+			this.acciones.selBanco.actulizaOpciones(this.bancos)
 		})
 	}
 
@@ -24,18 +24,18 @@ export class RegTrnBancosController extends Controlador {
 
 		if (this.banco === undefined) {
 			this.msjError("No se encontró información del banco seleccionado.")
-			this.acciones.selLayout.setMensaje("Selecciona un Banco.")
+			this.acciones.selArchivo.setMensaje("Selecciona un Banco.")
 			return
 		}
 
 		this.llenaListaLayouts(this.banco.id).then(() => {
 			if (this.layouts.length === 0) {
 				this.msjError("No hay layouts disponibles.")
-				this.acciones.selLayout.setMensaje("Selecciona un Banco.")
+				this.acciones.selArchivo.setMensaje("Selecciona un Banco.")
 				return
 			}
 
-			this.acciones.selLayout.actualilzaLayouts(this.layouts)
+			this.acciones.selLayout.actulizaOpciones(this.layouts)
 			this.acciones.selArchivo.setMensaje("Selecciona un Layout.")
 		})
 	}
@@ -99,7 +99,7 @@ export class RegTrnBancosController extends Controlador {
 
 	guardar = async () => {
 		this.msjContinuar(
-			`Se guardará la información del archivo:<br><br>${this.acciones.selArchivo.ruta.name}<br><br>¿Deseas continuar?`,
+			`Se guardará la información del archivo:<br><br>${this.acciones.selArchivo.ruta.name}<br><br>¿Desea continuar?`,
 			{
 				txtSi: "Si, guardar",
 				txtNo: "No, cancelar",

@@ -52,6 +52,17 @@ export class Componente {
 		return this
 	}
 
+	reemplazaClase(claseNueva, claseAnterior = null) {
+		if (claseAnterior) this.removeClase(claseAnterior)
+		else this.removeClases()
+
+		this.setClase(claseNueva)
+	}
+
+	removeClases() {
+		this.#componente.classList = []
+	}
+
 	/**
 	 * @param {string} id - ID para el elemento
 	 * @description Agrega un ID al elemento
@@ -135,6 +146,7 @@ export class Componente {
 	 */
 	setValor(valor) {
 		this.#componente.value = valor
+		return this
 	}
 
 	/**

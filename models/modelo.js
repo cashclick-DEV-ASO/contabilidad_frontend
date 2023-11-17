@@ -49,7 +49,7 @@ export class Modelo {
 			const mensaje = this.response
 				? this.mensajesError[this.response.status]
 				: this.mensajesError[500]
-			this.preocesaError(error, mensaje)
+			this.preocesaError(error, mensaje, recurso)
 		}
 	}
 
@@ -99,8 +99,8 @@ export class Modelo {
 		}
 	}
 
-	preocesaError(error, mensaje = null) {
-		if (!this.resultado) {
+	preocesaError(error, mensaje = null, recurso = null) {
+		if (!this.resultado && recurso !== "login") {
 			this.mensaje = mensaje
 			this.resultado = {
 				success: false,
@@ -110,7 +110,7 @@ export class Modelo {
 			cerrarSesion()
 		}
 
-		if (this.resultado.informacion.sesionCaducada) {
+		if (this.resultado && this.resultado.informacion.sesionCaducada) {
 			this.resultado = null
 			cerrarSesion()
 			return this

@@ -1,19 +1,15 @@
 @import url("./global.css");
 @import url("./navegacion.css");
+@import url("./mensaje.css");
+@import url("./lstPeriodo.css");
+@import url("./listaDesplegable.css");
+@import url("./slctArchivo.css");
+@import url("./tablaDatos.css");
 @import url("./vista.css");
 @import url("./inicio.css");
 @import url("./regTrnBancos.css");
-@import url("./tablaDatos.css");
-
-/* 
-@import url("./mensaje.css");
 @import url("./layout.css");
 @import url("./logout.css");
-@import url("./selBanco.css");
-@import url("./selPeriodo.css");
-@import url("./selArchivo.css");
-@import url("./selLayout.css");
- */
 
 .contenedor {
 	width: 100%;

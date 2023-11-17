@@ -1,0 +1,34 @@
+.contenedorListaDesplegable {
+	width: max-content;
+	height: 100%;
+	display: grid;
+	align-items: center;
+}
+
+.contenedorListaDesplegable > *{
+	margin: 2px;
+}
+
+.contenedorListaDesplegable.largo{
+	grid-template-areas:
+		"titulo"
+		"lista";
+	justify-items: center;
+}
+
+.contenedorListaDesplegable.ancho{
+	grid-template-areas:
+		"titulo lista";
+	justify-content: center;
+}
+
+.contenedorListaDesplegable > .lblLista {
+	grid-area: titulo;
+	font-weight: bold;
+}
+
+.contenedorListaDesplegable > .ListaDesplegable {
+	grid-area: lista;
+	min-width: 100px;
+	max-width: 200px;
+}

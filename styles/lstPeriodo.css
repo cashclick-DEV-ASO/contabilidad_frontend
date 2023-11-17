@@ -2,50 +2,52 @@
 	width: 100%;
 	height: 100%;
 	display: grid;
-	align-content: center;
+	align-items: center;
+	justify-items: center;
+	justify-content: center;
 }
 
-#contenedorPeriodo.cuadrado {
+
+#contenedorPeriodo > *{
+	margin: 2px;
+}
+
+#contenedorPeriodo.ancho {
 	grid-template-areas:
 		"titulo titulo"
 		"lblAnio txtAnio"
 		"lblMes txtMes";
-	align-items: center;
-	justify-items: center;
-	justify-content: center;
 }
 
 #contenedorPeriodo.largo {
 	grid-template-areas:
 		"titulo titulo titulo titulo"
 		"lblAnio txtAnio lblMes txtMes";
-	justify-items: center;
-	align-items: center;
 }
 
-.tituloPeriodo {
+#tituloPeriodo {
 	grid-area: titulo;
 	font-weight: bold;
 }
 
 #lblAnioPeriodo {
 	grid-area: lblAnio;
-	width: 50px;
+	width: 40px;
 	text-align: end;
 }
 
-#lblPeriodo {
+#lblMesPeriodo {
 	grid-area: lblMes;
-	width: 50px;
+	width: 40px;
 	text-align: end;
 }
 
 #anioPeriodo {
 	grid-area: txtAnio;
-	width: 50px;
+	width: 60px;
 }
 
 #mesPeriodo {
 	grid-area: txtMes;
-	width: 50px;
+	width: 60px;
 }

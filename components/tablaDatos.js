@@ -26,21 +26,12 @@ export class TablaDatos extends Componente {
 	inicia() {
 		this.controles = new Componente(SYS.SCTN, { id: TABLA.CONTROLES })
 
-		this.lblColFiltro = new Componente(SYS.LBL, {
-			id: TABLA.LBL_PARAMETRO,
-			clase: TABLA.PARAMETROS,
-		})
-		this.lblColFiltro.setTexto(TABLA.PARAMETRO)
-
-		this.selColFiltro = new ListaDesplegable()
-		this.selColFiltro.setClase(TABLA.PARAMETROS)
-		this.selColFiltro.setID(TABLA.SLCT_PARAMETRO)
+		this.selColFiltro = new ListaDesplegable().setTxtEtiqueta(TABLA.TXT_COL_FILTRO).setEstilo2()
 
 		this.lblFiltro = new Componente(SYS.LBL, {
 			clase: TABLA.PARAMETROS,
 			id: TABLA.LBL_VALOR_PARAMETRO,
-		})
-		this.lblFiltro.setTexto(TABLA.TXT_VALOR_PARAMETRO)
+		}).setTexto(TABLA.TXT_VALOR_PARAMETRO)
 
 		this.txtFiltro = new Componente(SYS.IN, {
 			clase: TABLA.PARAMETROS,
@@ -50,20 +41,17 @@ export class TablaDatos extends Componente {
 		this.btnFiltro = new Componente(SYS.BTN, {
 			clase: TABLA.PARAMETROS,
 			id: TABLA.BTN_FILTRO,
-		})
-		this.btnFiltro.setTexto(TABLA.TXT_BTN_FILTRO)
+		}).setTexto(TABLA.TXT_BTN_FILTRO)
 
 		this.btnLimpiar = new Componente(SYS.BTN, {
 			clase: TABLA.PARAMETROS,
 			id: TABLA.BTN_LIMPIAR,
-		})
-		this.btnLimpiar.setTexto(TABLA.TXT_BTN_LIMPIAR)
+		}).setTexto(TABLA.TXT_BTN_LIMPIAR)
 
 		this.btnExportar = new Componente(SYS.BTN, {
 			clase: TABLA.PARAMETROS,
 			id: TABLA.BTN_EXPORTAR,
-		})
-		this.btnExportar.setTexto(TABLA.TXT_BTN_EXPORTAR)
+		}).setTexto(TABLA.TXT_BTN_EXPORTAR)
 
 		this.contenedorDetalles = new Componente(SYS.SCTN, {
 			id: TABLA.DETALLES,
@@ -84,7 +72,6 @@ export class TablaDatos extends Componente {
 			this.filtro
 				? this.controles
 						.addHijos([
-							this.lblColFiltro.getComponente(),
 							this.selColFiltro.mostrar(),
 							this.lblFiltro.getComponente(),
 							this.txtFiltro.getComponente(),

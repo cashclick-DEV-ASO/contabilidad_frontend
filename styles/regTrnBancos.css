@@ -1,4 +1,4 @@
-#contenedorAcciones {
+.RegTrnBancos > #contenedorAcciones {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 2fr 0.5fr;
 	grid-template-rows: max-content;
@@ -7,23 +7,23 @@
 	align-items: center;
 }
 
-#contenedorAcciones > .selPeriodo {
+.RegTrnBancos > #contenedorAcciones > .selPeriodo {
 	grid-area: periodo;
 }
 
-#contenedorAcciones > .selBanco {
+.RegTrnBancos > #contenedorAcciones > .selBanco {
 	grid-area: banco;
 }
 
-#contenedorAcciones > .layout {
+.RegTrnBancos > #contenedorAcciones > .layout {
 	grid-area: layout;
 }
 
-#contenedorAcciones > .selArchivo {
+.RegTrnBancos > #contenedorAcciones > .selArchivo {
 	grid-area: archivo;
 }
 
-#contenedorAcciones > .contenedorGuardar {
+.RegTrnBancos > #contenedorAcciones > .contenedorGuardar {
 	grid-area: guardar;
 	width: 100%;
 	height: 100%;
@@ -32,6 +32,6 @@
 	align-items: center;
 }
 
-#contenedorDatos > .tablaDatos {
+.RegTrnBancos > #contenedorDatos > .tablaDatos {
 	grid-area: tabla;
 }

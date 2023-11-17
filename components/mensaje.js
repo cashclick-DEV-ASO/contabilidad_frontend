@@ -58,8 +58,7 @@ export class Mensaje extends Componente {
 		this.marco.setClase(this.tipoSolicitado)
 
 		this.txtTitulo.setTexto(this.txtTtl)
-		this.cerrar.setTexto("X")
-		this.cerrar.setListener("click", this.ocultar.bind(this))
+		this.cerrar.setTexto("❌").setListener("click", this.ocultar.bind(this))
 
 		this.txtMensaje.setTexto(this.txtMsj)
 		this.captura.setPropiedad("type", "text")

@@ -46,31 +46,20 @@ export const LSTPERIODO = {
 	ANIO_MINIMO: 2020,
 	A: "Año",
 	M: "Mes",
-	ESTILO_1: "cuadrado",
-	ESTILO_2: "largo",
+	ESTILO_1: "largo",
+	ESTILO_2: "ancho",
 }
 
 //Lista desplegable
 export const LST = {
-	CONTENEDOR: "contenedorLista",
-	SIN_OPT: "Sin opciones",
-	SEL: "Selecciona",
-}
-
-//Selector de Bancos
-export const LSTBANCO = {
-	CONTENEDOR: "contenedorBancos",
-	LBL: "lblBanco",
-	TXTTITULO: "Banco",
-}
-
-//Selector de Layouts
-export const LSTLAYOUT = {
-	CONTENEDOR: "contenedorLayouts",
-	TXTTITULO: "Layout",
-	LBL: "lblLayout",
-	PH_VACIO: "Sin Layout",
-	PH_LLENO: "Selecciona un Layout",
+	CONTENEDOR: "contenedorListaDesplegable",
+	LBL: "lblLista",
+	TXT_LBL: "Lista desplegable",
+	SLCT: "ListaDesplegable",
+	PH_VACIO: "Sin opciones",
+	PH_LLENO: "Selecciona",
+	ESTILO_1: "largo",
+	ESTILO_2: "ancho",
 }
 
 //Selector de Archivos
@@ -94,6 +83,7 @@ export const SLCTARCHIVO = {
 export const TABLA = {
 	CONTENEDOR: "contenedorTablaDatos",
 	CONTROLES: "contenedorControles",
+	TXT_COL_FILTRO: "Filtrar",
 	DETALLES: "contenedorDetalle",
 	DETALLE: "detalle",
 	LBL_DETALLE: "lblDetalle",
@@ -117,7 +107,6 @@ export const TABLA = {
 	TXT_BTN_EXPORTAR: "Exportar",
 	PARAMETROS: "parametros",
 	LBL_PARAMETRO: "lblParametro",
-	SLCT_PARAMETRO: "slctParametro",
 	PARAMETRO: "Parámetro",
 	SIN_DATOS: "sinDatos",
 	TXT_SIN_DATOS: "No hay datos para mostrar",

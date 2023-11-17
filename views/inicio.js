@@ -11,6 +11,7 @@ const LOGO = new URL("../images/Cashclick_logo.svg", import.meta.url).href
 export class Inicio extends Componente {
 	constructor() {
 		super("section", { id: "inicio" })
+		this.resolucionOK = true
 		return this.inicia()
 	}
 
@@ -19,10 +20,11 @@ export class Inicio extends Componente {
 		this.bienvenida.setTexto(
 			`<strong>
 			<p>
-			Hola!, ${leerCookie("NOMBRE")}
+			Hola,  ${leerCookie("NOMBRE")}.
 			</p>
+			<br>
 			<p>
-			Haz ingresado al sistema de contabilidad integral de
+			Te damos la bienvenida al sistema de contabilidad integral de
 			</p>
 			</strong>`
 		)
@@ -35,24 +37,29 @@ export class Inicio extends Componente {
 			id: "contenedorRecomendacion",
 		})
 		this.recomendacion.setTexto(
-			`<p>
-			<strong>
-			Para comenzar, selecciona una opción del menú superior.
-			<br>
-			¡Que tengas ${this.textoSaludo()}!
-			</strong>
-			<br>
+			`<strong>
+			<p>
+			¿Estás listo para empezar?, Selecciona una opción del menú superior.
 			</p>
 			<br>
-			<p><small>
-			Para una mejor experiencia, te sugerimos usar Google Chrome o Microsoft Edge y ajustar la resolución de tu pantalla a 1280 x 720 o más.
-			</small></p>
+			<p>
+			¡Que tengas ${this.textoSaludo()}!
 			<br>
-			<p><small>
+			</p>
+			</strong>
+			<br>
+			<small>
+			<p>
 			Tu navegador actual es: ${this.iconosNavegadores()}
 			<br>
 			Tu resolución actual es: ${this.validacionResolucion()}
-			</small></p>`
+			</p>
+			${
+				this.resolucionOK
+					? ""
+					: "<p>Para una mejor experiencia, te sugerimos utilizar Google Chrome o Microsoft Edge y tener una resolución de pantalla de 1280 x 720 o superior.</p>"
+			}
+			</small>`
 		)
 
 		this.addHijos([
@@ -90,7 +97,8 @@ export class Inicio extends Componente {
 	validacionResolucion() {
 		const ancho = window.innerWidth
 		const alto = window.innerHeight
-		const icono = ancho >= 1280 && alto >= 720 ? "✅" : "❌"
+		this.resolucionOK = ancho >= 1280 && alto >= 720
+		const icono = this.resolucionOK ? "✅" : "❌"
 		return `${ancho} x ${alto} ${icono}`
 	}
 }

@@ -22,44 +22,46 @@ export class LstPeriodo extends Componente {
 	}
 
 	inicia() {
-		this.titulo = new Componente(SYS.LBL, { id: LSTPERIODO.TITULO })
-		this.titulo.setTexto(LSTPERIODO.TXTTITULO)
+		this.setEstilo1()
+		this.titulo = new Componente(SYS.LBL, { id: LSTPERIODO.TITULO }).setTexto(
+			LSTPERIODO.TXTTITULO
+		)
 
-		this.lblAnioPeriodo = new Componente(SYS.LBL, { id: LSTPERIODO.LBLANIO })
-		this.lblAnioPeriodo.setTexto(LSTPERIODO.A)
+		this.lblAnioPeriodo = new Componente(SYS.LBL, { id: LSTPERIODO.LBLANIO }).setTexto(
+			LSTPERIODO.A
+		)
 		this.txtAnioPeriodo = new Componente(SYS.IN, { id: LSTPERIODO.TXTANIO })
+			.setPropiedad("type", SYS.NMBR)
+			.setPropiedad("min", LSTPERIODO.ANIO_MINIMO)
+			.setPropiedad("max", this.periodoActual.anio)
+			.setValor(this.periodoActual.anio)
+			.setListener(SYS.CHNG, () => {
+				if (this.txtAnioPeriodo.getValor() > this.periodoActual.anio)
+					this.txtAnioPeriodo.setValor(this.periodoActual.anio)
 
-		this.lblMesPeriodo = new Componente(SYS.LBL, { id: LSTPERIODO.LBLMES })
-		this.lblMesPeriodo.setTexto(LSTPERIODO.M)
+				if (this.txtAnioPeriodo.getValor() < ANIO_MINIMO)
+					this.txtAnioPeriodo.setValor(ANIO_MINIMO)
+
+				if (this.txtAnioPeriodo.getValor() % 1 !== 0)
+					this.txtAnioPeriodo.setValor(parseInt(this.txtAnioPeriodo.getValor()))
+			})
+
+		this.lblMesPeriodo = new Componente(SYS.LBL, { id: LSTPERIODO.LBLMES }).setTexto(
+			LSTPERIODO.M
+		)
 		this.txtMesPeriodo = new Componente(SYS.IN, { id: LSTPERIODO.TXTMES })
+			.setPropiedad("type", SYS.NMBR)
+			.setPropiedad("min", 1)
+			.setPropiedad("max", 12)
+			.setValor(this.periodoActual.mes)
+			.setListener(SYS.CHNG, () => {
+				if (this.txtMesPeriodo.getValor() > 12) this.txtMesPeriodo.setValor(12)
 
-		this.txtAnioPeriodo.setPropiedad("type", SYS.NMBR)
-		this.txtAnioPeriodo.setPropiedad("min", LSTPERIODO.ANIO_MINIMO)
-		this.txtAnioPeriodo.setPropiedad("max", this.periodoActual.anio)
-		this.txtAnioPeriodo.setValor(this.periodoActual.anio)
-		this.txtAnioPeriodo.setListener(SYS.CHNG, () => {
-			if (this.txtAnioPeriodo.getValor() > this.periodoActual.anio)
-				this.txtAnioPeriodo.setValor(this.periodoActual.anio)
+				if (this.txtMesPeriodo.getValor() < 1) this.txtMesPeriodo.setValor(1)
 
-			if (this.txtAnioPeriodo.getValor() < ANIO_MINIMO)
-				this.txtAnioPeriodo.setValor(ANIO_MINIMO)
-
-			if (this.txtAnioPeriodo.getValor() % 1 !== 0)
-				this.txtAnioPeriodo.setValor(parseInt(this.txtAnioPeriodo.getValor()))
-		})
-
-		this.txtMesPeriodo.setPropiedad("type", SYS.NMBR)
-		this.txtMesPeriodo.setPropiedad("min", 1)
-		this.txtMesPeriodo.setPropiedad("max", 12)
-		this.txtMesPeriodo.setValor(this.periodoActual.mes)
-		this.txtMesPeriodo.setListener(SYS.CHNG, () => {
-			if (this.txtMesPeriodo.getValor() > 12) this.txtMesPeriodo.setValor(12)
-
-			if (this.txtMesPeriodo.getValor() < 1) this.txtMesPeriodo.setValor(1)
-
-			if (this.txtMesPeriodo.getValor() % 1 !== 0)
-				this.txtMesPeriodo.setValor(parseInt(this.txtMesPeriodo.getValor()))
-		})
+				if (this.txtMesPeriodo.getValor() % 1 !== 0)
+					this.txtMesPeriodo.setValor(parseInt(this.txtMesPeriodo.getValor()))
+			})
 
 		return this
 	}
@@ -79,19 +81,17 @@ export class LstPeriodo extends Componente {
 		return this.configura().getComponente()
 	}
 
-	ocultar() {
-		this.removeComponente()
-	}
-
 	setEstilo(estilo) {
 		this.setClase(estilo)
 	}
 
 	setEstilo1() {
+		this.removeClase(this.estilos.estilo2)
 		this.setEstilo(this.estilos.estilo1)
 	}
 
 	setEstilo2() {
+		this.removeClase(this.estilos.estilo1)
 		this.setEstilo(this.estilos.estilo2)
 	}
 }

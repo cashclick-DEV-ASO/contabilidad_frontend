@@ -33,10 +33,6 @@
 	margin-right: 10px;
 }
 
-#contenedorTablaDatos > #contenedorControles > label {
-	font-weight: bold;
-}
-
 #contenedorTablaDatos > #contenedorDetalle {
 	grid-area: detalles;
 	display: flex;
@@ -64,6 +60,7 @@
 	height: 100%;
 	position: relative;
 	overflow: auto;
+	padding: 0px 5px 5px 5px;
 }
 
 #contenedorTablaDatos > #contenedorTabla > #tablaDatos {

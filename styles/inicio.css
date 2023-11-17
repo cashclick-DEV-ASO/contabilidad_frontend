@@ -8,9 +8,9 @@
 }
 
 #inicio > #spnBienvenida * {
-	font-size: 3vh;
+	font-size: x-large;
 	font-weight: bold;
-	color: #1e1e1e;
+	/* color: #1e1e1e; */
 	text-align: center;
 }
 
@@ -21,6 +21,14 @@
 
 #inicio > #contenedorRecomendacion {
 	text-align: center;
-	font-size: 1.2em;
-	color: #1e1e1e;
+	/* color: #1e1e1e; */
+}
+
+#inicio > #contenedorRecomendacion > strong > p {
+	font-size: x-large;
+	font-weight: bold;
+}
+
+#inicio > #contenedorRecomendacion > small > p {
+	font-size: small;
 }

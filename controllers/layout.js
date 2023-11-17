@@ -9,10 +9,10 @@ export class LayoutController extends Controlador {
 		this.datos = this.vista.datos
 	}
 
-	datosInicio = () => {
+	cargaInicial = () => {
 		this.acciones.selBanco.setTemporalPH("Cargando bancos...")
 		this.llenaListaBancos().then(() => {
-			this.acciones.selBanco.actualilzaBancos(this.bancos)
+			this.acciones.selBanco.actulizaOpciones(this.bancos)
 		})
 	}
 
@@ -20,24 +20,22 @@ export class LayoutController extends Controlador {
 		this.limpiaCampos()
 		this.acciones.selLayout.setTemporalPH("Cargando layout...")
 
-		this.acciones.banco = this.acciones.bancos.find(
+		this.banco = this.bancos.find(
 			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
 		)
 
-		if (this.acciones.banco === undefined) {
+		if (this.banco === undefined) {
 			this.msjError("No se encontró información del banco seleccionado.")
-			this.acciones.selLayout.setMensaje("Selecciona un Banco.")
 			return
 		}
 
-		this.llenaListaLayouts(this.acciones.banco.id).then(() => {
+		this.llenaListaLayouts(this.banco.id).then(() => {
 			if (this.layouts.length === 0) {
 				this.msjError("No hay layouts disponibles.")
-				this.acciones.selLayout.setMensaje("Selecciona un Banco.")
 				return
 			}
-
-			this.acciones.selLayout.actualilzaLayouts(this.layouts)
+			debugger
+			this.acciones.selLayout.actulizaOpciones(this.layouts)
 		})
 	}
 
@@ -54,16 +52,12 @@ export class LayoutController extends Controlador {
 			return
 		}
 
-		if (this.layout) {
-			let texto = this.layout.layout
-			try {
-				texto = JSON.stringify(JSON.parse(this.layout.layout), null, 2)
-			} catch (e) {
-				mostrarError("El layout no es un JSON válido, se muestra el texto plano.")
-			}
+		if (this.layout.extension === "")
+			return this.msjError("El layout no indican las extensiones soportadas.")
+		else this.acciones.selArchivo.setFormato(this.layout.extension.split(","))
 
-			this.vista.editor.setValor(texto)
-		}
+		this.acciones.selArchivo.habilitaSelector()
+		this.acciones.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
 	}
 
 	informacionModificada = () => {

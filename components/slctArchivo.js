@@ -4,7 +4,7 @@ import { SYS, SLCTARCHIVO } from "../src/constantes.js"
 
 export class SlctArchivo extends Componente {
 	constructor({ formato = ".txt", multiple = false } = {}) {
-		super(SYS.SCTN, { clase: SLCTARCHIVO.CONTENEDOR })
+		super(SYS.SCTN, { id: SLCTARCHIVO.CONTENEDOR })
 		this.formato = formato
 		this.multiple = multiple
 		this.ruta = null
@@ -14,52 +14,49 @@ export class SlctArchivo extends Componente {
 	}
 
 	inicia() {
-		this.titulo = new Componente(SYS.LBL, { id: SLCTARCHIVO.TITULO })
+		this.titulo = new Componente(SYS.LBL, { id: SLCTARCHIVO.TITULO }).setTexto(
+			SLCTARCHIVO.TXTTITULO
+		)
+
 		this.lblArchivo = new Componente(SYS.LBL, { id: SLCTARCHIVO.LBLARCHIVO })
-		this.lblRuta = new Componente(SYS.LBL, { id: SLCTARCHIVO.LBLRUTA })
+			.setTexto(SLCTARCHIVO.TXTARCHIVO)
+			.setPropiedad("htmlFor", SLCTARCHIVO.INARCHIVO)
+			.setClase(SYS.DSBL)
+
+		this.lblRuta = new Componente(SYS.LBL, { id: SLCTARCHIVO.LBLRUTA }).setTexto(this.mensaje)
+
 		this.archivo = new Componente(SYS.IN, { id: SLCTARCHIVO.INARCHIVO })
+			.setPropiedad("accept", this.formato)
+			.setPropiedad("type", "file")
+			.setPropiedad("required", true)
+			.setPropiedad("multiple", this.multiple)
+			.habilitar(false)
+			.setListener(SYS.CHNG, () => {
+				if (this.formato.length === 0) {
+					this.lblRuta.setTexto(SLCTARCHIVO.MSJ_SIN_FORMATO)
+					this.btnAbrir.habilitar(false)
+					this.lblArchivo.setClase(SYS.DSBL)
+					return
+				}
+
+				this.ruta = this.validarArchivo(this.archivo.getComponente().files[0], this.formato)
+				if (this.ruta) {
+					this.lblRuta.setTexto(this.ruta.name)
+					this.btnAbrir.habilitar(true)
+					return
+				}
+				this.lblRuta.setTexto(SLCTARCHIVO.MSJ_ERROR_FORMATO)
+				this.btnAbrir.habilitar(false)
+			})
+
 		this.btnAbrir = new Componente(SYS.BTN, { id: SLCTARCHIVO.BTNABRIR })
+			.setTexto(SLCTARCHIVO.TXTABRIR)
+			.habilitar(false)
+
 		return this
 	}
 
 	configura() {
-		this.titulo.setTexto(SLCTARCHIVO.TXTTITULO)
-		this.lblRuta.setTexto(this.mensaje)
-
-		this.lblArchivo.setTexto(SLCTARCHIVO.TXTARCHIVO)
-		this.lblArchivo.setPropiedad("htmlFor", this.archivo.getID())
-		this.lblArchivo.setClase(SYS.DSBL)
-
-		this.archivo.setListener(SYS.CHNG, () => {
-			if (this.formato.length === 0) {
-				this.lblRuta.setTexto(SLCTARCHIVO.MSJ_SIN_FORMATO)
-				this.btnAbrir.habilitar(false)
-				this.lblArchivo.setClase(SYS.DSBL)
-				return
-			}
-
-			this.ruta = this.validarArchivo(this.archivo.getComponente().files[0], this.formato)
-			if (this.ruta) {
-				this.lblRuta.setTexto(this.ruta.name)
-				this.btnAbrir.habilitar(true)
-				return
-			}
-			this.lblRuta.setTexto(SLCTARCHIVO.MSJ_ERROR_FORMATO)
-			this.btnAbrir.habilitar(false)
-		})
-
-		this.archivo.setPropiedad("accept", this.formato)
-		this.archivo.setPropiedad("type", "file")
-		this.archivo.setPropiedad("required", true)
-		this.archivo.setPropiedad("multiple", this.multiple)
-		this.archivo.habilitar(false)
-
-		this.btnAbrir.setTexto(SLCTARCHIVO.TXTABRIR)
-		this.btnAbrir.habilitar(false)
-		return this
-	}
-
-	crear() {
 		this.addHijos([
 			this.titulo.getComponente(),
 			this.lblRuta.getComponente(),
@@ -71,7 +68,7 @@ export class SlctArchivo extends Componente {
 	}
 
 	mostrar() {
-		return this.configura().crear().getComponente()
+		return this.configura().getComponente()
 	}
 
 	accionAbrir(accion) {

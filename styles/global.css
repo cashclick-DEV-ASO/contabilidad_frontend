@@ -23,7 +23,7 @@ html * {
 	margin: 0;
 	box-sizing: border-box;
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 1.3vh;
+	font-size: 1.2vh;
 }
 
 body {
@@ -32,18 +32,24 @@ body {
 	position: relative;
 }
 
+select,
+input {
+	border-radius: 15px;
+	padding: 3px 5px;
+}
+
 select:focus,
 input:focus {
 	outline: none;
 }
 
-select,
-input {
-	border-radius: 15px;
-}
-
+select:hover,
 input:hover {
 	border: 2px solid var(--azul_fuerte);
+}
+
+select{
+	height: 2.5vh;
 }
 
 button {

@@ -20,8 +20,13 @@
 }
 
 #tituloVista {
-	text-align: center;
-	margin: 0;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5vh;
 }
 
 #contenedorAcciones {

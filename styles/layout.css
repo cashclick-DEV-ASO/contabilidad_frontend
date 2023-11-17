@@ -1,28 +1,25 @@
-.contenedorLayout {
-	width: 100%;
-	height: 100%;
+.Layout > #contenedorAcciones {
 	display: grid;
-	/* grid-template-rows: max-content 1fr 90%; */
-	grid-template-rows: max-content max-content 1fr;
-	grid-template-columns: 0.5fr repeat(4, 1fr) 0.5fr;
-	grid-template-areas:
-		"titulo titulo titulo titulo titulo titulo"
-		"nuevo selBanco selLayout tipo extensiones guardar"
-		"editor editor editor editor editor editor";
-}
-
-.titulo {
-	grid-area: titulo;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	display: flex;
+	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-rows: max-content;
+	grid-template-areas: "nuevo selBanco selLayout tipo extensiones guardar";
+	justify-items: center;
 	align-items: center;
-	justify-content: center;
 }
 
-.contenedorLayout .selLayout {
+.Layout > #contenedorAcciones > .selPeriodo {
+	grid-area: periodo;
+}
+
+.Layout > #contenedorAcciones > .selBanco {
+	grid-area: banco;
+}
+
+.Layout > #contenedorAcciones > .layout {
+	grid-area: layout;
+}
+
+.Layout > #contenedorAcciones > #slctLayout {
 	grid-area: selLayout;
 }
 
@@ -40,7 +37,7 @@
 	font-weight: bold;
 }
 
-.contenedorExt {
+#vista > #contenedorExt {
 	grid-area: extensiones;
 	display: flex;
 	flex-direction: column;
@@ -50,7 +47,7 @@
 	padding: 0;
 }
 
-.contenedorExt .lblExtensiones {
+#vista > #contenedorExt > #lblExtensiones {
 	font-weight: bold;
 }
 
@@ -63,7 +60,7 @@
 	padding: 0;
 }
 
-.contenedorNuevo {
+#contenedorNuevo {
 	grid-area: nuevo;
 	display: flex;
 	align-items: center;

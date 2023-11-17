@@ -18,15 +18,15 @@ export class Vista extends Componente {
 	 * @constructor
 	 * @param {Object} controlador - El controlador asociado a la vista.
 	 */
-	constructor() {
-		super("div", { id: "vista" })
+	constructor(clase = "") {
+		super("div", { id: "vista", clase })
 		this.controlador = null
 
 		this.contenedorTitulo = new Componente("section", { id: "contenedorTitulo" })
 		this.contenedorAcciones = new Componente("section", { id: "contenedorAcciones" })
 		this.contenedorDatos = new Componente("section", { id: "contenedorDatos" })
 
-		this.titulo = new Componente("h3", { id: "tituloVista" })
+		this.titulo = new Componente("span", { id: "tituloVista" })
 		this.acciones = {}
 		this.datos = {}
 	}
