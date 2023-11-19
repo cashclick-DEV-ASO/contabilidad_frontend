@@ -107,7 +107,7 @@ export class ListaDesplegable extends Componente {
 	}
 
 	reinicia() {
-		this.getComponente().value = this.default
+		this.lista.getComponente().value = this.default
 		return this
 	}
 
@@ -145,5 +145,9 @@ export class ListaDesplegable extends Componente {
 	setBloquearPh(bloquear) {
 		this.bloqueaPh = !bloquear
 		return this
+	}
+
+	dfltSelecciondo() {
+		return this.lista.getComponente().value === this.default
 	}
 }

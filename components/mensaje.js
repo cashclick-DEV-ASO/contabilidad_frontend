@@ -41,17 +41,17 @@ export class Mensaje extends Componente {
 	inicia() {
 		this.marco = new Componente("div", { clase: "msjMarco" })
 
-		this.titulo = new Componente("section", { clase: "msjTitulo" })
+		this.txtTitulo = new Componente("section", { clase: "msjTitulo" })
 
-		this.txtTitulo = new Componente("span", { clase: "msjTitulo" }).setTexto(this.txtTtl)
+		this.titulo = new Componente("span", { clase: "titulo" }).setTexto(this.txtTtl)
 
-		this.cerrar = new Componente("span", { clase: "msjCerrar" })
+		this.cerrar = new Componente("span", { clase: "cerrar" })
 			.setTexto("❌")
 			.setListener("click", this.ocultar.bind(this))
 
-		this.mensaje = new Componente("section", { clase: "msjTexto" })
+		this.txtMensaje = new Componente("section", { clase: "msjTexto" })
 
-		this.txtMensaje = new Componente("span", { clase: "msjTexto" })
+		this.mensaje = new Componente("span", { clase: "texto" })
 
 		this.captura = new Componente("input", { clase: "msjCaptura" }).setPropiedad("type", "text")
 
@@ -63,15 +63,12 @@ export class Mensaje extends Componente {
 	configura() {
 		this.marco.setClase(this.tipoSolicitado)
 
-		this.titulo.addHijos([
-			this.txtTitulo.setTexto(this.txtTtl).getComponente(),
+		this.txtTitulo.addHijos([
+			this.titulo.setTexto(this.txtTtl).getComponente(),
 			this.cerrar.getComponente(),
 		])
 
-		this.mensaje.addHijos([
-			this.txtMensaje.setTexto(this.txtMsj).getComponente(),
-			this.tipo.SOLICITAR === this.tipoSolicitado ? this.captura.getComponente() : null,
-		])
+		this.txtMensaje.addHijo(this.mensaje.setTexto(this.txtMsj).getComponente())
 
 		if (this.botonesConfigurados.length > 0) {
 			this.botonesConfigurados.forEach(boton => {
@@ -82,8 +79,11 @@ export class Mensaje extends Componente {
 		this.addHijos([
 			this.marco
 				.addHijos([
-					this.titulo.getComponente(),
-					this.mensaje.getComponente(),
+					this.txtTitulo.getComponente(),
+					this.txtMensaje.getComponente(),
+					this.tipo.SOLICITAR === this.tipoSolicitado
+						? this.captura.getComponente()
+						: null,
 					this.botones.getComponente(),
 				])
 				.getComponente(),
@@ -140,8 +140,8 @@ export class Mensaje extends Componente {
 
 		const boton = new Componente("button", { clase: "msjBoton" })
 			.setTexto(texto)
-			.setListener("click", e => {
-				accion(e, this.ocultar.bind(this))
+			.setListener("click", () => {
+				accion(this.ocultar.bind(this))
 			})
 
 		if (focus) boton.setFoco()
@@ -161,12 +161,12 @@ export class Mensaje extends Componente {
 		return this
 	}
 
-	respuestaTrue = (e, cierre) => {
+	respuestaTrue = cierre => {
 		this.setRespuesta(true)
 		cierre()
 	}
 
-	respuestaFalse = (e, cierre) => {
+	respuestaFalse = cierre => {
 		this.setRespuesta(false)
 		cierre()
 	}

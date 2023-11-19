@@ -43,6 +43,11 @@ export const SYS = {
 	BLN: "boolean",
 	UND: "undefined",
 	RDO: "readonly",
+	FALSE: "false",
+	TRUE: "true",
+	BBVA: "BBVA",
+	CONEKTA: "Conekta",
+	STP: "STP",
 }
 
 // Componente Padre
@@ -154,17 +159,58 @@ export const BOTONERA = {
 	BTN_DFLT: "Boton",
 }
 
-// Valores multiproposito
-export const FORMATOS_BBVA = ".txt,.exp"
-export const FORMATOS_DWH = ".json"
-export const BBVA = "BBVA"
-export const CONEKTA = "Conekta"
-export const STP = "STP"
+// Vista Layout
+export const LAYOUT = {
+	ID_VISTA: "Layout",
+	TITULO: "Administración de Layout's",
+	ID_CONTENEDOR_BTN_NUEVO: "nuevo",
+	ID_BTN_NUEVO: "nuevo",
+	TXT_BTN_NUEVO: "Nuevo",
+	ID_CONTENEDOR_BANCO: "banco",
+	TXT_ETQ_BANCO: "Banco",
+	ID_CONTENEDOR_LAYOUT: "layout",
+	TXT_ETQ_LAYOUT: "Layout",
+	ID_CONTENEDOR_TIPO: "tipo",
+	TXT_ETQ_TIPO: "Tipo",
+	ID_CONTENEDOR_EXTENSIONES: "extensiones",
+	TXT_ETQ_EXTENSIONES: "Extensiones",
+	PH_EXTENSIONES: "Ejemplo: txt,csv,xls",
+	ID_CONTENEDOR_BTN_GUARDAR: "guardar",
+	ID_BTN_GUARDAR: "guardar",
+	TXT_BTN_GUARDAR: "Actualizar",
+	ID_CONTENEDOR_EDITOR: "contenedorEditor",
+	ID_EDITOR: "editor",
+	TIPOS: [
+		{ texto: "Excel", valor: "excel", extenciones: "xls,xlsx,xlsm,xlsb" },
+		{ texto: "Delimitado", valor: "delimitado", extenciones: "txt,csv" },
+		{ texto: "Ancho Fijo", valor: "fijo", extenciones: "txt,exp" },
+		{ texto: "JSON", valor: "json", extenciones: "json,txt" },
+		{ texto: "XML", valor: "xml", extenciones: "xml,txt" },
+	],
+	MSJ_CARGA_BANCOS: "Cargando bancos...",
+	MSJ_CARGA_LAYOUTS: "Cargando layouts...",
+	MSJ_ERROR_BANCO_1: "No se encontró información del banco seleccionado.",
+	MSJ_ERROR_LAYOUT_1: "No hay layouts disponibles.",
+	MSJ_ERROR_LAYOUT_2: "No se encontró información del layout seleccionado.",
+	MSJ_ERROR_LAYOUT_3: "El layout no indica las extensiones soportadas.",
+	MSJ_EXITO_GUARDADO: "El layout se ha actualizado correctamente.",
+	MSJ_ERROR_GUARDADO: "No se pudo actualizar el layout.",
+	MSJ_ERROR_NUEVO_1: "Se debe indicar un alias para el nuevo layout.",
+	MSJ_EXITO_NUEVO: "El layout se ha registrado correctamente.",
+	MSJ_ERROR_NUEVO_2: "No se pudo registrar el layout.",
+	MSJ_ERROR_VALIDACION_BANCO: "Se debe seleccionar un banco.",
+	MSJ_ERROR_VALIDACION_TIPO: "Se debe seleccionar el tipo de archivo.",
+	MSJ_ERROR_VALIDACION_FORMATO: "El contenido del layout no tiene el formato esperado.",
+	MSJ_ERROR_VALIDACION_EDITOR: "Se debe indicar el contenido del layout.",
+	MSJ_ERROR_VALIDACION_EXTENSION: "Se debe indicar las extensiones de archivo.",
+	MSJ_SOLICITUD_ALIAS:
+		"Indique el alias para identificar el layout.<br>Recuerde que este dato debe ser único, no puede haber 2 alias iguales.",
+	PH_ALIAS: "Alias",
+	MSJ_CONFIRMACION_NUEVO: "¿Desea crear un layout a partir del layout seleccionado?",
+	TXT_BTN_SI_CONFIRMACION_NUEVO: "Si, usar como plantilla",
+	TXT_BTN_NO_CONFIRMACION_NUEVO: "No, crear desde cero",
+}
 
-// Valores por defecto para los elementos
-export const BTN_TXT_DEFAULT = "Botón"
-export const LBL_TXT_DEFAULT = "Etiqueta"
-export const SPN_TXT_DEFAULT = "Texto"
 export const MSJ_PIE = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`
 
 // Nombres de clases e ID's para elementos HTML
@@ -173,17 +219,5 @@ export const UL_MENU = "ulMenu"
 export const LI_MENU = "liMenu"
 export const UL_SUBMENU = "ulSubMenu"
 export const LI_SUBMENU = "liSubMenu"
-export const TXT_DEFAULT_CLS = "txtDefault"
-export const SEL_PERIODO_CLS = "selPeriodo"
-export const ANIO_PERIODO_ID = "anioPeriodo"
-export const MES_PERIODO_ID = "mesPeriodo"
-export const ANIO_PERIODO_LBL_ID = "lblAnioPeriodo"
-export const MES_PERIODO_LBL_ID = "lblMesPeriodo"
-export const MSJ_CONTENEDOR_CLS = "msjContenedor"
-
 export const PIE_CLS = "pie"
-export const SEL_BANCO_CLS = "selBanco"
-export const TITULO_BANCO_CLS = "lblBanco"
-export const SEL_LAYOUT_CLS = "selLayout"
-export const TITULO_LAYOUT_CLS = "lblLayout"
-export const SEL_LAYOUT_ID = "selLayout"
+export const MSJ_CONTENEDOR_CLS = "msjContenedor"

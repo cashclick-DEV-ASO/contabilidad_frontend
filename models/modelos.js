@@ -1,2 +1,2 @@
-export { RegTrnBancosModel as RegTrnBancos } from "./regTrnBancos.js"
-export { LayoutModel as Layout } from "./layout.js"
+export { RegTrnBancosModel as RegTrnBancos } from "./regTrnBancosMdl.js"
+export { LayoutModel as Layout } from "./layoutMdl.js"

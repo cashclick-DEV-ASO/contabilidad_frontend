@@ -7,6 +7,10 @@
 	align-items: center;
 }
 
+.Layout > #contenedorAcciones > #nuevo {
+	grid-area: nuevo;
+}
+
 .Layout > #contenedorAcciones > #banco {
 	grid-area: banco;
 }
@@ -56,4 +60,5 @@
 	justify-content: center;
 	resize: none;
 	border-radius: 15px;
+	outline: none;
 }

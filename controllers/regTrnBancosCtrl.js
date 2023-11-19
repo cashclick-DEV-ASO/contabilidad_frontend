@@ -70,7 +70,7 @@ export class RegTrnBancosController extends Controlador {
 	}
 
 	cambioArchivo = () => {
-		this.acciones.guardar.getPrimero().habilitar(false)
+		this.acciones.guardar.habilitarBoton(false)
 	}
 
 	leerArchivo = async () => {
@@ -94,7 +94,7 @@ export class RegTrnBancosController extends Controlador {
 
 				this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla()).actualizaTabla()
 
-				this.acciones.guardar.getPrimero().habilitar(true)
+				this.acciones.guardar.habilitarBoton(true)
 				return
 			}
 		}

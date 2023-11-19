@@ -1,8 +1,11 @@
 import { Componente, Menu, Main, Pie } from "../components/componentes.js"
 
+import { leerCookie } from "../src/utils.js"
+
 export class Index extends Componente {
 	constructor() {
 		super(document.createDocumentFragment())
+		this.aplicarModo()
 		return this.inicia()
 	}
 
@@ -20,6 +23,12 @@ export class Index extends Componente {
 
 	mostrar() {
 		return this.getComponente()
+	}
+
+	aplicarModo() {
+		const modo = leerCookie("MODO")
+		const body = document.body
+		body.classList.add(modo)
 	}
 }
 

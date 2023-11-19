@@ -55,22 +55,26 @@ export class Botonera extends Componente {
 		return this
 	}
 
-	setTexto(id, txt = null) {
+	setTexto(txt = null, id = this.getIDUnico()) {
+		if (!id && !this.botones[id]) return this
 		this.botones[id].setTexto(txt || id)
 		return this
 	}
 
-	setListener(id, callback = this.btnNoConfigurado, evento = SYS.CLK) {
+	setListener(callback = this.btnNoConfigurado, evento = SYS.CLK, id = this.getIDUnico()) {
+		if (!id && !this.botones[id]) return this
 		this.botones[id].setListener(evento, callback)
 		return this
 	}
 
-	setId(idBtn, id) {
+	setId(id, idBtn = this.getIDUnico()) {
+		if (!idBtn && !this.botones[idBtn]) return this
 		this.botones[idBtn].setID(id)
 		return this
 	}
 
-	setDisabled(idBtn, habilitar = true) {
+	setDisabled(habilitar = true, idBtn = this.getIDUnico()) {
+		if (!idBtn && !this.botones[idBtn]) return this
 		this.botones[idBtn].habilitar(habilitar)
 		return this
 	}
@@ -106,6 +110,17 @@ export class Botonera extends Componente {
 	limpiar() {
 		this.botones = {}
 		return this
+	}
+
+	habilitarBoton(habilitar = true, id = this.getIDUnico()) {
+		if (!id && !this.botones[id]) return this
+		this.botones[id].habilitar(habilitar)
+		return this
+	}
+
+	getIDUnico() {
+		if (Object.keys(this.botones).length > 1) return null
+		return Object.keys(this.botones)[0]
 	}
 }
 

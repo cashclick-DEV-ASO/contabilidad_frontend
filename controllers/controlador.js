@@ -82,8 +82,12 @@ export class Controlador {
 	 * @returns {Promise} - Una promesa que se resolverá con el valor ingresado por el usuario cuando se presione el botón "Aceptar".
 	 */
 	msjSolicitar(mensaje, callback = null, placeholder = "Escriba su respuesta aquí") {
-		const m = this.mostrarMensaje(mensaje, this.mensaje.tipo.SOLICITAR, callback, false)
-		m.setPlaceholder(placeholder)
+		const m = this.mostrarMensaje(
+			mensaje,
+			this.mensaje.tipo.SOLICITAR,
+			callback,
+			false
+		).setPlaceholder(placeholder)
 		return m.mostrar()
 	}
 
@@ -107,12 +111,10 @@ export class Controlador {
 		} = {}
 	) {
 		const m = new Mensaje()
-		m.setMensaje(mensaje)
-		m.setTipo(m.tipo.INFORMACION)
-		m.addBoton(txtSi, callbackSi)
-		m.addBoton(txtNo, callbackNo)
-		m.setCallback(callbackSi)
-		m.setCallback(callbackNo)
+			.setMensaje(mensaje)
+			.setTipo(this.mensaje.tipo.INFORMACION)
+			.addBoton(txtSi, callbackSi)
+			.addBoton(txtNo, callbackNo)
 		return m.mostrar()
 	}
 

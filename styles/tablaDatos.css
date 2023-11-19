@@ -107,23 +107,3 @@
 	border-left: 1px solid black;
 	border-right: 1px solid black;
 }
-
-.contenedorTablaDatos > .contenedorTabla::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-	background-color: gray;
-	border-radius: 10px;
-}
-
-.contenedorTablaDatos > .contenedorTabla::-webkit-scrollbar-thumb {
-	background-color: var(--azul_medio_1);
-	border-radius: 10px;
-}
-
-.contenedorTablaDatos > .contenedorTabla::-webkit-scrollbar-thumb:hover {
-	background-color: var(--azul_claro);
-}
-
-.contenedorTablaDatos > .contenedorTabla::-webkit-scrollbar-thumb:active {
-	background-color: var(--azul_medio_1);
-}

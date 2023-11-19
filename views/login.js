@@ -2,6 +2,8 @@ import LoginController from "../controllers/login.js"
 
 import Componente from "../components/componente.js"
 
+import { leerCookie } from "../src/utils.js"
+
 /**
  * @class Login
  * @extends Componente
@@ -12,6 +14,7 @@ export class Login extends Componente {
 
 	constructor() {
 		super("form", { clase: "formulario" })
+		this.aplicarModo()
 		this.#controlador = new LoginController(this)
 		return this.inicia()
 	}
@@ -42,6 +45,12 @@ export class Login extends Componente {
 
 	mostrar() {
 		return this.getComponente()
+	}
+
+	aplicarModo() {
+		const modo = leerCookie("MODO")
+		const body = document.body
+		body.classList.add(modo)
 	}
 }
 

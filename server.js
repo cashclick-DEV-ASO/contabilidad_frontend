@@ -14,8 +14,7 @@ const INDEX = "index.html"
  * @returns {void}
  */
 const createApp = devMode => {
-	if (!process.env.API_URL)
-		return console.error("No se ha definido la URL para la API")
+	if (!process.env.API_URL) return console.error("No se ha definido la URL para la API")
 
 	const HOST = process.env.HOST ?? "127.0.0.1"
 	const PORT = process.env.PORT ?? null
@@ -30,6 +29,7 @@ const createApp = devMode => {
 
 	app.use((req, res, next) => {
 		res.cookie("API_URL", process.env.API_URL, { secure: true })
+		if (!req.cookies.MODO) res.cookie("MODO", "claro", { secure: true })
 		if (devMode) res.cookie("DEV_MODE", devMode, { secure: true })
 
 		next()
@@ -47,10 +47,7 @@ const createApp = devMode => {
 	})
 
 	app.all("*", (req, res) => {
-		if (
-			req.path &&
-			(validaToken(req.cookies.TOKEN) || req.cookies.ORIGEN === "login")
-		) {
+		if (req.path && (validaToken(req.cookies.TOKEN) || req.cookies.ORIGEN === "login")) {
 			const archivo = ubicaArchivo(directorio, req.path)
 
 			if (archivo) return res.sendFile(archivo)
@@ -70,9 +67,9 @@ const generarInsert = (rutas, padre = null) => {
 
 	Object.keys(rutas).forEach((ruta, index) => {
 		if (typeof rutas[ruta].vista === "string") {
-			insert += `('${ruta}', '${rutas[ruta].titulo}', '${
-				rutas[ruta].vista
-			}', ${!padre ? "NULL" : `'${padre}'`}, ${index}), `
+			insert += `('${ruta}', '${rutas[ruta].titulo}', '${rutas[ruta].vista}', ${
+				!padre ? "NULL" : `'${padre}'`
+			}, ${index}), `
 		} else {
 			insert += `('${ruta}', '${rutas[ruta].titulo}', NULL, ${
 				!padre ? "NULL" : `'${padre}'`
@@ -110,9 +107,7 @@ const ubicaArchivo = (directorio, ruta) => {
  * @returns {Array} Un arreglo con las rutas de los archivos y las rutas de los endpoints.
  */
 const archivosHTML = modo => {
-	log(
-		`Configurando servidor en modo ${modo ? "desarrollo" : "producción"}...`
-	)
+	log(`Configurando servidor en modo ${modo ? "desarrollo" : "producción"}...`)
 
 	const ruta = modo ? resolve() : resolve(resolve(), "dist")
 

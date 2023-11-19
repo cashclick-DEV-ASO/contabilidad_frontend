@@ -59,12 +59,12 @@ export class RegTrnBancosModel extends Modelo {
 		return false
 	}
 
-	pruebaAceptar(e, cierre) {
+	pruebaAceptar(cierre) {
 		console.log("Botón Aceptar")
 		cierre()
 	}
 
-	pruebaCancelar(e, cierre) {
+	pruebaCancelar(cierre) {
 		console.log("Botón Cancelar")
 		cierre()
 	}

@@ -15,8 +15,8 @@
 }
 
 #inicio > #logo {
-	width: 50%;
-	height: 50%;
+	width: 40%;
+	height: 40%;
 }
 
 #inicio > #contenedorRecomendacion {
@@ -31,4 +31,18 @@
 
 #inicio > #contenedorRecomendacion > small > p {
 	font-size: small;
+}
+
+#inicio > #modo {
+	width: 5%;
+	height: 5%;
+	margin: 5px;
+}
+
+#inicio > #modo.invertir {
+	filter: invert(1);
+}
+
+#inicio > #modo:hover {
+	cursor: pointer;
 }

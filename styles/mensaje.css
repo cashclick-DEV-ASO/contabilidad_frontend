@@ -16,57 +16,94 @@
 	align-content: center;
 }
 
-.msjMarco {
+.msjContenedor > .msjMarco {
 	background-color: #fff;
 	border-radius: 10px;
 	display: grid;
 	grid-template-areas:
 		"titulo"
 		"mensaje"
+		"captura"
 		"boton";
 	grid-gap: 5px;
 	padding: 5px;
+	justify-items: center;
 }
 
-.msjError {
+.msjContenedor > .msjMarco.msjError {
 	border: 5px solid var(--error);
 }
 
-.msjExito {
+.msjContenedor > .msjMarco.msjExito {
 	border: 5px solid var(--exito);
 }
 
-.msjAdvertencia {
+.msjContenedor > .msjMarco.msjAdvertencia {
 	border: 5px solid var(--advertencia);
 }
 
-.msjInformacion {
+.msjContenedor > .msjMarco.msjInformacion {
 	border: 5px solid var(--azul_fuerte);
 }
 
-.msjTitulo {
+.msjContenedor > .msjMarco.msjSolicitar {
+	border: 5px solid black;
+}
+
+.msjContenedor > .msjMarco.msjNeutro {
+	border: 5px solid white;
+}
+
+.msjContenedor > .msjMarco > .msjTitulo {
 	grid-area: titulo;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: 1fr max-content;
+}
+
+.msjContenedor > .msjMarco > .msjTitulo .titulo {
 	width: 100%;
 	height: 100%;
 	font-weight: bold;
 	font-size: large;
+}
+
+.msjContenedor > .msjMarco > .msjTitulo .cerrar {
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+}
+
+.msjContenedor > .msjMarco > .msjTexto {
+	grid-area: mensaje;
+	width: 100%;
+	height: 100%;
+	margin: 5px;
+}
+
+.msjContenedor > .msjMarco > .msjTexto .texto {
+	width: 100%;
+	height: 100%;
+	font-size: medium;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 }
 
-.msjCerrar {
-	font-weight: bold;
-	color: #7e0e1d;
-	cursor: pointer;
+.msjContenedor > .msjMarco > .msjCaptura {
+	grid-area: captura;
+	width: 80%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
-.msjTexto {
-	margin: 5px;
-	font-size: medium;
-}
-
-.msjBotones {
+.msjContenedor > .msjMarco > .msjBotones {
+	grid-area: boton;
+	width: 100%;
+	height: 100%;
 	display: flex;
 	justify-content: space-evenly;
 }

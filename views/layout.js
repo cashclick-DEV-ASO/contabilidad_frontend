@@ -2,70 +2,63 @@ import Vista from "./vista.js"
 import { Layout as Controlador } from "../controllers/controladores.js"
 import { Layout as Modelo } from "../models/modelos.js"
 
-import { SYS } from "../src/constantes.js"
-import { Componente, ListaDesplegable, SolicitaDato } from "../components/componentes.js"
+import { Botonera, Componente, ListaDesplegable, SolicitaDato } from "../components/componentes.js"
+
+import { SYS, LAYOUT } from "../src/constantes.js"
 
 export class Layout extends Vista {
 	constructor() {
-		super("Layout")
+		super(LAYOUT.ID_VISTA)
 		this.controlador = new Controlador(this, new Modelo())
 		return this.inicia()
 	}
 
 	inicia() {
-		this.titulo.setTexto("Administración de Layout's")
+		this.titulo.setTexto(LAYOUT.TITULO)
 
-		this.acciones.nuevo = new Componente(SYS.SCTN, {
-			id: "contenedorNuevo",
-			hijos: [(this.acciones.btnNuevo = new Componente(SYS.BTN, { clase: "btnNuevo" }))],
-		})
-		this.acciones.btnNuevo.setTexto("Nuevo")
-		this.acciones.btnNuevo.setListener(SYS.CLK, this.controlador.solicitaNombre)
+		this.acciones.nuevo = new Botonera()
+			.setIDContenedor(LAYOUT.ID_CONTENEDOR_BTN_NUEVO)
+			.addBoton(LAYOUT.ID_BTN_NUEVO)
+			.setTexto(LAYOUT.TXT_BTN_NUEVO)
+			.setListener(this.controlador.validarNuevo)
 
-		this.acciones.selBanco = new ListaDesplegable()
-			.setTxtEtiqueta("Banco")
-			.setID("banco")
-			.setListener("change", this.controlador.cambioBanco)
+		this.acciones.banco = new ListaDesplegable()
+			.setID(LAYOUT.ID_CONTENEDOR_BANCO)
+			.setTxtEtiqueta(LAYOUT.TXT_ETQ_BANCO)
+			.setListener(SYS.CHNG, this.controlador.cambioBanco)
 
-		this.acciones.selLayout = new ListaDesplegable()
-			.setTxtEtiqueta("Layout")
-			.setID("layout")
-			.setListener("change", this.controlador.cambioLayout)
+		this.acciones.layout = new ListaDesplegable()
+			.setID(LAYOUT.ID_CONTENEDOR_LAYOUT)
+			.setTxtEtiqueta(LAYOUT.TXT_ETQ_LAYOUT)
+			.setListener(SYS.CHNG, this.controlador.cambioLayout)
 
 		this.acciones.tipo = new ListaDesplegable()
-			.setTxtEtiqueta("Tipo")
-			.setID("tipo")
-			.setOpciones([
-				{ texto: "excel", valor: "excel" },
-				{ texto: "delimitado", valor: "delimitado" },
-				{ texto: "fijo", valor: "fijo" },
-				{ texto: "json", valor: "json" },
-				{ texto: "xml", valor: "xml" },
-			])
+			.setID(LAYOUT.ID_CONTENEDOR_TIPO)
+			.setTxtEtiqueta(LAYOUT.TXT_ETQ_TIPO)
+			.setOpciones(LAYOUT.TIPOS)
+			.setListener(SYS.CHNG, this.controlador.cambioTipo)
 
 		this.acciones.extensiones = new SolicitaDato()
-			.setTxtEtiqueta("Extensiones")
-			.setTxtPlaceholder("txt,csv,xls")
-			.setTipo("text")
+			.setID(LAYOUT.ID_CONTENEDOR_EXTENSIONES)
+			.setTxtEtiqueta(LAYOUT.TXT_ETQ_EXTENSIONES)
+			.setTxtPlaceholder(LAYOUT.PH_EXTENSIONES)
+			.setTipo(SYS.TXT)
 			.setListener(SYS.IN, this.controlador.informacionModificada)
-			.setID("extensiones")
 
-		this.acciones.contenedorGuardar = new Componente(SYS.SCTN, {
-			clase: "contenedorGuardar",
-			hijos: [(this.acciones.btnGuardar = new Componente(SYS.BTN, { clase: "btnGuardar" }))],
-		})
-		this.acciones.btnGuardar
-			.setTexto("Guardar")
-			.setPropiedad(SYS.DSBL, "true")
-			.setListener(SYS.CLK, this.controlador.guardarCambios)
+		this.acciones.guardar = new Botonera()
+			.setIDContenedor(LAYOUT.ID_CONTENEDOR_BTN_GUARDAR)
+			.addBoton(LAYOUT.ID_BTN_GUARDAR)
+			.setTexto(LAYOUT.TXT_BTN_GUARDAR)
+			.setListener(this.controlador.guardarCambios)
+			.habilitarBoton(false)
 
 		this.datos.contenedorEditor = new Componente(SYS.SCTN, {
-			clase: "contenedorEditor",
-			hijos: [(this.datos.editor = new Componente("textarea", { clase: "editor" }))],
+			clase: LAYOUT.ID_CONTENEDOR_EDITOR,
+			hijos: [(this.datos.editor = new Componente("textarea", { clase: LAYOUT.ID_EDITOR }))],
 		})
 
 		this.datos.editor
-			.setPropiedad("spellcheck", "false")
+			.setPropiedad("spellcheck", false)
 			.setListener(SYS.IN, this.controlador.informacionModificada)
 
 		this.controlador.cargaInicial()
