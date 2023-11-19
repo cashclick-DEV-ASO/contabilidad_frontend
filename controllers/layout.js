@@ -56,8 +56,8 @@ export class LayoutController extends Controlador {
 			return this.msjError("El layout no indican las extensiones soportadas.")
 		else this.acciones.selArchivo.setFormato(this.layout.extension.split(","))
 
-		this.acciones.selArchivo.habilitaSelector()
-		this.acciones.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
+		this.acciones.extensiones.setValor(this.layout.extension)
+		this.datos.editor.setValor(this.layout.layout)
 	}
 
 	informacionModificada = () => {
