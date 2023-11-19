@@ -1,6 +1,6 @@
 import Vista from "./vista.js"
-import { Layout as Controlador } from "../controllers/controladores.js"
-import { Layout as Modelo } from "../models/modelos.js"
+import { LayoutCtrl as Controlador } from "../controllers/controladores.js"
+import { LayoutMdl as Modelo } from "../models/modelos.js"
 
 import { Botonera, Componente, ListaDesplegable, SolicitaDato } from "../components/componentes.js"
 

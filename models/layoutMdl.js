@@ -1,6 +1,6 @@
 import Modelo from "./modelo.js"
 
-export class LayoutModel extends Modelo {
+export class LayoutMdl extends Modelo {
 	constructor() {
 		super()
 	}
@@ -11,8 +11,8 @@ export class LayoutModel extends Modelo {
 
 	async actualizaLayout(lyt) {
 		const datos = {
-			query: `UPDATE layout SET alias = ?, extensiones = ?, layout = ? WHERE id = ?`,
-			parametros: [lyt.alias, lyt.extensiones, lyt.layout, lyt.id],
+			query: `UPDATE layout SET extensiones = ?, layout = ?, tipo = ? WHERE id = ?`,
+			parametros: [lyt.extension, lyt.layout, lyt.tipo, lyt.valor],
 		}
 
 		return await this.patch("noConfig", datos)
@@ -20,12 +20,11 @@ export class LayoutModel extends Modelo {
 
 	async nuevoLayout(lyt) {
 		const datos = {
-			query: `INSERT INTO layout (id_banco, alias, extensiones, layout) VALUES (?, ?, ?, ?)`,
-			parametros: [lyt.id_banco, lyt.alias, lyt.extensiones, lyt.layout],
+			query: `INSERT INTO layout (id_banco, alias, extensiones, layout, tipo) VALUES (?, ?, ?, ?, ?)`,
+			parametros: [lyt.id_banco, lyt.alias, lyt.extension, lyt.layout, lyt.tipo],
 		}
-
 		return await this.post("noConfig", datos)
 	}
 }
 
-export default LayoutModel
+export default LayoutMdl

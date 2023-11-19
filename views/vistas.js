@@ -4,22 +4,8 @@ import Inicio from "./inicio.js"
 import RegTrnBancos from "./regTrnBancos.js"
 import Layout from "./layout.js"
 import Logout from "./logout.js"
-
-class VistaTemporal extends Componente {
-	constructor() {
-		super("section", { clase: "mambu" })
-		this.setTexto("<h1>Vista en construcción.</h1>")
-		this.setPropiedad(
-			"style",
-			"width: 100%;height: 100%;text-align: center;font-weight: bold;inset: 0px;margin: auto;display: flex;align-items: center;justify-content: center;"
-		)
-		return this
-	}
-
-	mostrar() {
-		return this.getComponente()
-	}
-}
+import Aclaraciones from "./aclaraciones.js"
+import Ajustes from "./ajustes.js"
 
 class OOPS extends Componente {
 	constructor() {
@@ -47,6 +33,8 @@ const VISTAS = {
 	Layout,
 	Logout,
 	OOPS,
+	Aclaraciones,
+	Ajustes,
 }
 
 export default VISTAS

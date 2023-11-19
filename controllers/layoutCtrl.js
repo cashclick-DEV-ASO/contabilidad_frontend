@@ -4,7 +4,7 @@ import { SYS, LAYOUT } from "../src/constantes.js"
 
 import { mostrarError } from "../src/utils.js"
 
-export class LayoutController extends Controlador {
+export class LayoutCtrl extends Controlador {
 	constructor(vista, modelo) {
 		super(vista, modelo)
 		this.acciones = this.vista.acciones
@@ -58,7 +58,12 @@ export class LayoutController extends Controlador {
 
 		this.acciones.extensiones.setValor(this.layout.extension)
 		this.acciones.tipo.setSeleccionByValor(this.layout.tipo)
-		this.datos.editor.setValor(JSON.stringify(JSON.parse(this.layout.layout), null, 4))
+		try {
+			this.datos.editor.setValor(JSON.stringify(JSON.parse(this.layout.layout), null, 4))
+		} catch (error) {
+			this.datos.editor.setValor(this.layout.layout)
+			this.msjError(LAYOUT.MSJ_ERROR_LAYOUT_4)
+		}
 	}
 
 	cambioTipo = () => {
@@ -71,7 +76,7 @@ export class LayoutController extends Controlador {
 	informacionModificada = () => {
 		const chek = () => {
 			if (this.acciones.banco.dfltSelecciondo()) return false
-			if (!this.acciones.tipo.dfltSelecciondo()) return false
+			// if (!this.acciones.layout.dfltSelecciondo()) return false
 			if (this.acciones.tipo.dfltSelecciondo()) return false
 			if (this.acciones.extensiones.getValor() === "") return false
 			if (this.datos.editor.getValor() === "") return false
@@ -95,12 +100,14 @@ export class LayoutController extends Controlador {
 		try {
 			JSON.parse(this.datos.editor.getValor())
 		} catch (error) {
+			this.msjError(LAYOUT.MSJ_ERROR_VALIDACION_FORMATO)
 			return mostrarError(error)
 		}
 
-		const layout = this.layouts
+		const layout = this.layout
 		layout.extension = this.acciones.extensiones.getValor()
 		layout.layout = this.datos.editor.getValor()
+		layout.tipo = this.acciones.tipo.getValorSeleccionado()
 
 		await this.modelo.actualizaLayout(layout)
 
@@ -213,4 +220,4 @@ export class LayoutController extends Controlador {
 	}
 }
 
-export default LayoutController
+export default LayoutCtrl

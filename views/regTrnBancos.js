@@ -1,6 +1,6 @@
 import Vista from "./vista.js"
-import { RegTrnBancos as Controlador } from "../controllers/controladores.js"
-import { RegTrnBancos as Modelo } from "../models/modelos.js"
+import { RegTrnBancosCtrl as Controlador } from "../controllers/controladores.js"
+import { RegTrnBancosMdl as Modelo } from "../models/modelos.js"
 
 import {
 	Periodo,

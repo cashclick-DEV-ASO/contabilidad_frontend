@@ -209,6 +209,8 @@ export const LAYOUT = {
 	MSJ_CONFIRMACION_NUEVO: "¿Desea crear un layout a partir del layout seleccionado?",
 	TXT_BTN_SI_CONFIRMACION_NUEVO: "Si, usar como plantilla",
 	TXT_BTN_NO_CONFIRMACION_NUEVO: "No, crear desde cero",
+	MSJ_ERROR_LAYOUT_4:
+		"Este layout no cuenta con el formato esperado.<br>Favor de corregir o se presentaran errores al procesar los archivos.",
 }
 
 export const MSJ_PIE = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`

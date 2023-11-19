@@ -1,6 +1,6 @@
 import Controlador from "./controlador.js"
 
-export class RegTrnBancosController extends Controlador {
+export class RegTrnBancosCtrl extends Controlador {
 	constructor(vista, modelo) {
 		super(vista, modelo)
 		this.acciones = this.vista.acciones
@@ -178,4 +178,4 @@ export class RegTrnBancosController extends Controlador {
 	}
 }
 
-export default RegTrnBancosController
+export default RegTrnBancosCtrl

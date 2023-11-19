@@ -3,7 +3,7 @@ import Modelo from "./modelo.js"
 import { mostrarError } from "../src/utils.js"
 import { anchoBBVA } from "../src/layoutParser.js"
 
-export class RegTrnBancosModel extends Modelo {
+export class RegTrnBancosMdl extends Modelo {
 	constructor() {
 		super()
 	}
@@ -106,4 +106,4 @@ export class RegTrnBancosModel extends Modelo {
 	}
 }
 
-export default RegTrnBancosModel
+export default RegTrnBancosMdl
