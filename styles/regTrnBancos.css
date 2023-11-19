@@ -7,31 +7,22 @@
 	align-items: center;
 }
 
-.RegTrnBancos > #contenedorAcciones > .selPeriodo {
+.RegTrnBancos > #contenedorAcciones > #periodo {
 	grid-area: periodo;
 }
 
-.RegTrnBancos > #contenedorAcciones > .selBanco {
+.RegTrnBancos > #contenedorAcciones > #banco {
 	grid-area: banco;
 }
 
-.RegTrnBancos > #contenedorAcciones > .layout {
+.RegTrnBancos > #contenedorAcciones > #layout {
 	grid-area: layout;
 }
 
-.RegTrnBancos > #contenedorAcciones > .selArchivo {
+.RegTrnBancos > #contenedorAcciones > #archivo {
 	grid-area: archivo;
 }
 
-.RegTrnBancos > #contenedorAcciones > .contenedorGuardar {
+.RegTrnBancos > #contenedorAcciones > #guardar {
 	grid-area: guardar;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.RegTrnBancos > #contenedorDatos > .tablaDatos {
-	grid-area: tabla;
 }

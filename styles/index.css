@@ -1,9 +1,12 @@
 @import url("./global.css");
 @import url("./navegacion.css");
 @import url("./mensaje.css");
-@import url("./lstPeriodo.css");
+@import url("./periodo.css");
 @import url("./listaDesplegable.css");
-@import url("./slctArchivo.css");
+@import url("./solcitaDato.css");
+@import url("./muestraDato.css");
+@import url("./botonera.css");
+@import url("./solicitaArchivo.css");
 @import url("./tablaDatos.css");
 @import url("./vista.css");
 @import url("./inicio.css");

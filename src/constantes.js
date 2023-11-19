@@ -25,29 +25,43 @@ export const SYS = {
 	TH: "th",
 	TD: "td",
 	FLE: "file",
+	PH: "placeholder",
+	KUP: "keyup",
 	CHNG: "change",
 	CLK: "click",
+	DCLK: "dblclick",
 	DSBL: "disabled",
 	DFLT: "default",
 	STRNG: "string",
 	NMBR: "number",
+	MNY: "currency",
+	DTTM: "datetime",
+	TM: "time",
+	DT: "date",
 	OBJ: "object",
+	ARR: "array",
+	BLN: "boolean",
+	UND: "undefined",
+	RDO: "readonly",
+}
+
+// Componente Padre
+export const COMPONENTE = {
+	CONTENEDOR: "contenedorComponente",
+	ESTILO_1: "alto",
+	ESTILO_2: "ancho",
 }
 
 //Selector de Peridos
-export const LSTPERIODO = {
+export const PERIODO = {
 	CONTENEDOR: "contenedorPeriodo",
 	TITULO: "tituloPeriodo",
 	TXTTITULO: "Período",
-	LBLANIO: "lblAnioPeriodo",
-	TXTANIO: "anioPeriodo",
-	LBLMES: "lblMesPeriodo",
-	TXTMES: "mesPeriodo",
+	ANIO_ID: "anioPeriodo",
+	MES_ID: "mesPeriodo",
 	ANIO_MINIMO: 2020,
 	A: "Año",
 	M: "Mes",
-	ESTILO_1: "largo",
-	ESTILO_2: "ancho",
 }
 
 //Lista desplegable
@@ -58,8 +72,6 @@ export const LST = {
 	SLCT: "ListaDesplegable",
 	PH_VACIO: "Sin opciones",
 	PH_LLENO: "Selecciona",
-	ESTILO_1: "largo",
-	ESTILO_2: "ancho",
 }
 
 //Selector de Archivos
@@ -83,7 +95,9 @@ export const SLCTARCHIVO = {
 export const TABLA = {
 	CONTENEDOR: "contenedorTablaDatos",
 	CONTROLES: "contenedorControles",
-	TXT_COL_FILTRO: "Filtrar",
+	TXT_LBL_FILTRO: "Filtrar por:",
+	TXT_LBL_PARAMETRO: "Contiene",
+	TXT_PH_FILTRO: "Parámetro",
 	DETALLES: "contenedorDetalle",
 	DETALLE: "detalle",
 	LBL_DETALLE: "lblDetalle",
@@ -97,7 +111,6 @@ export const TABLA = {
 	TBL_FILA: "fila",
 	TBL_CELDA: "celda",
 	LBL_VALOR_PARAMETRO: "lblFiltro",
-	TXT_VALOR_PARAMETRO: "Valor",
 	IN_VALOR_PARAMETRO: "inFiltro",
 	BTN_FILTRO: "btnFiltrar",
 	TXT_BTN_FILTRO: "Filtrar",
@@ -112,6 +125,33 @@ export const TABLA = {
 	TXT_SIN_DATOS: "No hay datos para mostrar",
 	ESTILO_SIN_DATOS:
 		"width: 100%;height: 100%;text-align: center;font-weight: bold;inset: 0px;margin: auto;display: flex;align-items: center;justify-content: center;user-select: none;",
+	ORDEN_ASC: "asc",
+	ORDEN_DESC: "desc",
+}
+
+// Entrada de datos
+export const SOLICITA_DATO = {
+	CONTENEDOR: "contenedorSolicitaDato",
+	LBL: "lblDato",
+	IN: "txtDato",
+	TXT_ETIQUETA: "Dato Solicitado",
+	TXT_PLACEHOLDER: "Escribe aquí",
+}
+
+// Muestra de datos
+export const MUESTRA_DATO = {
+	CONTENEDOR: "contenedorMuestraDato",
+	LBL: "lblDato",
+	DTO: "txtDato",
+	TXT_ETIQUETA: "Dato Solicitado",
+}
+
+// Botonera
+export const BOTONERA = {
+	CONTENEDOR: "contenedorBotonera",
+	BTN: "btnBotonera",
+	TXT_BTN: "Botón",
+	BTN_DFLT: "Boton",
 }
 
 // Valores multiproposito

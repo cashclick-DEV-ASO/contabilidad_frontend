@@ -1,0 +1,43 @@
+.contenedorPeriodo {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	align-items: center;
+	justify-items: center;
+	justify-content: center;
+}
+
+.contenedorPeriodo > * {
+	margin: 2px;
+}
+
+.contenedorPeriodo.alto {
+	grid-template-areas:
+		"titulo titulo"
+		"anio mes";
+}
+
+.contenedorPeriodo.ancho {
+	grid-template-areas:
+		"titulo"
+		"anio"
+		"Mes";
+}
+
+.tituloPeriodo {
+	grid-area: titulo;
+	font-weight: bold;
+}
+
+.contenedorPeriodo > #anioPeriodo {
+	grid-area: anio;
+}
+
+.contenedorPeriodo > #anioPeriodo > input {
+	width: 60px;
+	text-align: start;
+}
+
+.contenedorPeriodo > #mesPeriodo {
+	grid-area: mes;
+}

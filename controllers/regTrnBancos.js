@@ -16,7 +16,7 @@ export class RegTrnBancosController extends Controlador {
 
 	cambioBanco = async () => {
 		this.limpiaCampos()
-		this.acciones.selLayout.setTemporalPH("Cargando layout...")
+		this.acciones.selLayout.actulizaOpciones().setTemporalPH("Cargando layout...").mostrar()
 
 		this.banco = this.bancos.find(
 			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
@@ -25,10 +25,11 @@ export class RegTrnBancosController extends Controlador {
 		if (this.banco === undefined) {
 			this.msjError("No se encontró información del banco seleccionado.")
 			this.acciones.selArchivo.setMensaje("Selecciona un Banco.")
+			this.acciones.selLayout.actulizaOpciones([])
 			return
 		}
 
-		this.llenaListaLayouts(this.banco.id).then(() => {
+		this.llenaListaLayouts(this.banco.valor).then(() => {
 			if (this.layouts.length === 0) {
 				this.msjError("No hay layouts disponibles.")
 				this.acciones.selArchivo.setMensaje("Selecciona un Banco.")
@@ -68,6 +69,10 @@ export class RegTrnBancosController extends Controlador {
 		this.datos.tabla.limpiar()
 	}
 
+	cambioArchivo = () => {
+		this.acciones.guardar.getPrimero().habilitar(false)
+	}
+
 	leerArchivo = async () => {
 		if (this.acciones.selLayout.getValorSeleccionado() === "default") {
 			this.msjError("Se debe seleccionar un layout.")
@@ -89,7 +94,7 @@ export class RegTrnBancosController extends Controlador {
 
 				this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla()).actualizaTabla()
 
-				this.acciones.btnGuardar.setPropiedad("disabled", false)
+				this.acciones.guardar.getPrimero().habilitar(true)
 				return
 			}
 		}
@@ -108,13 +113,21 @@ export class RegTrnBancosController extends Controlador {
 		)
 	}
 
+	opcionesFecha() {
+		return {
+			day: "2-digit",
+			month: "2-digit",
+			year: "numeric",
+		}
+	}
+
 	formatoDetalles = () => {
 		return {
 			Fecha_Operación: dato => {
-				return dato.toLocaleDateString()
+				return dato.toLocaleDateString("es-ES", this.opcionesFecha)
 			},
 			Fecha_Emisión: dato => {
-				return dato.toLocaleDateString()
+				return dato.toLocaleDateString("es-ES", this.opcionesFecha)
 			},
 			Saldo_Inicial: dato => {
 				return dato.toLocaleString("es-MX", {

@@ -30,10 +30,7 @@ export class Controlador {
 	 * @returns {Mensaje|undefined} - El objeto Mensaje si se muestra el mensaje, o undefined si no se muestra.
 	 */
 	mostrarMensaje(mensaje, tipo = this.mensaje.tipo.INFORMACION, callback = null, mostrar = true) {
-		const m = new Mensaje()
-		m.setMensaje(mensaje)
-		m.setTipo(tipo)
-		m.setCallback(callback)
+		const m = new Mensaje().setMensaje(mensaje).setTipo(tipo).setCallback(callback)
 		return mostrar ? m.mostrar() : m
 	}
 

@@ -29,12 +29,12 @@ export class LayoutController extends Controlador {
 			return
 		}
 
-		this.llenaListaLayouts(this.banco.id).then(() => {
+		this.llenaListaLayouts(this.banco.valor).then(() => {
 			if (this.layouts.length === 0) {
 				this.msjError("No hay layouts disponibles.")
 				return
 			}
-			debugger
+
 			this.acciones.selLayout.actulizaOpciones(this.layouts)
 		})
 	}
@@ -54,10 +54,10 @@ export class LayoutController extends Controlador {
 
 		if (this.layout.extension === "")
 			return this.msjError("El layout no indican las extensiones soportadas.")
-		else this.acciones.selArchivo.setFormato(this.layout.extension.split(","))
 
 		this.acciones.extensiones.setValor(this.layout.extension)
-		this.datos.editor.setValor(this.layout.layout)
+		this.acciones.tipo.setSeleccionByValor(this.layout.tipo)
+		this.datos.editor.setValor(JSON.stringify(JSON.parse(this.layout.layout), null, 2))
 	}
 
 	informacionModificada = () => {
@@ -68,6 +68,7 @@ export class LayoutController extends Controlador {
 			if (this.datos.editor.getValor() === "") return false
 			return true
 		}
+
 		this.acciones.btnGuardar.habilitar(chek())
 	}
 
@@ -79,13 +80,19 @@ export class LayoutController extends Controlador {
 	 */
 	limpiaCampos = ({ lyt = true, bnk = false } = {}) => {
 		bnk && this.acciones.selBanco.reinicia()
-		lyt && this.acciones.selLayout.limpiar()
+		lyt && this.acciones.selLayout.reinicia()
 		this.acciones.extensiones.setValor("")
 		this.acciones.btnGuardar.habilitar(false)
 		this.datos.editor.setValor("")
 	}
 
 	guardarCambios = async () => {
+		try {
+			JSON.parse(this.datos.editor.getValor())
+		} catch (error) {
+			return mostrarError(error)
+		}
+
 		const layout = this.layouts
 		layout.extension = this.acciones.extensiones.getValor()
 		layout.layout = this.datos.editor.getValor()
@@ -93,7 +100,7 @@ export class LayoutController extends Controlador {
 		await this.modelo.actualizaLayout(layout)
 
 		if (this.modelo.resultado.success) {
-			this.acciones.guardar.habilitar(false)
+			this.acciones.btnGuardar.habilitar(false)
 			this.acciones.selLayout.setValor(layout.id)
 			this.msjExito("El layout se ha actualizado correctamente.")
 			this.limpiaCampos({ bnk: true })

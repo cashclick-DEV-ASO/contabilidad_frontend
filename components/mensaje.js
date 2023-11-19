@@ -42,12 +42,18 @@ export class Mensaje extends Componente {
 		this.marco = new Componente("div", { clase: "msjMarco" })
 
 		this.titulo = new Componente("section", { clase: "msjTitulo" })
-		this.txtTitulo = new Componente("span", { clase: "msjTitulo" })
+
+		this.txtTitulo = new Componente("span", { clase: "msjTitulo" }).setTexto(this.txtTtl)
+
 		this.cerrar = new Componente("span", { clase: "msjCerrar" })
+			.setTexto("❌")
+			.setListener("click", this.ocultar.bind(this))
 
 		this.mensaje = new Componente("section", { clase: "msjTexto" })
+
 		this.txtMensaje = new Componente("span", { clase: "msjTexto" })
-		this.captura = new Componente("input", { clase: "msjCaptura" })
+
+		this.captura = new Componente("input", { clase: "msjCaptura" }).setPropiedad("type", "text")
 
 		this.botones = new Componente("section", { clase: "msjBotones" })
 
@@ -57,20 +63,13 @@ export class Mensaje extends Componente {
 	configura() {
 		this.marco.setClase(this.tipoSolicitado)
 
-		this.txtTitulo.setTexto(this.txtTtl)
-		this.cerrar.setTexto("❌").setListener("click", this.ocultar.bind(this))
-
-		this.txtMensaje.setTexto(this.txtMsj)
-		this.captura.setPropiedad("type", "text")
-
-		return this
-	}
-
-	crea() {
-		this.titulo.addHijos([this.txtTitulo.getComponente(), this.cerrar.getComponente()])
+		this.titulo.addHijos([
+			this.txtTitulo.setTexto(this.txtTtl).getComponente(),
+			this.cerrar.getComponente(),
+		])
 
 		this.mensaje.addHijos([
-			this.txtMensaje.getComponente(),
+			this.txtMensaje.setTexto(this.txtMsj).getComponente(),
 			this.tipo.SOLICITAR === this.tipoSolicitado ? this.captura.getComponente() : null,
 		])
 
@@ -94,8 +93,8 @@ export class Mensaje extends Componente {
 	}
 
 	mostrar() {
-		if (this.botonesConfigurados.length === 0) this.addBoton("Aceptar", this.callback)
-		return this.configura().crea().insertarEnDOM()
+		if (this.botonesConfigurados.length === 0) this.addBoton("Aceptar", this.callback, true)
+		return this.configura().insertarEnDOM()
 	}
 
 	ocultar() {
@@ -136,14 +135,16 @@ export class Mensaje extends Componente {
 		return this
 	}
 
-	addBoton(texto = "Aceptar", callback = null) {
+	addBoton(texto = "Aceptar", callback = null, focus = true) {
 		const accion = callback ?? this.respuestaTrue
 
 		const boton = new Componente("button", { clase: "msjBoton" })
-		boton.setTexto(texto)
-		boton.setListener("click", e => {
-			accion(e, this.ocultar.bind(this))
-		})
+			.setTexto(texto)
+			.setListener("click", e => {
+				accion(e, this.ocultar.bind(this))
+			})
+
+		if (focus) boton.setFoco()
 
 		this.botonesConfigurados.push(boton)
 

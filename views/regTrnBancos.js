@@ -3,12 +3,13 @@ import { RegTrnBancos as Controlador } from "../controllers/controladores.js"
 import { RegTrnBancos as Modelo } from "../models/modelos.js"
 
 import {
-	Componente,
-	LstPeriodo,
-	SlctArchivo,
+	Periodo,
+	SolicitaArchivo,
 	TablaDatos,
 	ListaDesplegable,
+	Botonera,
 } from "../components/componentes.js"
+import { SYS } from "../src/constantes.js"
 
 export class RegTrnBancos extends Vista {
 	constructor() {
@@ -20,29 +21,35 @@ export class RegTrnBancos extends Vista {
 	inicia() {
 		this.titulo.setTexto("Registro de Transacciones Bancarias")
 
-		this.acciones.selPeriodo = new LstPeriodo()
+		this.acciones.selPeriodo = new Periodo().setID("periodo")
 
 		this.acciones.selBanco = new ListaDesplegable()
-		this.acciones.selBanco.setTxtEtiqueta("Banco")
-		this.acciones.selBanco.setListener("change", this.controlador.cambioBanco)
+			.setTxtEtiqueta("Banco")
+			.setID("banco")
+			.setListener(SYS.CHNG, this.controlador.cambioBanco)
 
 		this.acciones.selLayout = new ListaDesplegable()
-		this.acciones.selLayout.setTxtEtiqueta("Layout")
-		this.acciones.selLayout.setListener("change", this.controlador.cambioLayout)
+			.setTxtEtiqueta("Layout")
+			.setID("layout")
+			.setListener(SYS.CHNG, this.controlador.cambioLayout)
 
-		this.acciones.selArchivo = new SlctArchivo()
-		this.acciones.selArchivo.accionAbrir(this.controlador.leerArchivo)
-		this.acciones.selArchivo.setMensaje("Selecciona un Banco y un Layout.")
+		this.acciones.selArchivo = new SolicitaArchivo()
+			.accionAbrir(this.controlador.leerArchivo)
+			.accionSeleccionar(this.controlador.cambioArchivo, this.controlador.cambioArchivo)
+			.setID("archivo")
+			.setMensaje("Selecciona un Banco y un Layout.")
 
-		this.acciones.guardar = new Componente("section", {
-			id: "contenedorGuardar",
-			hijos: [(this.acciones.btnGuardar = new Componente("button"))],
-		})
-		this.acciones.btnGuardar.setTexto("Guardar").setPropiedad("disabled", "true")
-		this.acciones.btnGuardar.setListener("click", this.controlador.guardar)
+		this.acciones.guardar = new Botonera()
+			.addBoton("btnGuardar")
+			.setIDContenedor("guardar")
+			.setTexto("btnGuardar", "Guardar")
+			.setDisabled("btnGuardar", false)
+			.setListener("btnGuardar", this.controlador.guardar)
 
-		this.datos.tabla = new TablaDatos()
-		this.datos.tabla.mostrarFiltro = false
+		this.datos.tabla = new TablaDatos().setID("tabla")
+		this.datos.tabla.permiteFiltro = true
+		this.datos.tabla.permiteExportar = true
+		this.datos.tabla.permiteEditar = true
 
 		this.controlador.cargaInicial()
 		return this

@@ -1,3 +1,5 @@
+import { SYS, COMPONENTE } from "../src/constantes.js"
+
 export class Componente {
 	/**
 	 * @param {HTMLElement} elemento - Elemento contenedor del componente
@@ -13,13 +15,20 @@ export class Componente {
 	 */
 	constructor(elemento = null, { clase = "", id = "", hijos = null } = {}) {
 		this.#componente =
-			typeof elemento === "string" ? document.createElement(elemento) : elemento
+			typeof elemento === SYS.STRNG ? document.createElement(elemento) : elemento
 
 		if (clase !== "") this.setClase(clase)
 		if (id !== "") this.setID(id)
 
 		this.hijos = hijos
 		this.hijo = false
+
+		this.estilos = {
+			estilo1: COMPONENTE.ESTILO_1,
+			estilo2: COMPONENTE.ESTILO_2,
+		}
+
+		this.estilo = this.estilos.estilo1
 
 		return this
 	}
@@ -99,6 +108,11 @@ export class Componente {
 		return this
 	}
 
+	removeListener(evento, callback) {
+		this.#componente.removeEventListener(evento, callback)
+		return this
+	}
+
 	/**
 	 * @param {string} propiedad - Propiedad a configurar
 	 * @param {string} valor - Valor de la propiedad
@@ -163,6 +177,7 @@ export class Componente {
 	 * @returns {Componente} Componente
 	 */
 	addHijo(hijo = new HTMLElement()) {
+		if (!hijo) return this
 		this.#componente.appendChild(hijo)
 		return this
 	}
@@ -257,6 +272,37 @@ export class Componente {
 	setPrimerHijo(hijo) {
 		this.#componente.insertBefore(hijo, this.#componente.firstChild)
 		return this
+	}
+
+	setFoco() {
+		this.#componente.focus()
+		return this
+	}
+
+	setEstilo(estilo) {
+		this.estilo = estilo
+		this.setClase(estilo)
+		return this
+	}
+
+	setEstilo1() {
+		this.removeClase(this.estilos.estilo2)
+		this.setEstilo(this.estilos.estilo1)
+		return this
+	}
+
+	setEstilo2() {
+		this.removeClase(this.estilos.estilo1)
+		this.setEstilo(this.estilos.estilo2)
+		return this
+	}
+
+	esPadre() {
+		return this.#componente.childElementCount > 0
+	}
+
+	tieneClase(clase) {
+		return this.#componente.classList.contains(clase)
 	}
 }
 

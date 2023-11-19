@@ -1,0 +1,40 @@
+.contenedorSolicitaDato {
+	width: max-content;
+	height: 100%;
+	display: grid;
+	align-items: center;
+}
+
+.contenedorSolicitaDato > * {
+	margin: 2px;
+}
+
+.contenedorSolicitaDato.alto {
+	grid-template-rows: max-content 1fr max-content;
+	grid-template-areas:
+		"titulo"
+		"dato"
+		"boton";
+	justify-items: center;
+}
+
+.contenedorSolicitaDato.ancho {
+	grid-template-columns: max-content 1fr max-content;
+	grid-template-areas: "titulo dato boton";
+	justify-content: center;
+}
+
+.contenedorSolicitaDato > .lblDato {
+	grid-area: titulo;
+	font-weight: bold;
+	width: max-content;
+}
+
+.contenedorSolicitaDato > .txtDato {
+	grid-area: dato;
+	width: max-content;
+}
+
+.contenedorSolicitaDato > .btnDato {
+	grid-area: boton;
+}

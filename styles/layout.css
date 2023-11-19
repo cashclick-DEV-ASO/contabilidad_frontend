@@ -2,66 +2,29 @@
 	display: grid;
 	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "nuevo selBanco selLayout tipo extensiones guardar";
+	grid-template-areas: "nuevo banco layout tipo extensiones guardar";
 	justify-items: center;
 	align-items: center;
 }
 
-.Layout > #contenedorAcciones > .selPeriodo {
-	grid-area: periodo;
-}
-
-.Layout > #contenedorAcciones > .selBanco {
+.Layout > #contenedorAcciones > #banco {
 	grid-area: banco;
 }
 
-.Layout > #contenedorAcciones > .layout {
+.Layout > #contenedorAcciones > #layout {
 	grid-area: layout;
 }
 
-.Layout > #contenedorAcciones > #slctLayout {
-	grid-area: selLayout;
-}
-
-.contenedorTipo {
+.Layout > #contenedorAcciones > #tipo {
 	grid-area: tipo;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	margin: 0;
-	padding: 0;
 }
 
-.contenedorTipo .lblTipo {
-	font-weight: bold;
-}
-
-#vista > #contenedorExt {
+.Layout > #contenedorAcciones > #extensiones {
 	grid-area: extensiones;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	margin: 0;
-	padding: 0;
-}
-
-#vista > #contenedorExt > #lblExtensiones {
-	font-weight: bold;
 }
 
 .contenedorGuardar {
 	grid-area: guardar;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0;
-	padding: 0;
-}
-
-#contenedorNuevo {
-	grid-area: nuevo;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -76,13 +39,21 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	position: relative;
 }
 
 .editor {
+	background: url(http://i.imgur.com/2cOaJ.png);
+	background-attachment: local;
+	background-repeat: no-repeat;
+	padding-left: 35px;
+	padding-top: 10px;
+	border-color: black;
 	width: 95%;
 	height: 99%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	resize: none;
+	border-radius: 15px;
 }

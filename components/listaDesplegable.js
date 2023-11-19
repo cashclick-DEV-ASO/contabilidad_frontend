@@ -9,10 +9,8 @@ export class ListaDesplegable extends Componente {
 		this.txtPhVacio = phVacio
 		this.txtPhLleno = phLleno
 		this.mostrarPh = mostrarPh
-		this.estilos = {
-			estilo1: LST.ESTILO_1,
-			estilo2: LST.ESTILO_2,
-		}
+		this.bloqueaPh = false
+
 		this.opciones = []
 
 		return this.inicia()
@@ -54,34 +52,21 @@ export class ListaDesplegable extends Componente {
 	configuraPlaceholder() {
 		if (this.mostrarPh) {
 			this.placeholder.setTexto(this.opciones.length ? this.txtPhLleno : this.txtPhVacio)
+			this.placeholder.setValor(this.default)
 			this.placeholder.setPropiedad("selected", true)
+			this.placeholder.habilitar(this.bloqueaPh)
 			this.lista.addHijo(this.placeholder.getComponente())
 		}
 	}
 
-	setEstilo(estilo) {
-		this.setClase(estilo)
-	}
-
-	setEstilo1() {
-		this.removeClase(this.estilos.estilo2)
-		this.setEstilo(this.estilos.estilo1)
-		return this
-	}
-
-	setEstilo2() {
-		this.removeClase(this.estilos.estilo1)
-		this.setEstilo(this.estilos.estilo2)
-		return this
-	}
-
-	actulizaOpciones(opciones) {
+	actulizaOpciones(opciones = []) {
 		this.opciones = opciones
 		this.lista.vaciar()
 		this.configuraPlaceholder()
 		opciones.forEach(opcion => {
 			this.lista.addHijo(this.setOpcion(opcion).mostrar())
 		})
+		return this
 	}
 
 	setOpcion(atributos) {
@@ -92,9 +77,7 @@ export class ListaDesplegable extends Componente {
 	}
 
 	setOpciones(opciones) {
-		opciones.map(opcion => {
-			this.setOpcion(opcion)
-		})
+		this.opciones = opciones
 		return this
 	}
 
@@ -104,9 +87,8 @@ export class ListaDesplegable extends Componente {
 	}
 
 	setTemporalPH(ph) {
-		// this.removePrimerHijo()
 		this.placeholder.setTexto(ph).mostrar()
-		// this.setPrimerHijo(this.placeholder.mostrar())
+		return this
 	}
 
 	setMostrarPh(mostrar) {
@@ -126,13 +108,6 @@ export class ListaDesplegable extends Componente {
 
 	reinicia() {
 		this.getComponente().value = this.default
-		return this
-	}
-
-	limpiar() {
-		this.opciones = []
-		this.vaciar()
-		this.configuraPlaceholder()
 		return this
 	}
 
@@ -164,6 +139,11 @@ export class ListaDesplegable extends Componente {
 
 	setSeleccionByTexto(texto) {
 		this.lista.getComponente().value = texto
+		return this
+	}
+
+	setBloquearPh(bloquear) {
+		this.bloqueaPh = !bloquear
 		return this
 	}
 }

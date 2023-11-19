@@ -1,0 +1,31 @@
+.contenedorBotonera {
+	width: max-content;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.contenedorBotonera > * {
+	margin: 2px;
+}
+
+.contenedorBotonera.alto {
+	flex-direction: column;
+	justify-items: center;
+}
+
+.contenedorBotonera.ancho {
+	justify-content: center;
+}
+
+.contenedorBotonera > .lblDato {
+	grid-area: titulo;
+	font-weight: bold;
+}
+
+.contenedorBotonera > .txtDato {
+	grid-area: lista;
+	min-width: 100px;
+	max-width: 200px;
+}

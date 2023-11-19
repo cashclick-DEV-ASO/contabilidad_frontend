@@ -24,7 +24,7 @@ export class Inicio extends Componente {
 			</p>
 			<br>
 			<p>
-			Te damos la bienvenida al sistema de contabilidad integral de
+			Le damos la bienvenida al sistema de contabilidad integral de
 			</p>
 			</strong>`
 		)
@@ -39,20 +39,20 @@ export class Inicio extends Componente {
 		this.recomendacion.setTexto(
 			`<strong>
 			<p>
-			¿Estás listo para empezar?, Selecciona una opción del menú superior.
+			¿Está listo para empezar?, Seleccione una opción del menú superior.
 			</p>
 			<br>
 			<p>
-			¡Que tengas ${this.textoSaludo()}!
+			¡Que tenga ${this.textoSaludo()}!
 			<br>
 			</p>
 			</strong>
 			<br>
 			<small>
 			<p>
-			Tu navegador actual es: ${this.iconosNavegadores()}
+			Su navegador actual es: ${this.iconosNavegadores()}
 			<br>
-			Tu resolución actual es: ${this.validacionResolucion()}
+			Su resolución actual es: ${this.validacionResolucion()}
 			</p>
 			${
 				this.resolucionOK

@@ -1,0 +1,44 @@
+.contenedorMuestraDato {
+	width: max-content;
+	position: relative;
+	display: grid;
+	align-items: center;
+}
+
+.contenedorMuestraDato > * {
+	margin: 2px;
+}
+
+.contenedorMuestraDato.alto {
+	grid-template-rows: max-content 1fr max-content;
+	grid-template-areas:
+		"titulo"
+		"dato"
+		"boton";
+	justify-items: center;
+}
+
+.contenedorMuestraDato.ancho {
+	grid-template-columns: max-content 1fr max-content;
+	grid-template-areas: "titulo dato boton";
+	justify-content: center;
+}
+
+.contenedorMuestraDato > .lblDato {
+	grid-area: titulo;
+	font-weight: bold;
+	width: max-content;
+}
+
+.contenedorMuestraDato > .txtDato {
+	grid-area: dato;
+	border: 0;
+	padding: 0;
+	border-radius: 0;
+	width: max-content;
+	text-align: center;
+}
+
+.contenedorMuestraDato > .btnDato {
+	grid-area: boton;
+}

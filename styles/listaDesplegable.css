@@ -5,20 +5,19 @@
 	align-items: center;
 }
 
-.contenedorListaDesplegable > *{
+.contenedorListaDesplegable > * {
 	margin: 2px;
 }
 
-.contenedorListaDesplegable.largo{
+.contenedorListaDesplegable.alto {
 	grid-template-areas:
 		"titulo"
 		"lista";
 	justify-items: center;
 }
 
-.contenedorListaDesplegable.ancho{
-	grid-template-areas:
-		"titulo lista";
+.contenedorListaDesplegable.ancho {
+	grid-template-areas: "titulo lista";
 	justify-content: center;
 }
 

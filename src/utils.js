@@ -5,8 +5,7 @@ export const leerCookie = nombreBuscado => {
 	return galletas.reduce((valorEncontrado, galleta) => {
 		const [nombre, valor] = galleta.split("=")
 
-		if (nombre.trim() === nombreBuscado)
-			return decodeURIComponent(valor.trim())
+		if (nombre.trim() === nombreBuscado) return decodeURIComponent(valor.trim())
 		else return valorEncontrado
 	}, null)
 }
@@ -30,14 +29,11 @@ export const cerrarSesion = () => {
 export const escribirCookie = (nombre, valor, opciones = {}) => {
 	let cookie = `${nombre}=${encodeURIComponent(valor)}`
 
-	Object.keys(opciones).forEach(
-		opcion => (cookie += `; ${opcion}=${opciones[opcion]}`)
-	)
+	Object.keys(opciones).forEach(opcion => (cookie += `; ${opcion}=${opciones[opcion]}`))
 	document.cookie = cookie
 }
 
-export const borrarCookie = nombre =>
-	(document.cookie = `${nombre}=; max-age=0`)
+export const borrarCookie = nombre => (document.cookie = `${nombre}=; max-age=0`)
 
 export const getPeridoActual = () => {
 	const fecha = new Date()
