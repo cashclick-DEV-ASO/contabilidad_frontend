@@ -79,20 +79,134 @@ const crearArchivos = nombresVistas => {
 	return imports
 }
 
-console.log(crearArchivos(vistas))
+// console.log(crearArchivos(vistas))
 
 const lista = [
 	{
-		vista: 'import Aclaraciones from "./aclaraciones.js"',
-		controlador: 'export { AclaracionesCtrl } from "./aclaracionesCtrl.js"',
-		modelo: 'export { AclaracionesMdl } from "./aclaracionesMdl.js"',
-		estilos: '@import url("./aclaraciones.css");"',
+		vista: 'import Cartera from "./cartera.js"',
+		controlador: 'export { CarteraCtrl } from "./carteraCtrl.js"',
+		modelo: 'export { CarteraMdl } from "./carteraMdl.js"',
+		estilos: '@import url("./cartera.css");',
 	},
 	{
-		vista: 'import Ajustes from "./ajustes.js"',
-		controlador: 'export { AjustesCtrl } from "./ajustesCtrl.js"',
-		modelo: 'export { AjustesMdl } from "./ajustesMdl.js"',
-		estilos: '@import url("./ajustes.css");"',
+		vista: 'import Conciliación from "./conciliación.js"',
+		controlador: 'export { ConciliaciónCtrl } from "./conciliaciónCtrl.js"',
+		modelo: 'export { ConciliaciónMdl } from "./conciliaciónMdl.js"',
+		estilos: '@import url("./conciliación.css");',
+	},
+	{
+		vista: 'import Conciliar from "./conciliar.js"',
+		controlador: 'export { ConciliarCtrl } from "./conciliarCtrl.js"',
+		modelo: 'export { ConciliarMdl } from "./conciliarMdl.js"',
+		estilos: '@import url("./conciliar.css");',
+	},
+	{
+		vista: 'import ConCtasBancarias from "./conCtasBancarias.js"',
+		controlador: 'export { ConCtasBancariasCtrl } from "./conCtasBancariasCtrl.js"',
+		modelo: 'export { ConCtasBancariasMdl } from "./conCtasBancariasMdl.js"',
+		estilos: '@import url("./conCtasBancarias.css");',
+	},
+	{
+		vista: 'import ConCtasContables from "./conCtasContables.js"',
+		controlador: 'export { ConCtasContablesCtrl } from "./conCtasContablesCtrl.js"',
+		modelo: 'export { ConCtasContablesMdl } from "./conCtasContablesMdl.js"',
+		estilos: '@import url("./conCtasContables.css");',
+	},
+	{
+		vista: 'import ConSaldos from "./conSaldos.js"',
+		controlador: 'export { ConSaldosCtrl } from "./conSaldosCtrl.js"',
+		modelo: 'export { ConSaldosMdl } from "./conSaldosMdl.js"',
+		estilos: '@import url("./conSaldos.css");',
+	},
+	{
+		vista: 'import ConTrnBancos from "./conTrnBancos.js"',
+		controlador: 'export { ConTrnBancosCtrl } from "./conTrnBancosCtrl.js"',
+		modelo: 'export { ConTrnBancosMdl } from "./conTrnBancosMdl.js"',
+		estilos: '@import url("./conTrnBancos.css");',
+	},
+	{
+		vista: 'import ConTrnMambu from "./conTrnMambu.js"',
+		controlador: 'export { ConTrnMambuCtrl } from "./conTrnMambuCtrl.js"',
+		modelo: 'export { ConTrnMambuMdl } from "./conTrnMambuMdl.js"',
+		estilos: '@import url("./conTrnMambu.css");',
+	},
+	{
+		vista: 'import EdoCta from "./edoCta.js"',
+		controlador: 'export { EdoCtaCtrl } from "./edoCtaCtrl.js"',
+		modelo: 'export { EdoCtaMdl } from "./edoCtaMdl.js"',
+		estilos: '@import url("./edoCta.css");',
+	},
+	{
+		vista: 'import Etiquetas from "./etiquetas.js"',
+		controlador: 'export { EtiquetasCtrl } from "./etiquetasCtrl.js"',
+		modelo: 'export { EtiquetasMdl } from "./etiquetasMdl.js"',
+		estilos: '@import url("./etiquetas.css");',
+	},
+	{
+		vista: 'import NoConciliado from "./noConciliado.js"',
+		controlador: 'export { NoConciliadoCtrl } from "./noConciliadoCtrl.js"',
+		modelo: 'export { NoConciliadoMdl } from "./noConciliadoMdl.js"',
+		estilos: '@import url("./noConciliado.css");',
+	},
+	{
+		vista: 'import RecalculoCapital from "./recalculoCapital.js"',
+		controlador: 'export { RecalculoCapitalCtrl } from "./recalculoCapitalCtrl.js"',
+		modelo: 'export { RecalculoCapitalMdl } from "./recalculoCapitalMdl.js"',
+		estilos: '@import url("./recalculoCapital.css");',
+	},
+	{
+		vista: 'import RecalculoInteres from "./recalculoInteres.js"',
+		controlador: 'export { RecalculoInteresCtrl } from "./recalculoInteresCtrl.js"',
+		modelo: 'export { RecalculoInteresMdl } from "./recalculoInteresMdl.js"',
+		estilos: '@import url("./recalculoInteres.css");',
+	},
+	{
+		vista: 'import RegCtasBancarias from "./regCtasBancarias.js"',
+		controlador: 'export { RegCtasBancariasCtrl } from "./regCtasBancariasCtrl.js"',
+		modelo: 'export { RegCtasBancariasMdl } from "./regCtasBancariasMdl.js"',
+		estilos: '@import url("./regCtasBancarias.css");',
+	},
+	{
+		vista: 'import RegCtasContables from "./regCtasContables.js"',
+		controlador: 'export { RegCtasContablesCtrl } from "./regCtasContablesCtrl.js"',
+		modelo: 'export { RegCtasContablesMdl } from "./regCtasContablesMdl.js"',
+		estilos: '@import url("./regCtasContables.css");',
+	},
+	{
+		vista: 'import RegSaldos from "./regSaldos.js"',
+		controlador: 'export { RegSaldosCtrl } from "./regSaldosCtrl.js"',
+		modelo: 'export { RegSaldosMdl } from "./regSaldosMdl.js"',
+		estilos: '@import url("./regSaldos.css");',
+	},
+	{
+		vista: 'import RegTrnMambu from "./regTrnMambu.js"',
+		controlador: 'export { RegTrnMambuCtrl } from "./regTrnMambuCtrl.js"',
+		modelo: 'export { RegTrnMambuMdl } from "./regTrnMambuMdl.js"',
+		estilos: '@import url("./regTrnMambu.css");',
+	},
+	{
+		vista: 'import ResConciliacion from "./resConciliacion.js"',
+		controlador: 'export { ResConciliacionCtrl } from "./resConciliacionCtrl.js"',
+		modelo: 'export { ResConciliacionMdl } from "./resConciliacionMdl.js"',
+		estilos: '@import url("./resConciliacion.css");',
+	},
+	{
+		vista: 'import SaldoFavor from "./saldoFavor.js"',
+		controlador: 'export { SaldoFavorCtrl } from "./saldoFavorCtrl.js"',
+		modelo: 'export { SaldoFavorMdl } from "./saldoFavorMdl.js"',
+		estilos: '@import url("./saldoFavor.css");',
+	},
+	{
+		vista: 'import TrnDWH from "./trnDWH.js"',
+		controlador: 'export { TrnDWHCtrl } from "./trnDWHCtrl.js"',
+		modelo: 'export { TrnDWHMdl } from "./trnDWHMdl.js"',
+		estilos: '@import url("./trnDWH.css");',
+	},
+	{
+		vista: 'import Variables from "./variables.js"',
+		controlador: 'export { VariablesCtrl } from "./variablesCtrl.js"',
+		modelo: 'export { VariablesMdl } from "./variablesMdl.js"',
+		estilos: '@import url("./variables.css");',
 	},
 ]
 
@@ -102,4 +216,4 @@ const obtenerListaImports = (lista, key) => {
 	})
 }
 
-// console.log(obtenerListaImports(lista, "vista").join("\n"))
+console.log(obtenerListaImports(lista, "controlador").join("\n"))

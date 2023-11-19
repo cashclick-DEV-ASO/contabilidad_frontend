@@ -6,6 +6,28 @@ import Layout from "./layout.js"
 import Logout from "./logout.js"
 import Aclaraciones from "./aclaraciones.js"
 import Ajustes from "./ajustes.js"
+import Cartera from "./cartera.js"
+import Conciliacion from "./conciliacion.js"
+import Conciliar from "./conciliar.js"
+import ConCtasBancarias from "./conCtasBancarias.js"
+import ConCtasContables from "./conCtasContables.js"
+import ConSaldos from "./conSaldos.js"
+import ConTrnBancos from "./conTrnBancos.js"
+import ConTrnMambu from "./conTrnMambu.js"
+import EdoCta from "./edoCta.js"
+import Etiquetas from "./etiquetas.js"
+import NoConciliado from "./noConciliado.js"
+import RecalculoCapital from "./recalculoCapital.js"
+import RecalculoInteres from "./recalculoInteres.js"
+import RegCtasBancarias from "./regCtasBancarias.js"
+import RegCtasContables from "./regCtasContables.js"
+import RegSaldos from "./regSaldos.js"
+import RegTrnMambu from "./regTrnMambu.js"
+import ResConciliacion from "./resConciliacion.js"
+import SaldoFavor from "./saldoFavor.js"
+import RegTrnDWH from "./regTrnDWH.js"
+import ConTrnDWH from "./conTrnDWH.js"
+import Variables from "./variables.js"
 
 class OOPS extends Componente {
 	constructor() {
@@ -28,13 +50,33 @@ class OOPS extends Componente {
 const VISTAS = {
 	Inicio,
 	RegTrnBancos,
-	TrnDWH: VistaTemporal,
-	TrnMambu: VistaTemporal,
 	Layout,
 	Logout,
 	OOPS,
 	Aclaraciones,
 	Ajustes,
+	Cartera,
+	Conciliacion,
+	Conciliar,
+	ConCtasBancarias,
+	ConCtasContables,
+	ConSaldos,
+	ConTrnBancos,
+	ConTrnMambu,
+	EdoCta,
+	Etiquetas,
+	NoConciliado,
+	RecalculoCapital,
+	RecalculoInteres,
+	RegCtasBancarias,
+	RegCtasContables,
+	RegSaldos,
+	RegTrnMambu,
+	ResConciliacion,
+	SaldoFavor,
+	RegTrnDWH,
+	Variables,
+	ConTrnDWH,
 }
 
 export default VISTAS

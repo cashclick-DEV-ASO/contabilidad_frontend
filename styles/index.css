@@ -16,6 +16,28 @@
 
 @import url("./aclaraciones.css");
 @import url("./ajustes.css");
+@import url("./cartera.css");
+@import url("./conciliacion.css");
+@import url("./conciliar.css");
+@import url("./conCtasBancarias.css");
+@import url("./conCtasContables.css");
+@import url("./conSaldos.css");
+@import url("./conTrnBancos.css");
+@import url("./conTrnMambu.css");
+@import url("./edoCta.css");
+@import url("./etiquetas.css");
+@import url("./noConciliado.css");
+@import url("./recalculoCapital.css");
+@import url("./recalculoInteres.css");
+@import url("./regCtasBancarias.css");
+@import url("./regCtasContables.css");
+@import url("./regSaldos.css");
+@import url("./regTrnMambu.css");
+@import url("./resConciliacion.css");
+@import url("./saldoFavor.css");
+@import url("./regTrnDWH.css");
+@import url("./conTrnDWH.css");
+@import url("./variables.css");
 
 .contenedor {
 	width: 100%;

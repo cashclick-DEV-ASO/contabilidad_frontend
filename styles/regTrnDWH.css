@@ -1,0 +1,24 @@
+.TrnDWH > #contenedorAcciones {
+	display: grid;
+	grid-template-columns: 1fr 1fr 2fr 0.5fr;
+	grid-template-rows: max-content;
+	grid-template-areas: "periodo layout archivo guardar";
+	justify-items: center;
+	align-items: center;
+}
+
+.TrnDWH > #contenedorAcciones > #periodo {
+	grid-area: periodo;
+}
+
+.TrnDWH > #contenedorAcciones > #layout {
+	grid-area: layout;
+}
+
+.TrnDWH > #contenedorAcciones > #archivo {
+	grid-area: archivo;
+}
+
+.TrnDWH > #contenedorAcciones > #guardar {
+	grid-area: guardar;
+}
