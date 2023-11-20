@@ -41,7 +41,7 @@ const createApp = devMode => {
 	})
 
 	app.get("/", (req, res) => {
-		if (!validaToken(req.cookies.TOKEN)) return res.redirect("/login")
+		if (!validaToken(req.cookies.TOKEN) || !req.cookies.SESION) return res.redirect("/login")
 		res.sendFile(indexHtml)
 	})
 
