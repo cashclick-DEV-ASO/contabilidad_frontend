@@ -47,9 +47,8 @@ const createApp = devMode => {
 
 	app.all("*", (req, res) => {
 		if (
-			req.path &&
-			(validaToken(req.cookies.TOKEN) || req.cookies.ORIGEN === "login") &&
-			req.cookies.SESION
+			(req.path && validaToken(req.cookies.TOKEN) && req.cookies.SESION) ||
+			req.cookies.ORIGEN === "login"
 		) {
 			const archivo = ubicaArchivo(directorio, req.path)
 
