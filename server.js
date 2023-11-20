@@ -46,11 +46,11 @@ const createApp = devMode => {
 	})
 
 	app.all("*", (req, res) => {
-		console.log(req.path)
 		if (req.cookies.ORIGEN === "login" || (req.path && req.cookies.SESION)) {
 			const archivo = ubicaArchivo(directorio, req.path)
 
 			if (archivo) return res.sendFile(archivo)
+			console.log(`No se encontró el archivo: ${req.path}`)
 		}
 		res.redirect("/login")
 	})
