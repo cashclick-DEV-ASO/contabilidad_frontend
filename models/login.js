@@ -28,9 +28,9 @@ export class LoginModel extends Modelo {
 
 		if (this.resultado.success) {
 			const { nombre, mapa } = this.resultado.informacion
+			escribirCookie("SESION", true)
 			escribirCookie("NOMBRE", nombre)
 			escribirCookie("RUTAS", mapa)
-			escribirCookie("SESION", true)
 		} else if (this.error) {
 			this.mensaje =
 				this.mensaje ??
