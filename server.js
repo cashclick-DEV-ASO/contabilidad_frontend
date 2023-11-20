@@ -37,10 +37,10 @@ const createApp = devMode => {
 	app.get("/login", (req, res) => {
 		console.log(req.cookies.ORIGEN, req.cookies.SESION)
 		if (validaToken(req.cookies.TOKEN) && req.cookies.SESION) {
-			console.log("Se ha iniciado sesión")
+			console.log("La ruta login hizo redireccionamiento a /")
 			return res.redirect("/")
 		}
-		console.log("No se ha iniciado sesión")
+		console.log("La ruta login envia el login")
 		res.cookie("ORIGEN", "login", { secure: true })
 		res.sendFile(loginHtml)
 	})
@@ -48,23 +48,23 @@ const createApp = devMode => {
 	app.get("/", (req, res) => {
 		console.log(req.cookies)
 		if (!validaToken(req.cookies.TOKEN) || !req.cookies.SESION) {
-			console.log("No se ha iniciado sesión")
+			console.log("La ruta raiz hizo redireccionamiento a /login")
 			return res.redirect("/login")
 		}
-		console.log("Se ha iniciado sesión")
+		console.log("La ruta raiz envia el index")
 		res.sendFile(indexHtml)
 	})
 
 	app.all("*", (req, res) => {
 		console.log(req.cookies.ORIGEN, req.cookies.SESION)
 		if (req.cookies.ORIGEN === "login" || (req.path && req.cookies.SESION)) {
-			console.log("Se ha iniciado sesión")
+			console.log("Se envia el archivo solicitado")
 			const archivo = ubicaArchivo(directorio, req.path)
 
 			if (archivo) return res.sendFile(archivo)
 			console.log(`No se encontró el archivo: ${req.path}`)
 		}
-		console.log("No se ha iniciado sesión")
+		console.log("Al solicitar un archivo se redirecciona a /login")
 		res.redirect("/login")
 	})
 
