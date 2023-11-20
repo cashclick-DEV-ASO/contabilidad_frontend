@@ -65,21 +65,21 @@ export class Inicio extends Componente {
 			</small>`
 		)
 
-		this.modo = new Componente("img", { id: "modo" })
-		this.modo.setPropiedad("alt", "Cambiar modo oscuro")
-		this.modo.setListener("click", this.cambiarModo.bind(this))
-		this.validaModoOscuro()
+		// this.modo = new Componente("img", { id: "modo" })
+		// this.modo.setPropiedad("alt", "Cambiar modo oscuro")
+		// this.modo.setListener("click", this.cambiarModo.bind(this))
+		// this.validaModoOscuro()
 
-		this.instruccion = new Componente("span", { id: "instruccion" }).setTexto(
-			this.actualizaRecomendacion()
-		)
+		// this.instruccion = new Componente("span", { id: "instruccion" }).setTexto(
+		// 	this.actualizaRecomendacion()
+		// )
 
 		this.addHijos([
 			this.bienvenida.mostrar(),
 			this.imagen.mostrar(),
 			this.recomendacion.mostrar(),
-			this.instruccion.mostrar(),
-			this.modo.mostrar(),
+			// this.instruccion.mostrar(),
+			// this.modo.mostrar(),
 		])
 
 		return this

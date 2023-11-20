@@ -40,16 +40,6 @@ body {
 	color: var(--body-color);
 }
 
-body.claro {
-	background: var(--body-bg-claro);
-	color: var(--body-color-claro);
-}
-
-body.oscuro {
-	background: var(--body-bg-oscuro);
-	color: var(--body-color-oscuro);
-}
-
 select,
 input {
 	border-radius: 15px;
