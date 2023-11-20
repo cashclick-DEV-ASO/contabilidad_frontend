@@ -108,6 +108,7 @@ export class Modelo {
 			}
 
 			cerrarSesion()
+			return this
 		}
 
 		if (this.resultado && this.resultado.informacion.sesionCaducada) {
@@ -115,6 +116,8 @@ export class Modelo {
 			cerrarSesion()
 			return this
 		}
+
+		if (this.resultado && !this.resultado.informacion.success) return this
 
 		mostrarError(error)
 		this.mensaje = mensaje

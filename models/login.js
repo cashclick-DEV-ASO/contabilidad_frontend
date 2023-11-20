@@ -19,38 +19,39 @@ export class LoginModel extends Modelo {
 	}
 
 	async login() {
-		if (this.valida() != true) return false
+		if (!this.valida()) return false
 
 		await this.post("login", {
 			user: this.user,
 			pass: this.pass,
 		})
 
-		if (this.error) {
+		if (this.resultado.success) {
+			const { nombre, mapa } = this.resultado.informacion
+			escribirCookie("NOMBRE", nombre)
+			escribirCookie("RUTAS", mapa)
+			escribirCookie("SESION", true)
+		} else if (this.error) {
 			this.mensaje =
 				this.mensaje ??
 				"Ocurrió un problema al validar la información.\nIntente nuevamente o contacte al administrador."
 			return false
 		}
 
-		if (this.resultado.success) {
-			const { token, nombre, mapa } = this.resultado.informacion
-			escribirCookie("NOMBRE", nombre)
-			escribirCookie("RUTAS", mapa)
-		} else {
-			this.mensaje = "Credenciales incorrectas."
-		}
+		this.mensaje = "Credenciales incorrectas."
 
 		return this.resultado.success
 	}
 
 	valida() {
+		this.mensaje = null
+
 		if (this.user === "" && this.pass === "")
-			return (this.mensaje = "No se han proporcionado credenciales de acceso.")
-		else if (this.user === "")
-			return (this.mensaje = "No se ha proporcionado el nombre de usuario.")
-		else if (this.pass === "") return (this.mensaje = "No se ha proporcionado la contraseña.")
-		else return true
+			this.mensaje = "No se han proporcionado credenciales de acceso."
+		else if (this.user === "") this.mensaje = "No se ha proporcionado el nombre de usuario."
+		else if (this.pass === "") this.mensaje = "No se ha proporcionado la contraseña."
+
+		return this.mensaje === null
 	}
 }
 

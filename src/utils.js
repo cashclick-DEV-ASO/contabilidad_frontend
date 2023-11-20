@@ -12,11 +12,8 @@ export const leerCookie = nombreBuscado => {
 
 export const limipiarCookies = () => {
 	const galletas = document.cookie.split(";")
-
 	galletas.forEach(galleta => {
 		const nombre = galleta.split("=")[0].trim()
-
-		if (nombre.trim === DEV_MODE || nombre === URL_API) return
 		borrarCookie(nombre)
 	})
 }

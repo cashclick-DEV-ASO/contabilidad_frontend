@@ -8,12 +8,13 @@ export class LoginController extends Controlador {
 
 	login = async event => {
 		event.preventDefault()
+
 		this.modelo.setUsuario(this.vista.usuario.getValor())
 		this.modelo.setPassword(this.vista.password.getValor())
 
 		await this.modelo.login()
 
-		if (this.modelo.resultado.success) {
+		if (this.modelo.resultado && this.modelo.resultado.success) {
 			window.location.href = "/"
 		} else this.msjError(this.modelo.mensaje)
 	}

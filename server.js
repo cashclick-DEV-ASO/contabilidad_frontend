@@ -35,7 +35,7 @@ const createApp = devMode => {
 	})
 
 	app.get("/login", (req, res) => {
-		if (validaToken(req.cookies.TOKEN)) return res.redirect("/")
+		if (validaToken(req.cookies.TOKEN) && req.cookies.SESION) return res.redirect("/")
 		res.cookie("ORIGEN", "login", { secure: true })
 		res.sendFile(loginHtml)
 	})
@@ -46,7 +46,12 @@ const createApp = devMode => {
 	})
 
 	app.all("*", (req, res) => {
-		if (req.path && (validaToken(req.cookies.TOKEN) || req.cookies.ORIGEN === "login")) {
+		if (
+			req.path &&
+			(validaToken(req.cookies.TOKEN) ||
+				req.cookies.ORIGEN === "login" ||
+				!req.cookies.SESION)
+		) {
 			const archivo = ubicaArchivo(directorio, req.path)
 
 			if (archivo) return res.sendFile(archivo)
