@@ -59,41 +59,39 @@ export class RegTrnBancosMdl extends Modelo {
 		return false
 	}
 
-	pruebaAceptar(cierre) {
-		console.log("Botón Aceptar")
-		cierre()
-	}
+	async guardar(edoCta) {
+		const datID = {
+			query: "INSERT INTO edo_cta (periodo, archivo, fecha_captura, id_cuenta) VALUES (?, ?, ?, ?)",
+			parametros: [edoCta.periodo, edoCta.archivo, edoCta.fecha_carga, edoCta.id_cuenta],
+		}
 
-	pruebaCancelar(cierre) {
-		console.log("Botón Cancelar")
-		cierre()
-	}
+		const id_edo_cta = await this.post("noConfig", datID)
 
-	async guardar(banco, periodo, archivo, layout, contenidoArchivo = this.contenidoArchivo) {
-		if (this.valida() !== true) return false
-
-		await this.post("trnBancos", {
-			banco,
-			periodo,
-			archivo,
-			layout,
-		})
-
-		if (!this.informacion) {
-			this.mensaje =
-				"Ocurrió un problema al validar la información.\nIntente nuevamente o contacte al administrador."
-			mostrarError(this.error)
+		if (id_edo_cta.error) {
+			this.mensaje = "Error al guardar el estado de cuenta."
 			return false
 		}
+		const id_edo = id_edo_cta.resultado.informacion.resultado.insertId
+		const trnsToSend = edoCta.trns.map(trn => {
+			return [
+				id_edo,
+				trn.linea,
+				trn.informacion,
+				this.txtToFechaMysql(trn.fecha_creacion),
+				this.txtToFechaMysql(trn.fecha_valor),
+				trn.concepto,
+				trn.tipo,
+				this.monedaToFloat(trn.monto),
+				edoCta.id_layout,
+			]
+		})
 
-		if (this.success) {
-			this.mensaje = "El archivo se guardó correctamente."
-		} else {
-			this.mensaje = "Ocurrió un problema al guardar el archivo."
-			mostrarError(this.informacion)
+		const datos = {
+			query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto, id_layout) VALUES ?",
+			parametros: [trnsToSend],
 		}
 
-		return this.success
+		await this.post("noConfig", datos)
 	}
 
 	valida(banco, periodo, archivo, layout, contenidoArchivo = this.contenidoArchivo) {
@@ -103,6 +101,15 @@ export class RegTrnBancosMdl extends Modelo {
 		else if (layout === "") return (this.mensaje = "No se ha seleccionado un layout.")
 		else if (!contenidoArchivo) return (this.mensaje = "No se ha proporcionado un archivo.")
 		else return true
+	}
+
+	txtToFechaMysql(fecha) {
+		const [dia, mes, anio] = fecha.split("/")
+		return `${anio}-${mes}-${dia}`
+	}
+
+	monedaToFloat(monto) {
+		return parseFloat(monto.replace(/[$,]/gi, ""))
 	}
 }
 

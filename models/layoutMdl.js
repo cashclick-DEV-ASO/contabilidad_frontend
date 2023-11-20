@@ -21,8 +21,17 @@ export class LayoutMdl extends Modelo {
 	async nuevoLayout(lyt) {
 		const datos = {
 			query: `INSERT INTO layout (id_banco, alias, extensiones, layout, tipo) VALUES (?, ?, ?, ?, ?)`,
-			parametros: [lyt.id_banco, lyt.alias, lyt.extension, lyt.layout, lyt.tipo],
+			parametros: [lyt.id_banco, lyt.alias, lyt.extensiones, lyt.layout, lyt.tipo],
 		}
+		return await this.post("noConfig", datos)
+	}
+
+	async eliminaLayout(id) {
+		const datos = {
+			query: `DELETE FROM layout WHERE id = ?`,
+			parametros: [id],
+		}
+
 		return await this.post("noConfig", datos)
 	}
 }

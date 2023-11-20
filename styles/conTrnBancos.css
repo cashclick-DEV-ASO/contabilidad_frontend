@@ -1,8 +1,24 @@
 .ConTrnBancos > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "fechaI fechaF banco buscar";
 	justify-items: center;
 	align-items: center;
+}
+
+.ConTrnBancos > #contenedorAcciones > #fechaI {
+	grid-area: fechaI;
+}
+
+.ConTrnBancos > #contenedorAcciones > #fechaF {
+	grid-area: fechaF;
+}
+
+.ConTrnBancos > #contenedorAcciones > #banco {
+	grid-area: banco;
+}
+
+.ConTrnBancos > #contenedorAcciones > #buscar {
+	grid-area: buscar;
 }

@@ -43,13 +43,15 @@ export class RegTrnBancos extends Vista {
 			.addBoton("btnGuardar")
 			.setIDContenedor("guardar")
 			.setTexto("Guardar")
-			.setDisabled(false)
+			.habilitarBoton(false)
 			.setListener(this.controlador.guardar)
 
-		this.datos.tabla = new TablaDatos().setID("tabla")
-		this.datos.tabla.permiteFiltro = false
-		this.datos.tabla.permiteExportar = false
-		this.datos.tabla.permiteEditar = false
+		this.datos.tabla = new TablaDatos()
+			.setID("tabla")
+			.setListenerExportar(this.controlador.exportaExcel.bind(this.controlador))
+		this.datos.tabla.permiteFiltro = true
+		this.datos.tabla.permiteExportar = true
+		this.datos.tabla.permiteEditar = true
 
 		this.controlador.cargaInicial()
 		return this

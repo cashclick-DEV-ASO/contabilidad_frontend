@@ -1,5 +1,5 @@
 :root {
-	--body-bg-oscuro: #1a1b1c;
+	--body-bg-oscuro: #121212;
 	--body-color-oscuro: #ffffff;
 	--body-bg-claro: #ffffff;
 	--body-color-claro: #000000;
@@ -10,12 +10,12 @@
 	--azul_medio_3: #198fb0;
 	--azul_claro: #07aada;
 	--advertencia: #d3d32b;
-	--error: #a50d0d;
+	--error: #f92f60;
 	--exito: #169c16;
 
-	--btnGradiente: linear-gradient(to bottom, #1d4387 5%, #07aada 100%);
+	--btnGradiente: linear-gradient(to bottom, #1d4387 5%, #198fb0 100%);
 	--btnGradienteHover: linear-gradient(to bottom, #07aada 5%, #1d4387 100%);
-	--btnGradienteDisabled: linear-gradient(to bottom, #871d1d 5%, #da0707 100%);
+	--btnGradienteDisabled: linear-gradient(to bottom, #871d1d 5%, #f92f60 100%);
 }
 
 html {
@@ -62,9 +62,16 @@ input:focus {
 	outline: none;
 }
 
+select:not(:disabled):hover,
+input:not(:disabled):hover {
+	border: 2px solid var(--azul_medio_1);
+	cursor: pointer;
+}
+
 select:hover,
 input:hover {
-	border: 2px solid var(--azul_claro);
+	border: 2px solid var(--error);
+	cursor: not-allowed;
 }
 
 button {
@@ -83,6 +90,7 @@ button:hover {
 
 button:disabled {
 	background: var(--btnGradienteDisabled);
+	cursor: not-allowed;
 }
 
 button:not(:disabled):active {

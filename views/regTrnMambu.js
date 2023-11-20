@@ -2,29 +2,50 @@ import Vista from "./vista.js"
 import { RegTrnMambuCtrl as Controlador } from "../controllers/controladores.js"
 import { RegTrnMambuMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, Componente } from "../components/componentes.js"
+import {
+	Botonera,
+	Periodo,
+	ListaDesplegable,
+	SolicitaArchivo,
+	TablaDatos,
+} from "../components/componentes.js"
 
 import { SYS } from "../src/constantes.js"
 
+const REG_TRN_MAMBU = {
+	CONTENEDOR: "RegTrnMambu",
+	TITULO: "Registro de Transacciones de Mambu",
+}
+
 export class RegTrnMambu extends Vista {
 	constructor() {
-		super("RegTrnMambu")
+		super(REG_TRN_MAMBU.CONTENEDOR)
 		this.controlador = new Controlador(this, new Modelo())
 		return this.inicia()
 	}
 
 	inicia() {
-		this.titulo.setTexto("RegTrnMambu")
+		this.titulo.setTexto(REG_TRN_MAMBU.TITULO)
+
+		this.acciones.selPeriodo = new Periodo().setID("periodo")
+
+		this.acciones.selArchivo = new SolicitaArchivo()
+			.accionAbrir(this.controlador.leerArchivo)
+			.accionSeleccionar(this.controlador.cambioArchivo, this.controlador.cambioArchivo)
+			.setID("archivo")
+			.setMensaje("Selecciona un Banco y un Layout.")
 
 		this.acciones.guardar = new Botonera()
-			.addBoton("btnVacio")
-			.setIDContenedor("btnVacio")
-			.setTexto("Saludar")
-			.setListener(this.controlador.saludar)
+			.addBoton("btnGuardar")
+			.setIDContenedor("guardar")
+			.setTexto("Guardar")
+			.habilitarBoton(false)
+			.setListener(this.controlador.guardar)
 
-		this.datos.etiqueta = new Componente(SYS.LBL, { clase: "texto" }).setTexto(
-			"La vista RegTrnMambu se encuentra en desarrollo. Vuelva más tarde."
-		)
+		this.datos.tabla = new TablaDatos().setID("tabla")
+		this.datos.tabla.permiteFiltro = true
+		this.datos.tabla.permiteExportar = true
+		this.datos.tabla.permiteEditar = true
 
 		return this
 	}

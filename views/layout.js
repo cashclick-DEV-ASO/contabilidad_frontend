@@ -51,6 +51,11 @@ export class Layout extends Vista {
 			.setTexto(LAYOUT.TXT_BTN_GUARDAR)
 			.setListener(this.controlador.guardarCambios)
 			.habilitarBoton(false)
+			.addBoton(LAYOUT.ID_BTN_ELIMINAR)
+			.setTexto(LAYOUT.TXT_BTN_ELIMINAR, LAYOUT.ID_BTN_ELIMINAR)
+			.setListener(this.controlador.elimiarLayout, LAYOUT.ID_BTN_ELIMINAR)
+			.habilitarBoton(false, LAYOUT.ID_BTN_ELIMINAR)
+			.setEstilo2()
 
 		this.datos.contenedorEditor = new Componente(SYS.SCTN, {
 			clase: LAYOUT.ID_CONTENEDOR_EDITOR,

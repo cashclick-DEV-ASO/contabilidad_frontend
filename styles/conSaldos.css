@@ -1,8 +1,28 @@
 .ConSaldos > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "fechaI fechaF banco cta buscar";
 	justify-items: center;
 	align-items: center;
+}
+
+.ConSaldos > #contenedorAcciones > #banco {
+	grid-area: banco;
+}
+
+.ConSaldos > #contenedorAcciones > #cta {
+	grid-area: cta;
+}
+
+.ConSaldos > #contenedorAcciones > #fechaI {
+	grid-area: fechaI;
+}
+
+.ConSaldos > #contenedorAcciones > #fechaF {
+	grid-area: fechaF;
+}
+
+.ConSaldos > #contenedorAcciones > #buscar {
+	grid-area: buscar;
 }

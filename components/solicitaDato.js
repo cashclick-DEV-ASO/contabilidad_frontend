@@ -8,6 +8,7 @@ export class SolicitaDato extends Componente {
 
 		this.txtEtiqueta = SOLICITA_DATO.TXT_ETIQUETA
 		this.txtPlaceholder = SOLICITA_DATO.TXT_PLACEHOLDER
+		this.fechaInicio = null
 		this.boton = null
 		this.tipo = SYS.TXT
 
@@ -37,11 +38,19 @@ export class SolicitaDato extends Componente {
 			this.boton ? this.btn.mostrar() : null,
 		])
 
+		if (this.fechaInicio) this.dato.getComponente().valueAsDate = this.fechaInicio
+
 		return this
 	}
 
 	mostrar() {
 		return this.configura().getComponente()
+	}
+
+	reinicia() {
+		if (this.fechaInicio) this.dato.getComponente().valueAsDate = this.fechaInicio
+		else this.dato.getComponente().value = ""
+		return this
 	}
 
 	setTxtEtiqueta(txt) {
@@ -66,6 +75,11 @@ export class SolicitaDato extends Componente {
 
 	setValor(valor) {
 		this.dato.setValor(valor)
+		return this
+	}
+
+	setValorFecha(valor) {
+		this.fechaInicio = valor
 		return this
 	}
 
@@ -100,6 +114,11 @@ export class SolicitaDato extends Componente {
 
 	setIDLbl(id) {
 		this.dato.setID(id)
+		return this
+	}
+
+	habilitarInput(disabled) {
+		this.dato.habilitar(disabled)
 		return this
 	}
 }

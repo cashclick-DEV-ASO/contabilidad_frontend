@@ -1,8 +1,24 @@
 .ConTrnDWH > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "fechaI fechaF banco buscar";
 	justify-items: center;
 	align-items: center;
+}
+
+.ConTrnDWH > #contenedorAcciones > #fechaI {
+	grid-area: fechaI;
+}
+
+.ConTrnDWH > #contenedorAcciones > #fechaF {
+	grid-area: fechaF;
+}
+
+.ConTrnDWH > #contenedorAcciones > #banco {
+	grid-area: banco;
+}
+
+.ConTrnDWH > #contenedorAcciones > #buscar {
+	grid-area: buscar;
 }

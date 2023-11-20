@@ -11,10 +11,37 @@ export class ConTrnBancosCtrl extends Controlador {
 		this.datos = this.vista.datos
 	}
 
-	cargaInicial = () => {}
+	cargaInicial = () => {
+		this.acciones.banco.setTemporalPH("Cargando bancos...")
+		this.llenaListaBancos().then(() => {
+			this.acciones.banco.actulizaOpciones(this.bancos)
+		})
+	}
 
-	saludar = () => {
-		this.msjInformacion("Hola mundo")
+	cambiaFechaI = () => {
+		if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
+			this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
+	}
+
+	cambiaFechaF = () => {
+		if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
+			this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
+	}
+
+	cambioBanco = async () => {
+		this.limpiaCampos()
+
+		this.banco = this.bancos.find(
+			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
+		)
+	}
+
+	limpiaCampos = () => {
+		this.datos.tabla.limpia()
+	}
+
+	buscar = () => {
+		this.msjInformacion("Buscando...")
 	}
 }
 

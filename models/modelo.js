@@ -158,6 +158,10 @@ export class Modelo {
 		return this.enviaSync(recurso, datos, "DELETE")
 	}
 
+	async getInformacionComponentes(query, parametros = []) {
+		return await this.post("noConfig", { query, parametros })
+	}
+
 	async getBancos(idBanco = null) {
 		const query = `SELECT id, nombre FROM banco${
 			idBanco ? " WHERE id_banco = ? " : " "
@@ -172,8 +176,12 @@ export class Modelo {
 		return this.getInformacionComponentes(query, parametros)
 	}
 
-	async getInformacionComponentes(query, parametros = []) {
-		return await this.post("noConfig", { query, parametros })
+	async getCuentas(idBanco = null) {
+		const query = `SELECT * FROM cuenta_bancaria ${
+			idBanco ? "WHERE id_banco = ?" : ""
+		} ORDER BY cta`
+		const parametros = idBanco ? [idBanco] : []
+		return this.getInformacionComponentes(query, parametros)
 	}
 }
 

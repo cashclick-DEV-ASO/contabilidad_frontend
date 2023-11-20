@@ -1,8 +1,8 @@
 .Layout > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "nuevo banco layout tipo extensiones guardar";
+	grid-template-areas: "nuevo banco layout tipo extensiones guardar eliminar";
 	justify-items: center;
 	align-items: center;
 }
@@ -25,6 +25,10 @@
 
 .Layout > #contenedorAcciones > #extensiones {
 	grid-area: extensiones;
+}
+
+.Layout > #contenedorAcciones > #guardar {
+	grid-area: guardar;
 }
 
 .contenedorGuardar {

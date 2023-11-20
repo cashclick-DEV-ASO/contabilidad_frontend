@@ -11,10 +11,22 @@ export class ConTrnMambuCtrl extends Controlador {
 		this.datos = this.vista.datos
 	}
 
-	cargaInicial = () => {}
+	cambiaFechaI = () => {
+		if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
+			this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
+	}
 
-	saludar = () => {
-		this.msjInformacion("Hola mundo")
+	cambiaFechaF = () => {
+		if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
+			this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
+	}
+
+	limpiaCampos = () => {
+		this.datos.tabla.limpiar()
+	}
+
+	buscar = () => {
+		this.msjInformacion("Buscando...")
 	}
 }
 

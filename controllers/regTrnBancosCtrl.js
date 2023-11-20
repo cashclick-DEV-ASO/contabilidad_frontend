@@ -102,17 +102,6 @@ export class RegTrnBancosCtrl extends Controlador {
 		this.msjError(this.modelo.mensaje)
 	}
 
-	guardar = async () => {
-		this.msjContinuar(
-			`Se guardará la información del archivo:<br><br>${this.acciones.selArchivo.ruta.name}<br><br>¿Desea continuar?`,
-			{
-				txtSi: "Si, guardar",
-				txtNo: "No, cancelar",
-				callbackSi: this.modelo.pruebaAceptar,
-			}
-		)
-	}
-
 	opcionesFecha() {
 		return {
 			day: "2-digit",
@@ -175,6 +164,70 @@ export class RegTrnBancosCtrl extends Controlador {
 				return tipos[dato]
 			},
 		}
+	}
+
+	guardar = async () => {
+		this.msjContinuar(
+			`Se guardará la información del archivo:<br><br>${this.acciones.selArchivo.ruta.name}<br><br>¿Desea continuar?`,
+			{
+				txtSi: "Si, guardar",
+				txtNo: "No, cancelar",
+				callbackSi: this.preparaDatos,
+			}
+		)
+	}
+
+	preparaDatos = async (cerrar = null) => {
+		const table = this.datos.tabla.tabla.getComponente()
+
+		var data = []
+		var headers = []
+
+		for (var i = 0; i < table.rows[0].cells.length; i++) {
+			headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi, "")
+		}
+		for (var i = 1; i < table.rows.length; i++) {
+			var tableRow = table.rows[i]
+			var rowData = {}
+			for (var j = 0; j < tableRow.cells.length; j++) {
+				rowData[headers[j]] = tableRow.cells[j].innerHTML
+			}
+			data.push(rowData)
+		}
+
+		const trns = data.map(trn => {
+			return {
+				linea: trn.no,
+				informacion: trn.descripción1 + "||" + trn.descripción2 + "||" + trn.descripción3,
+				fecha_creacion: trn.fechaoperación,
+				fecha_valor: trn.fechavalor,
+				concepto: trn.idoperación,
+				tipo: trn.tipomovimiento === "Cargo" ? 1 : 2,
+				monto: trn.monto,
+			}
+		})
+
+		const periodo = this.acciones.selPeriodo.getPeriodo()
+
+		const final = {
+			periodo: periodo.anio + "" + periodo.mes,
+			archivo: this.acciones.selArchivo.ruta.name,
+			fecha_carga: this.fechaMysql(new Date()),
+			id_cuenta: this.banco.valor,
+			id_layout: this.layout.valor,
+			trns,
+		}
+
+		await this.modelo.guardar(final)
+		if (cerrar) cerrar()
+		this.msjExito("Se guardó la información correctamente.")
+		this.acciones.selLayout.actulizaOpciones([])
+		this.limpiaCampos({ lyt: true, bnk: true })
+		this.acciones.guardar.habilitarBoton(false)
+	}
+
+	fechaMysql = fecha => {
+		return fecha.toISOString().slice(0, 19).replace("T", " ")
 	}
 }
 

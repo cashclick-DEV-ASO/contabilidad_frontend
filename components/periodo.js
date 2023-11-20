@@ -72,6 +72,13 @@ export class Periodo extends Componente {
 	mostrar() {
 		return this.configura().getComponente()
 	}
+
+	getPeriodo() {
+		return {
+			anio: this.txtAnioPeriodo.getValor(),
+			mes: this.txtMesPeriodo.getValor(),
+		}
+	}
 }
 
 export default Periodo

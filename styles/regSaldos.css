@@ -1,8 +1,45 @@
+.RegSaldos {
+	display: grid !important;
+	grid-template-rows: max-content 1fr !important;
+	grid-template-areas: "titulo" "acciones" !important;
+	justify-items: center !important;
+	align-items: center !important;
+	justify-content: center !important;
+	align-content: center !important;
+}
+
 .RegSaldos > #contenedorAcciones {
-	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
-	grid-template-rows: max-content;
-	grid-template-areas: "";
+	display: flex;
+	flex-direction: column;
 	justify-items: center;
+	height: 50%;
 	align-items: center;
+}
+
+.RegSaldos > #contenedorAcciones > #banco {
+	grid-area: banco;
+}
+
+.RegSaldos > #contenedorAcciones > #cuenta {
+	grid-area: cuenta;
+}
+
+.RegSaldos > #contenedorAcciones > #fecha {
+	grid-area: fecha;
+}
+
+.RegSaldos > #contenedorAcciones > #saldoI {
+	grid-area: saldoI;
+}
+
+.RegSaldos > #contenedorAcciones > #saldoF {
+	grid-area: saldoF;
+}
+
+.RegSaldos > #contenedorAcciones > #boton {
+	grid-area: boton;
+}
+
+.RegSaldos > #contenedorDatos {
+	display: none;
 }

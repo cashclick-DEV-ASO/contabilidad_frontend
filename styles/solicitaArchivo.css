@@ -43,6 +43,7 @@
 
 .contenedorArchivo .lblArchivo.disabled {
 	background: var(--btnGradienteDisabled);
+	cursor: not-allowed;
 }
 
 .contenedorArchivo .btnAbrir {

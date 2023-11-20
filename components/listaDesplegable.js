@@ -32,6 +32,8 @@ export class ListaDesplegable extends Componente {
 
 		this.configuraPlaceholder()
 
+		this.lista.habilitar(!(this.opciones.length === 0))
+
 		this.opciones.forEach(opcion => {
 			this.lista.addHijo(this.setOpcion(opcion).mostrar())
 		})
@@ -63,6 +65,7 @@ export class ListaDesplegable extends Componente {
 		this.opciones = opciones
 		this.lista.vaciar()
 		this.configuraPlaceholder()
+		this.lista.habilitar(!(this.opciones.length === 0))
 		opciones.forEach(opcion => {
 			this.lista.addHijo(this.setOpcion(opcion).mostrar())
 		})

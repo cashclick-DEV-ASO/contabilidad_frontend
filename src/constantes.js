@@ -26,6 +26,7 @@ export const SYS = {
 	TD: "td",
 	FLE: "file",
 	PH: "placeholder",
+	BLR: "blur",
 	KUP: "keyup",
 	CHNG: "change",
 	CLK: "click",
@@ -211,6 +212,15 @@ export const LAYOUT = {
 	TXT_BTN_NO_CONFIRMACION_NUEVO: "No, crear desde cero",
 	MSJ_ERROR_LAYOUT_4:
 		"Este layout no cuenta con el formato esperado.<br>Favor de corregir o se presentaran errores al procesar los archivos.",
+	ID_CONTENEDOR_BTN_ELIMINAR: "eliminar",
+	ID_BTN_ELIMINAR: "eliminar",
+	TXT_BTN_ELIMINAR: "Eliminar",
+	MSJ_CONFIRMACION_ELIMINAR:
+		"¿Esta seguro que desea eliminar el layout seleccionado?<br>Esta accion no se puede deshacer.",
+	TXT_BTN_SI_CONFIRMACION_ELIMINAR: "Si, estoy seguro",
+	TXT_BTN_NO_CONFIRMACION_ELIMINAR: "No, cancelar",
+	MSJ_EXITO_ELIMINAR: "El layout se ha eliminado correctamente.",
+	MSJ_ERROR_ELIMINAR: "No se pudo eliminar el layout.",
 }
 
 export const MSJ_PIE = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`

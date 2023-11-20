@@ -152,6 +152,21 @@ export class Controlador {
 	}
 
 	/**
+	 * Llena la lista de layouts con las opciones obtenidas del modelo.
+	 * @async
+	 * @param {number|null} id - El id del layout a obtener, si es null se obtienen todos los layouts.
+	 * @returns {Promise<void>}
+	 */
+	async llenaListaCtasContables(id = null) {
+		await this.modelo.getCuentas(id)
+
+		this.ctasContables = this.getLista(ctasContable => ({
+			valor: ctasContable.id,
+			texto: ctasContable.cta,
+		}))
+	}
+
+	/**
 	 * Llena una lista con opciones obtenidas a partir de los registros del modelo.
 	 * @param {function} agregaOpciones - Función que agrega las opciones a la lista.
 	 * @param {function} extractor - Función que extrae la información necesaria de cada registro.
@@ -166,6 +181,28 @@ export class Controlador {
 		return registros.map(registro => {
 			return extractor(registro)
 		})
+	}
+
+	exportaExcel = (tableSelect, filename = "") => {
+		if (tableSelect === undefined || tableSelect === null) return
+		var downloadLink
+		var dataType = "application/vnd.ms-excel"
+		var tableHTML = tableSelect.outerHTML.replace(/ /g, "%20")
+		filename = filename ? filename + ".xls" : "excel_data.xls"
+		downloadLink = document.createElement("a")
+
+		document.body.appendChild(downloadLink)
+
+		if (navigator.msSaveOrOpenBlob) {
+			var blob = new Blob(["ufeff", tableHTML], {
+				type: dataType,
+			})
+			navigator.msSaveOrOpenBlob(blob, filename)
+		} else {
+			downloadLink.href = "data:" + dataType + ", " + tableHTML
+			downloadLink.download = filename
+			downloadLink.click()
+		}
 	}
 }
 

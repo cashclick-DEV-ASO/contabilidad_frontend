@@ -1,8 +1,20 @@
 .RegTrnMambu > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "periodo archivo guardar";
 	justify-items: center;
 	align-items: center;
+}
+
+.RegTrnMambu > #contenedorAcciones > #periodo {
+	grid-area: periodo;
+}
+
+.RegTrnMambu > #contenedorAcciones > #archivo {
+	grid-area: archivo;
+}
+
+.RegTrnMambu > #contenedorAcciones > #guardar {
+	grid-area: guardar;
 }

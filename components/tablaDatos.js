@@ -49,6 +49,10 @@ export class TablaDatos extends Componente {
 	configura() {
 		this.botones = this.congifuraBotones()
 
+		this.valorFiltro.habilitarInput(false)
+		if (this.botones.getNumeroBotones() > 0)
+			this.botones.habilitarBoton(false, TABLA.TXT_BTN_EXPORTAR)
+
 		this.controles.addHijos([
 			this.permiteFiltro ? this.selColFiltro.mostrar() : null,
 			this.permiteFiltro ? this.valorFiltro.mostrar() : null,
@@ -162,6 +166,7 @@ export class TablaDatos extends Componente {
 		this.tabla = new Componente(SYS.DIV, { clase: TABLA.SIN_DATOS })
 		this.tabla.setTexto(TABLA.TXT_SIN_DATOS)
 		this.tabla.setPropiedad("style", TABLA.ESTILO_SIN_DATOS)
+		this.e
 
 		return this
 	}
@@ -177,8 +182,16 @@ export class TablaDatos extends Componente {
 
 	actualizaTabla({ encabezados = this.encabezados, filas = this.filas, updtFiltro = true } = {}) {
 		this.tabla.removeComponente()
-		if (this.filas.length == 0) this.tablaSinDatos()
-		else this.construirTabla(encabezados, filas)
+		if (this.filas.length == 0) {
+			this.tablaSinDatos()
+			this.botones.habilitarBoton(false, TABLA.TXT_BTN_EXPORTAR)
+			this.valorFiltro.habilitarInput(false)
+		} else {
+			this.construirTabla(encabezados, filas)
+			this.valorFiltro.habilitarInput(true)
+			if (this.botones.getNumeroBotones() > 0)
+				this.botones.habilitarBoton(true, TABLA.TXT_BTN_EXPORTAR)
+		}
 
 		this.mostrarDetalles()
 		this.contenedor.addHijo(this.tabla.getComponente())
@@ -280,11 +293,13 @@ export class TablaDatos extends Componente {
 	congifuraBotones() {
 		const btns = new Botonera().setIDContenedor(TABLA.PARAMETROS)
 
-		if (this.permiteExportar)
-			btns.addBoton(TABLA.TXT_BTN_EXPORTAR).setTexto(
-				TABLA.TXT_BTN_EXPORTAR,
-				TABLA.TXT_BTN_EXPORTAR
-			)
+		if (this.permiteExportar && this.lstnrExportar) {
+			btns.addBoton(TABLA.TXT_BTN_EXPORTAR)
+				.setTexto(TABLA.TXT_BTN_EXPORTAR)
+				.setListener(() => {
+					this.lstnrExportar(this.tabla.getComponente())
+				})
+		}
 
 		return btns
 	}
@@ -390,6 +405,15 @@ export class TablaDatos extends Componente {
 		const numero = parseFloat(valorNumerico)
 
 		return isNaN(numero) ? null : numero
+	}
+
+	setListenerExportar(callback) {
+		this.lstnrExportar = callback
+		return this
+	}
+
+	getFilas() {
+		return this.filas
 	}
 }
 

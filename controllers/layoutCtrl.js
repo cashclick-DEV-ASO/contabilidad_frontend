@@ -64,6 +64,8 @@ export class LayoutCtrl extends Controlador {
 			this.datos.editor.setValor(this.layout.layout)
 			this.msjError(LAYOUT.MSJ_ERROR_LAYOUT_4)
 		}
+
+		this.acciones.guardar.habilitarBoton(true, LAYOUT.ID_BTN_ELIMINAR)
 	}
 
 	cambioTipo = () => {
@@ -84,7 +86,7 @@ export class LayoutCtrl extends Controlador {
 			return true
 		}
 
-		this.acciones.guardar.habilitarBoton(chek())
+		this.acciones.guardar.habilitarBoton(chek(), LAYOUT.ID_BTN_GUARDAR)
 	}
 
 	limpiaCampos = ({ lyt = true, bnk = false } = {}) => {
@@ -92,7 +94,7 @@ export class LayoutCtrl extends Controlador {
 		lyt && this.acciones.layout.reinicia()
 		this.acciones.tipo.reinicia()
 		this.acciones.extensiones.setValor("")
-		this.acciones.guardar.habilitarBoton(false)
+		this.acciones.guardar.habilitarBoton(false, LAYOUT.ID_BTN_GUARDAR)
 		this.datos.editor.setValor("")
 	}
 
@@ -112,7 +114,7 @@ export class LayoutCtrl extends Controlador {
 		await this.modelo.actualizaLayout(layout)
 
 		if (this.modelo.resultado.success) {
-			this.acciones.guardar.habilitarBoton(false)
+			this.acciones.guardar.habilitarBoton(false, LAYOUT.ID_BTN_GUARDAR)
 			this.acciones.layout.setValor(layout.id)
 			this.msjExito(LAYOUT.MSJ_EXITO_GUARDADO)
 			this.limpiaCampos({ bnk: true })
@@ -138,9 +140,9 @@ export class LayoutCtrl extends Controlador {
 		await this.modelo.nuevoLayout(layout)
 
 		if (this.modelo.resultado.success) {
-			this.limpiaCampos()
-			this.msjExito(LAYOUT.MSJ_EXITO_NUEVO)
 			this.limpiaCampos({ bnk: true })
+			this.acciones.layout.actulizaOpciones()
+			this.msjExito(LAYOUT.MSJ_EXITO_NUEVO)
 		} else {
 			this.msjError(LAYOUT.MSJ_ERROR_NUEVO_2)
 		}
@@ -217,6 +219,28 @@ export class LayoutCtrl extends Controlador {
 		const lineaError = ruta[1]
 		const columnaError = ruta[3]
 		return { lineaError, columnaError }
+	}
+
+	elimiarLayout = async () => {
+		this.msjContinuar(LAYOUT.MSJ_CONFIRMACION_ELIMINAR, {
+			txtSi: LAYOUT.TXT_BTN_SI_CONFIRMACION_ELIMINAR,
+			txtNo: LAYOUT.TXT_BTN_NO_CONFIRMACION_ELIMINAR,
+			callbackSi: this.eliminar.bind(this),
+		})
+	}
+
+	eliminar = async cerrar => {
+		await this.modelo.eliminaLayout(this.layout.valor)
+
+		if (this.modelo.resultado.success) {
+			this.limpiaCampos({ bnk: true })
+			this.acciones.layout.actulizaOpciones()
+			this.msjExito(LAYOUT.MSJ_EXITO_ELIMINAR)
+		} else {
+			this.msjError(LAYOUT.MSJ_ERROR_ELIMINAR)
+		}
+
+		if (cerrar) cerrar()
 	}
 }
 

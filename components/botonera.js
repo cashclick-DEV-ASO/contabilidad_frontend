@@ -61,7 +61,7 @@ export class Botonera extends Componente {
 		return this
 	}
 
-	setListener(callback = this.btnNoConfigurado, evento = SYS.CLK, id = this.getIDUnico()) {
+	setListener(callback = this.btnNoConfigurado, id = this.getIDUnico(), evento = SYS.CLK) {
 		if (!id && !this.botones[id]) return this
 		this.botones[id].setListener(evento, callback)
 		return this
@@ -70,12 +70,6 @@ export class Botonera extends Componente {
 	setId(id, idBtn = this.getIDUnico()) {
 		if (!idBtn && !this.botones[idBtn]) return this
 		this.botones[idBtn].setID(id)
-		return this
-	}
-
-	setDisabled(habilitar = true, idBtn = this.getIDUnico()) {
-		if (!idBtn && !this.botones[idBtn]) return this
-		this.botones[idBtn].habilitar(habilitar)
 		return this
 	}
 

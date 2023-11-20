@@ -12,27 +12,22 @@ import {
 
 import { SYS } from "../src/constantes.js"
 
-const TRN_DWH = {
+const REG_TRN_DWH = {
 	CONTENEDOR: "TrnDWH",
-	TITULO: "Registro de Transacciones DWH",
+	TITULO: "Registro de Transacciones del DWH",
 }
 
 export class RegTrnDWH extends Vista {
 	constructor() {
-		super(TRN_DWH.CONTENEDOR)
+		super(REG_TRN_DWH.CONTENEDOR)
 		this.controlador = new Controlador(this, new Modelo())
 		return this.inicia()
 	}
 
 	inicia() {
-		this.titulo.setTexto(TRN_DWH.TITULO)
+		this.titulo.setTexto(REG_TRN_DWH.TITULO)
 
 		this.acciones.selPeriodo = new Periodo().setID("periodo")
-
-		this.acciones.selLayout = new ListaDesplegable()
-			.setTxtEtiqueta("Layout")
-			.setID("layout")
-			.setListener(SYS.CHNG, this.controlador.cambioLayout)
 
 		this.acciones.selArchivo = new SolicitaArchivo()
 			.accionAbrir(this.controlador.leerArchivo)
@@ -44,13 +39,13 @@ export class RegTrnDWH extends Vista {
 			.addBoton("btnGuardar")
 			.setIDContenedor("guardar")
 			.setTexto("Guardar")
-			.setDisabled(false)
+			.habilitarBoton(false)
 			.setListener(this.controlador.guardar)
 
 		this.datos.tabla = new TablaDatos().setID("tabla")
-		this.datos.tabla.permiteFiltro = false
-		this.datos.tabla.permiteExportar = false
-		this.datos.tabla.permiteEditar = false
+		this.datos.tabla.permiteFiltro = true
+		this.datos.tabla.permiteExportar = true
+		this.datos.tabla.permiteEditar = true
 
 		return this
 	}
