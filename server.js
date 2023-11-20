@@ -46,8 +46,8 @@ const createApp = devMode => {
 	})
 
 	app.all("*", (req, res) => {
-		console.log(req.cookies)
-		if ((req.path && req.cookies.SESION) || req.cookies.ORIGEN === "login") {
+		console.log(req.path)
+		if (req.cookies.ORIGEN === "login" || (req.path && req.cookies.SESION)) {
 			const archivo = ubicaArchivo(directorio, req.path)
 
 			if (archivo) return res.sendFile(archivo)
