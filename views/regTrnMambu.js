@@ -33,7 +33,9 @@ export class RegTrnMambu extends Vista {
 			.accionAbrir(this.controlador.leerArchivo)
 			.accionSeleccionar(this.controlador.cambioArchivo, this.controlador.cambioArchivo)
 			.setID("archivo")
-			.setMensaje("Selecciona un Banco y un Layout.")
+			.habilitaSelector(true)
+			.setFormato("xsl,xslx,xslm,csv,txt")
+			.setMensaje("Selecciona un archivo a importar.")
 
 		this.acciones.guardar = new Botonera()
 			.addBoton("btnGuardar")

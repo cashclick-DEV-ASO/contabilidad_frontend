@@ -35,10 +35,6 @@ export class LoginModel extends Modelo {
 
 		if (this.resultado.success) {
 			const { token, nombre, mapa } = this.resultado.informacion
-			// escribirCookie("TOKEN", token, {
-			// 	"max-age": 30 * 60 * 1000,
-			// 	secure: true,
-			// })
 			escribirCookie("NOMBRE", nombre)
 			escribirCookie("RUTAS", mapa)
 		} else {

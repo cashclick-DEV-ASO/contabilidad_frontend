@@ -37,11 +37,44 @@ export class ConTrnBancosCtrl extends Controlador {
 	}
 
 	limpiaCampos = () => {
-		this.datos.tabla.limpia()
+		this.datos.tabla.limpiar()
 	}
 
 	buscar = () => {
-		this.msjInformacion("Buscando...")
+		const datos = {
+			fechaI: this.acciones.fechaI.getValor(),
+			fechaF: this.acciones.fechaF.getValor(),
+			banco: this.banco,
+		}
+
+		this.modelo.buscarTransaccionesBancos(datos).then(res => {
+			this.datos.tabla.limpiar()
+
+			this.datos.tabla
+				.parseaJSON(res.resultado.informacion.resultado, null, this.formatoTabla)
+				.actualizaTabla()
+		})
+	}
+
+	formatoTabla = () => {
+		return {
+			fecha_valor: dato => {
+				return new Date(dato).toLocaleDateString()
+			},
+			fecha_creacion: dato => {
+				return new Date(dato).toLocaleDateString()
+			},
+			monto: dato => {
+				return dato.toLocaleString("es-MX", {
+					style: "currency",
+					currency: "MXN",
+				})
+			},
+			tipo: dato => {
+				const tipos = ["No Identificado", "Cargo", "Abono"]
+				return tipos[dato]
+			},
+		}
 	}
 }
 

@@ -27,13 +27,15 @@ export class RegTrnDWH extends Vista {
 	inicia() {
 		this.titulo.setTexto(REG_TRN_DWH.TITULO)
 
-		this.acciones.selPeriodo = new Periodo().setID("periodo")
+		this.acciones.periodo = new Periodo().setID("periodo")
 
-		this.acciones.selArchivo = new SolicitaArchivo()
+		this.acciones.archivo = new SolicitaArchivo()
 			.accionAbrir(this.controlador.leerArchivo)
 			.accionSeleccionar(this.controlador.cambioArchivo, this.controlador.cambioArchivo)
 			.setID("archivo")
-			.setMensaje("Selecciona un Banco y un Layout.")
+			.habilitaSelector(true)
+			.setFormato("json,csv,txt")
+			.setMensaje("Selecciona un archivo a importar.")
 
 		this.acciones.guardar = new Botonera()
 			.addBoton("btnGuardar")

@@ -29,7 +29,6 @@ const createApp = devMode => {
 
 	app.use((req, res, next) => {
 		res.cookie("API_URL", process.env.API_URL, { secure: true })
-		if (!req.cookies.MODO) res.cookie("MODO", "claro", { secure: true })
 		if (devMode) res.cookie("DEV_MODE", devMode, { secure: true })
 
 		next()

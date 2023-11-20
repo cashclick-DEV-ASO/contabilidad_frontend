@@ -5,7 +5,6 @@ import { leerCookie } from "../src/utils.js"
 export class Index extends Componente {
 	constructor() {
 		super(document.createDocumentFragment())
-		// this.aplicarModo()
 		return this.inicia()
 	}
 

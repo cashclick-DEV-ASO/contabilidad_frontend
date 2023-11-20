@@ -104,7 +104,7 @@ export class TablaDatos extends Componente {
 		this.filas = []
 		if (!texto || texto === "") return this
 
-		const lineas = texto.split("\r\n")
+		const lineas = texto.split("\n")
 		this.encabezados = lineas[0].split(separador)
 		this.filas = lineas.slice(1).map(l => l.split(separador))
 
@@ -184,8 +184,9 @@ export class TablaDatos extends Componente {
 		this.tabla.removeComponente()
 		if (this.filas.length == 0) {
 			this.tablaSinDatos()
-			this.botones.habilitarBoton(false, TABLA.TXT_BTN_EXPORTAR)
 			this.valorFiltro.habilitarInput(false)
+			if (this.botones.getNumeroBotones() > 0)
+				this.botones.habilitarBoton(false, TABLA.TXT_BTN_EXPORTAR)
 		} else {
 			this.construirTabla(encabezados, filas)
 			this.valorFiltro.habilitarInput(true)
@@ -239,7 +240,8 @@ export class TablaDatos extends Componente {
 			} else {
 				this.filas = this.filasTmp.filter(f => {
 					const valor = f[col]
-					if (isNaN(valor)) return valor.toLowerCase().includes(filtro.toLowerCase())
+					if (valor && isNaN(valor))
+						return valor.toLowerCase().includes(filtro.toLowerCase())
 					return valor == filtro
 				})
 			}
@@ -347,8 +349,9 @@ export class TablaDatos extends Componente {
 				return 0
 			}
 
-			const aValor = a.cells[indice].innerText
-			const bValor = b.cells[indice].innerText
+			if (!a.cells[indice] || !b.cells[indice]) return 0
+			const aValor = a.cells[indice].innerText || a.cells[indice].textContent
+			const bValor = b.cells[indice].innerText || b.cells[indice].textContent
 
 			const aClase = a.cells[indice].classList[1]
 			const bClase = b.cells[indice].classList[1]
@@ -414,6 +417,64 @@ export class TablaDatos extends Componente {
 
 	getFilas() {
 		return this.filas
+	}
+
+	csvToTabla(contenido) {
+		if (contenido) {
+			const filas = contenido.split("\n")
+
+			// Crear la tabla
+			this.tabla = new Componente(SYS.TBL, { clase: TABLA.ID_TABLA })
+			const encabezado = new Componente(SYS.THD, { clase: TABLA.TBL_ENC })
+			const cuerpo = new Componente(SYS.TBD, { clase: TABLA.TBL_CUERPO })
+
+			// Crear encabezados
+			const encabezados = filas[0].split(",")
+			const encabezadoRow = new Componente(SYS.TR, { clase: TABLA.TBL_FILA_HDR })
+			encabezados.forEach(encabezado => {
+				const th = new Componente(SYS.TH, { clase: TABLA.TBL_CELDA_HDR }).setTexto(
+					encabezado.trim()
+				)
+
+				if (this.permiteOrdenar) {
+					th.setListener(SYS.CLK, e =>
+						this.ordenar.bind(this)(e, this.tabla.getComponente())
+					)
+				}
+
+				encabezadoRow.addHijo(th.getComponente())
+			})
+			encabezado.addHijo(encabezadoRow.getComponente())
+			this.tabla.addHijo(encabezado.getComponente())
+
+			// Crear filas de datos
+			for (let i = 1; i < filas.length; i++) {
+				const datos = filas[i].split(",")
+				const fila = new Componente(SYS.TR, { clase: TABLA.TBL_FILA })
+				datos.forEach(dato => {
+					const td = new Componente(SYS.TD, { clase: TABLA.TBL_CELDA }).setTexto(
+						dato.trim()
+					)
+					if (this.permiteEditar) {
+						td.setListener(SYS.DCLK, this.editar)
+					}
+					fila.addHijo(td.getComponente())
+				})
+				cuerpo.addHijo(fila.getComponente())
+			}
+
+			this.tabla.addHijo(cuerpo.getComponente())
+			if (this.tabla.esPadre()) {
+				this.contenedor.vaciar()
+				this.contenedor.addHijo(this.tabla.getComponente())
+				this.selColFiltro.actulizaOpciones(
+					encabezados.map((titulo, indice) => {
+						return { valor: indice, texto: this.limpiarTitulo(titulo) }
+					})
+				)
+				this.valorFiltro.habilitarInput(true)
+			}
+		}
 	}
 }
 

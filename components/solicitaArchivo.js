@@ -109,7 +109,8 @@ export class SolicitaArchivo extends Componente {
 
 	setFormato(formato = []) {
 		if (!formato) return this
-		if (typeof formato === SYS.STRNG) formato = [formato]
+		if (typeof formato === SYS.STRNG)
+			formato = formato.includes(",") ? formato.split(",") : [formato]
 
 		this.formato = formato
 			.map(formato => {
@@ -141,6 +142,10 @@ export class SolicitaArchivo extends Componente {
 		this.mensaje = mensaje
 		this.lblRuta.setTexto(this.mensaje)
 		return this
+	}
+
+	getArchivo() {
+		return this.archivo.getComponente().files[0]
 	}
 }
 

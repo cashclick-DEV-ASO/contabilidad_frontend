@@ -13,8 +13,11 @@ export class RegTrnDWHCtrl extends Controlador {
 
 	cargaInicial = () => {}
 
-	saludar = () => {
-		this.msjInformacion("Hola mundo")
+	leerArchivo = async () => {
+		const lectura = await this.acciones.archivo.getArchivo().text()
+		// this.datos.tabla.csvToTabla(lectura)
+		this.datos.tabla.parseaTexto(lectura, ",").actualizaTabla()
+		this.acciones.guardar.habilitarBoton(true)
 	}
 }
 
