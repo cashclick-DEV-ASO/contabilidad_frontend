@@ -60,27 +60,6 @@ const createApp = devMode => {
 	)
 }
 
-const generarInsert = (rutas, padre = null) => {
-	let insert = !padre
-		? "INSERT INTO mapa_navegacion_frontend (grupo, titulo, vista, padre, orden) VALUES "
-		: ""
-
-	Object.keys(rutas).forEach((ruta, index) => {
-		if (typeof rutas[ruta].vista === "string") {
-			insert += `('${ruta}', '${rutas[ruta].titulo}', '${rutas[ruta].vista}', ${
-				!padre ? "NULL" : `'${padre}'`
-			}, ${index}), `
-		} else {
-			insert += `('${ruta}', '${rutas[ruta].titulo}', NULL, ${
-				!padre ? "NULL" : `'${padre}'`
-			}, ${index}), `
-			insert += generarInsert(rutas[ruta].vista, rutas[ruta].titulo)
-		}
-	})
-
-	return !padre ? `${insert.slice(0, -2)};` : insert
-}
-
 const validaToken = token => {
 	if (!token) return false
 	return true
