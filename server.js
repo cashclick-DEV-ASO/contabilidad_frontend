@@ -46,8 +46,8 @@ const createApp = devMode => {
 	})
 
 	app.get("/", (req, res) => {
-		console.log(req.cookies)
-		if (!validaToken(req.cookies.TOKEN) || !req.cookies.SESION) {
+		console.log(req.cookies.RUTAS, req.cookies.SESION)
+		if (!req.cookies.RUTAS && !req.cookies.SESION) {
 			console.log("La ruta raiz hizo redireccionamiento a /login")
 			return res.redirect("/login")
 		}
