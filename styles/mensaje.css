@@ -46,6 +46,10 @@
 	border: 5px solid var(--azul_fuerte);
 }
 
+.msjContenedor > .msjMarco.msjProcesando {
+	border: 5px solid black;
+}
+
 .msjContenedor > .msjMarco.msjSolicitar {
 	border: 5px solid black;
 }

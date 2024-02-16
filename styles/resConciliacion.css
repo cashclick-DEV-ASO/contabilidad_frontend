@@ -1,8 +1,33 @@
 .ResConciliacion > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "periodoI periodoF consulta";
 	justify-items: center;
 	align-items: center;
+}
+
+.ResConciliacion > #contenedorAcciones > #periodoI {
+	grid-area: periodoI;
+}
+
+.ResConciliacion > #contenedorAcciones > #periodoF {
+	grid-area: periodoF;
+}
+
+.ResConciliacion > #contenedorAcciones > #consulta {
+	grid-area: consulta;
+}
+
+.ResConciliacion > #contenedorDatos {
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	height: 50%;
+	align-items: center;
+}
+
+.ResConciliacion  > #contenedorDatos > .tituloRes {
+	font-size: 1.5em;
+	font-weight: bold;
 }

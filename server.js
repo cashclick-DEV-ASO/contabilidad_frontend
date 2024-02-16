@@ -13,69 +13,69 @@ const INDEX = "index.html"
  * @param {boolean} devMode - Indica si se está ejecutando en modo de desarrollo.
  * @returns {void}
  */
-const createApp = devMode => {
-	if (!process.env.API_URL) return console.error("No se ha definido la URL para la API")
+const createApp = (devMode) => {
+    if (!process.env.API_URL) return console.error("No se ha definido la URL para la API")
 
-	const HOST = process.env.HOST ?? "127.0.0.1"
-	const PORT = process.env.PORT ?? null
-	const SRV_URL = `${HOST}${PORT ? `:${PORT}` : ""}`
-	const app = express()
+    const HOST = process.env.HOST ?? "127.0.0.1"
+    const PORT = process.env.PORT ?? null
+    const SRV_URL = `${HOST}${PORT ? `:${PORT}` : ""}`
+    const app = express()
 
-	app.disable("x-powered-by")
+    app.disable("x-powered-by")
 
-	const [directorio, loginHtml, indexHtml] = archivosHTML(devMode)
+    const [directorio, loginHtml, indexHtml] = archivosHTML(devMode)
 
-	app.use(cookieParser())
+    app.use(cookieParser())
 
-	app.use((req, res, next) => {
-		res.cookie("API_URL", process.env.API_URL, { secure: true })
-		if (devMode) res.cookie("DEV_MODE", devMode, { secure: true })
+    app.use((req, res, next) => {
+        res.cookie("API_URL", process.env.API_URL, { secure: true })
+        if (devMode) res.cookie("DEV_MODE", devMode, { secure: true })
 
-		next()
-	})
+        next()
+    })
 
-	app.get("/login", (req, res) => {
-		console.log(req.cookies.ORIGEN, req.cookies.SESION)
-		if (validaToken(req.cookies.TOKEN) && req.cookies.SESION) {
-			console.log("La ruta login hizo redireccionamiento a /")
-			return res.redirect("/")
-		}
-		console.log("La ruta login envia el login")
-		res.cookie("ORIGEN", "login", { secure: true })
-		res.sendFile(loginHtml)
-	})
+    app.get("/login", (req, res) => {
+        if (validaToken(req.cookies.TOKEN) && req.cookies.SESION) {
+            console.log("La ruta login hizo redireccionamiento a /")
+            return res.redirect("/")
+        }
 
-	app.get("/", (req, res) => {
-		console.log(req.cookies.RUTAS, req.cookies.SESION)
-		if (!req.cookies.RUTAS && !req.cookies.SESION) {
-			console.log("La ruta raiz hizo redireccionamiento a /login")
-			return res.redirect("/login")
-		}
-		console.log("La ruta raiz envia el index")
-		res.sendFile(indexHtml)
-	})
+        res.cookie("ORIGEN", "login", { secure: true })
+        res.sendFile(loginHtml)
+    })
 
-	app.all("*", (req, res) => {
-		console.log(req.cookies.ORIGEN, req.cookies.SESION)
-		if (req.cookies.ORIGEN === "login" || (req.path && req.cookies.SESION)) {
-			console.log("Se envia el archivo solicitado")
-			const archivo = ubicaArchivo(directorio, req.path)
+    app.get("/", (req, res) => {
+        if (!req.cookies.RUTAS && !req.cookies.SESION) {
+            console.log("La ruta raíz hizo redireccionamiento a /login")
+            return res.redirect("/login")
+        }
 
-			if (archivo) return res.sendFile(archivo)
-			console.log(`No se encontró el archivo: ${req.path}`)
-		}
-		console.log("Al solicitar un archivo se redirecciona a /login")
-		res.redirect("/login")
-	})
+        res.sendFile(indexHtml)
+    })
 
-	app.listen(PORT, HOST.replace("http://", "").replace("https://", ""), () =>
-		log(`Servidor frontend en linea en: ${SRV_URL}`)
-	)
+    app.all("*", (req, res) => {
+        if (
+            req.cookies.ORIGEN === "login" ||
+            (req.path && req.cookies.SESION) ||
+            req.path.includes("images")
+        ) {
+            const archivo = ubicaArchivo(directorio, req.path)
+            if (archivo) return res.sendFile(archivo)
+            console.log(`No se encontró el archivo: ${req.path}`)
+        }
+
+        console.log("Al solicitar un archivo se redirecciona a /login")
+        res.redirect("/login")
+    })
+
+    app.listen(PORT, HOST.replace("http://", "").replace("https://", ""), () =>
+        log(`Servidor frontend en linea en: ${SRV_URL}`)
+    )
 }
 
-const validaToken = token => {
-	if (!token) return false
-	return true
+const validaToken = (token) => {
+    if (!token) return false
+    return true
 }
 
 /**
@@ -84,26 +84,26 @@ const validaToken = token => {
  * @returns {string|null} - La ruta completa del archivo si se encuentra, o null si no se encuentra.
  */
 const ubicaArchivo = (directorio, ruta) => {
-	const archivo = directorio + ruta
+    const archivo = directorio + ruta
 
-	try {
-		if (existsSync(archivo)) return archivo
-	} catch (error) {
-		cError(error)
-		return null
-	}
+    try {
+        if (existsSync(archivo)) return archivo
+    } catch (error) {
+        cError(error)
+        return null
+    }
 }
 
 /**
  * Configura el servidor en modo producción.
  * @returns {Array} Un arreglo con las rutas de los archivos y las rutas de los endpoints.
  */
-const archivosHTML = modo => {
-	log(`Configurando servidor en modo ${modo ? "desarrollo" : "producción"}...`)
+const archivosHTML = (modo) => {
+    log(`Configurando servidor en modo ${modo ? "desarrollo" : "producción"}...`)
 
-	const ruta = modo ? resolve() : resolve(resolve(), "dist")
+    const ruta = modo ? resolve() : resolve(resolve(), "dist")
 
-	return [ruta, resolve(ruta, LOGIN), resolve(ruta, INDEX)]
+    return [ruta, resolve(ruta, LOGIN), resolve(ruta, INDEX)]
 }
 
 createApp(process.argv[2] === "true")

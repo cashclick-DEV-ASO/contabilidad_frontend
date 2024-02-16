@@ -1,8 +1,28 @@
 .Conciliar > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "fechaI fechaF buscar concilia guardar";
 	justify-items: center;
 	align-items: center;
+}
+
+.Conciliar > #contenedorAcciones > #fechaI {
+	grid-area: fechaI;
+}
+
+.Conciliar > #contenedorAcciones > #fechaF {
+	grid-area: fechaF;
+}
+
+.Conciliar > #contenedorAcciones > #buscar {
+	grid-area: buscar;
+}
+
+.Conciliar > #contenedorAcciones > #concilia {
+	grid-area: concilia;
+}
+
+.Conciliar > #contenedorAcciones > #guardar {
+	grid-area: guardar;
 }

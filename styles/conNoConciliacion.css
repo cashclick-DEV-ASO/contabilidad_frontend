@@ -1,0 +1,20 @@
+.ConConciliacion > #contenedorAcciones {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: max-content;
+	grid-template-areas: "fechaI fechaF buscar";
+	justify-items: center;
+	align-items: center;
+}
+
+.ConConciliacion > #contenedorAcciones > #fechaI {
+	grid-area: fechaI;
+}
+
+.ConConciliacion > #contenedorAcciones > #fechaF {
+	grid-area: fechaF;
+}
+
+.ConConciliacion > #contenedorAcciones > #buscar {
+	grid-area: buscar;
+}

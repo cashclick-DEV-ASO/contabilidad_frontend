@@ -5,77 +5,93 @@ import { SYS } from "../src/constantes.js"
 import { mostrarError } from "../src/utils.js"
 
 export class ConTrnBancosCtrl extends Controlador {
-	constructor(vista, modelo) {
-		super(vista, modelo)
-		this.acciones = this.vista.acciones
-		this.datos = this.vista.datos
-	}
+    constructor(vista, modelo) {
+        super(vista, modelo)
+        this.acciones = this.vista.acciones
+        this.datos = this.vista.datos
+        this.formatoTabla = {
+            fecha_valor: (dato) => {
+                return new Date(dato).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                })
+            },
+            fecha_creacion: (dato) => {
+                return new Date(dato).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                })
+            },
+            monto: (dato) => {
+                const numero = parseFloat(dato)
+                if (isNaN(numero)) return dato
 
-	cargaInicial = () => {
-		this.acciones.banco.setTemporalPH("Cargando bancos...")
-		this.llenaListaBancos().then(() => {
-			this.acciones.banco.actulizaOpciones(this.bancos)
-		})
-	}
+                return numero.toLocaleString("es-MX", {
+                    style: "currency",
+                    currency: "MXN"
+                })
+            },
+            tipo: (dato) => {
+                const tipos = ["No Identificado", "Cargo", "Abono"]
+                return tipos[dato]
+            }
+        }
+    }
 
-	cambiaFechaI = () => {
-		if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-			this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-	}
+    cargaInicial = () => {
+        this.acciones.banco.setTemporalPH("Cargando bancos...")
+        this.llenaListaBancos().then(() => {
+            this.acciones.banco.actulizaOpciones(this.bancos)
+        })
+    }
 
-	cambiaFechaF = () => {
-		if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-			this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-	}
+    cambiaFechaI = () => {
+        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
+            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
+    }
 
-	cambioBanco = async () => {
-		this.limpiaCampos()
+    cambiaFechaF = () => {
+        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
+            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
+    }
 
-		this.banco = this.bancos.find(
-			banco => banco.valor === Number(this.acciones.selBanco.getValorSeleccionado())
-		)
-	}
+    cambioBanco = async () => {
+        this.datos.tabla.limpiar()
 
-	limpiaCampos = () => {
-		this.datos.tabla.limpiar()
-	}
+        this.banco = this.bancos.find(
+            (banco) => banco.valor === Number(this.acciones.banco.getValorSeleccionado())
+        )
 
-	buscar = () => {
-		const datos = {
-			fechaI: this.acciones.fechaI.getValor(),
-			fechaF: this.acciones.fechaF.getValor(),
-			banco: this.banco,
-		}
+        this.acciones.buscar.habilitarBoton(true)
+    }
 
-		this.modelo.buscarTransaccionesBancos(datos).then(res => {
-			this.datos.tabla.limpiar()
+    buscar = () => {
+        let msj = this.msjProcesando("Consultando transacciones...")
+        this.datos.tabla.limpiar()
 
-			this.datos.tabla
-				.parseaJSON(res.resultado.informacion.resultado, null, this.formatoTabla)
-				.actualizaTabla()
-		})
-	}
+        const datos = {
+            fechaI: this.acciones.fechaI.getValor(),
+            fechaF: this.acciones.fechaF.getValor(),
+            banco: this.banco
+        }
 
-	formatoTabla = () => {
-		return {
-			fecha_valor: dato => {
-				return new Date(dato).toLocaleDateString()
-			},
-			fecha_creacion: dato => {
-				return new Date(dato).toLocaleDateString()
-			},
-			monto: dato => {
-				return dato.toLocaleString("es-MX", {
-					style: "currency",
-					currency: "MXN",
-				})
-			},
-			tipo: dato => {
-				const tipos = ["No Identificado", "Cargo", "Abono"]
-				return tipos[dato]
-			},
-		}
-	}
+        this.modelo.buscarTransaccionesBancos(datos).then((res) => {
+            msj.ocultar()
+
+            if (!res.success) return this.msjError(resultado.mensaje)
+
+            if (res.datos.length === 0) {
+                this.msjAdvertencia(
+                    "No se encontraron transacciones para los criterios seleccionados."
+                )
+                return
+            }
+
+            this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla).actualizaTabla()
+        })
+    }
 }
 
 export default ConTrnBancosCtrl

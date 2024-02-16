@@ -69,3 +69,8 @@
 	font-weight: bold;
 	color: var(--azul_medio_2);
 }
+
+.logoLogin {
+	width: 200px;
+	height: 40px;
+}

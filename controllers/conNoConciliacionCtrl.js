@@ -1,6 +1,10 @@
 import Controlador from "./controlador.js"
 
-export class ConTrnMambuCtrl extends Controlador {
+import { SYS } from "../src/constantes.js"
+
+import { mostrarError } from "../src/utils.js"
+
+export class ConNoConciliacionCtrl extends Controlador {
     constructor(vista, modelo) {
         super(vista, modelo)
         this.acciones = this.vista.acciones
@@ -34,18 +38,8 @@ export class ConTrnMambuCtrl extends Controlador {
         })
     }
 
-    cambiaFechaI = () => {
-        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-    }
-
-    cambiaFechaF = () => {
-        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-    }
-
     buscar = () => {
-        let msj = this.msjProcesando("Consultando transacciones...")
+        let msj = this.msjProcesando("Consultando transacciones NO conciliadas...")
         this.datos.tabla.limpiar()
 
         const datos = {
@@ -53,7 +47,7 @@ export class ConTrnMambuCtrl extends Controlador {
             fechaF: this.acciones.fechaF.getValor()
         }
 
-        this.modelo.buscarTransaccionesMambu(datos).then((res) => {
+        this.modelo.buscar(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)
@@ -70,4 +64,4 @@ export class ConTrnMambuCtrl extends Controlador {
     }
 }
 
-export default ConTrnMambuCtrl
+export default ConNoConciliacionCtrl
