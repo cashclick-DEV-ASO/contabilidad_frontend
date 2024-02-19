@@ -2,32 +2,43 @@ import Vista from "./vista.js"
 import { ConCtasBancariasCtrl as Controlador } from "../controllers/controladores.js"
 import { ConCtasBancariasMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, Componente } from "../components/componentes.js"
+import { Botonera, ListaDesplegable, TablaDatos } from "../components/componentes.js"
 
 import { SYS } from "../src/constantes.js"
 
 export class ConCtasBancarias extends Vista {
-	constructor() {
-		super("ConCtasBancarias")
-		this.controlador = new Controlador(this, new Modelo())
-		return this.inicia()
-	}
+    constructor() {
+        super("ConCtasBancarias")
+        this.controlador = new Controlador(this, new Modelo())
+        return this.inicia()
+    }
 
-	inicia() {
-		this.titulo.setTexto("ConCtasBancarias")
+    inicia() {
+        this.titulo.setTexto("Consulta de Cuentas Bancarias")
 
-		this.acciones.guardar = new Botonera()
-			.addBoton("btnVacio")
-			.setIDContenedor("btnVacio")
-			.setTexto("Saludar")
-			.setListener(this.controlador.saludar)
+        this.acciones.banco = new ListaDesplegable()
+            .setTxtEtiqueta("Banco")
+            .setID("banco")
+            .setEstilo2()
+            .setTxtPhLleno("Todos")
+            .setBloquearPh(false)
+            .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
-		this.datos.etiqueta = new Componente(SYS.LBL, { clase: "texto" }).setTexto(
-			"La vista ConCtasBancarias se encuentra en desarrollo. Vuelva más tarde."
-		)
+        this.acciones.consultar = new Botonera()
+            .addBoton("btnConsultar")
+            .setIDContenedor("consultar")
+            .setTexto("Consultar")
+            .setListener(this.controlador.consultar)
 
-		return this
-	}
+        this.datos.tabla = new TablaDatos().setID("tabla")
+        this.datos.tabla.permiteFiltro = false
+        this.datos.tabla.permiteExportar = true
+        this.datos.tabla.permiteEditar = true
+
+        this.controlador.cargaInicial()
+
+        return this
+    }
 }
 
 export default ConCtasBancarias

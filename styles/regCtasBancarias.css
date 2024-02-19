@@ -1,8 +1,24 @@
 .RegCtasBancarias > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "banco guardar";
 	justify-items: center;
+	align-items: center;
+}
+
+.RegCtasBancarias > #contenedorAcciones > #banco {
+	grid-area: banco;
+}
+
+.RegCtasBancarias > #contenedorAcciones > #guardar {
+	grid-area: guardar;
+}
+
+.RegCtasBancarias > #contenedorDatos {
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	height: 30%;
 	align-items: center;
 }

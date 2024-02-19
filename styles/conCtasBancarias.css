@@ -1,8 +1,16 @@
 .ConCtasBancarias > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "banco consultar";
 	justify-items: center;
 	align-items: center;
+}
+
+.ConCtasBancarias > #contenedorAcciones > #banco {
+	grid-area: banco;
+}
+
+.ConCtasBancarias > #contenedorAcciones > #consultar {
+	grid-area: consultar;
 }

@@ -21,6 +21,7 @@ export class ConAclaraciones extends Vista {
             .setID("estatus")
             .setTxtPhLleno("Todos")
             .setBloquearPh(true)
+            .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
         this.acciones.buscar = new Botonera()

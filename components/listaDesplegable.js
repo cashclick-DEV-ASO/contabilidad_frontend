@@ -72,6 +72,11 @@ export class ListaDesplegable extends Componente {
         return this
     }
 
+    habilitarLista(habilitar) {
+        this.lista.habilitar(habilitar)
+        return this
+    }
+
     setOpcion(atributos) {
         const opcion = new Componente(SYS.OPT)
         opcion.setTexto(atributos.texto)
