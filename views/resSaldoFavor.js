@@ -1,20 +1,26 @@
 import Vista from "./vista.js"
-import { RecalculoInteresCtrl as Controlador } from "../controllers/controladores.js"
-import { RecalculoInteresMdl as Modelo } from "../models/modelos.js"
+import { ResSaldoFavorCtrl as Controlador } from "../controllers/controladores.js"
+import { ResSaldoFavorMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, Periodo, TablaDatos } from "../components/componentes.js"
+import {
+    Botonera,
+    Componente,
+    MuestraDato,
+    Periodo,
+    TablaDatos
+} from "../components/componentes.js"
 
 import { SYS } from "../src/constantes.js"
 
-export class RecalculoInteres extends Vista {
+export class ResSaldoFavor extends Vista {
     constructor() {
-        super("RecalculoInteres")
+        super("ResSaldoFavor")
         this.controlador = new Controlador(this, new Modelo())
         return this.inicia()
     }
 
     inicia() {
-        this.titulo.setTexto("Recalculo de Intereses")
+        this.titulo.setTexto("Reporte de clientes con saldo a favor")
 
         this.acciones.periodoI = new Periodo().setID("periodoI").setTitulo("Periodo Inicial")
         this.acciones.periodoF = new Periodo().setID("periodoF").setTitulo("Periodo Final")
@@ -34,4 +40,4 @@ export class RecalculoInteres extends Vista {
     }
 }
 
-export default RecalculoInteres
+export default ResSaldoFavor

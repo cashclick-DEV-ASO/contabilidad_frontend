@@ -38,6 +38,11 @@ export class RegTrnDWHCtrl extends Controlador {
         })
     }
 
+    cambioArchivo = () => {
+        this.acciones.guardar.habilitarBoton(false)
+        this.datos.tabla.limpiar()
+    }
+
     leerArchivo = async () => {
         const msj = this.msjProcesando("Leyendo archivo...")
         this.acciones.guardar.habilitarBoton(false)

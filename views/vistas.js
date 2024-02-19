@@ -26,7 +26,7 @@ import RegCtasContables from "./regCtasContables.js"
 import RegSaldos from "./regSaldos.js"
 import RegTrnMambu from "./regTrnMambu.js"
 import ResConciliacion from "./resConciliacion.js"
-import SaldoFavor from "./saldoFavor.js"
+import ResSaldoFavor from "./resSaldoFavor.js"
 import RegTrnDWH from "./regTrnDWH.js"
 import ConTrnDWH from "./conTrnDWH.js"
 import Variables from "./variables.js"
@@ -77,7 +77,7 @@ const VISTAS = {
     RegSaldos,
     RegTrnMambu,
     ResConciliacion,
-    SaldoFavor,
+    ResSaldoFavor,
     RegTrnDWH,
     Variables,
     ConTrnDWH

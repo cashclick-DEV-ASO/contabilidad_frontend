@@ -1,4 +1,4 @@
-.RecalculoCapital > #contenedorAcciones {
+.ResSaldoFavor > #contenedorAcciones {
 	display: grid;
 	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: max-content;
@@ -7,14 +7,14 @@
 	align-items: center;
 }
 
-.RecalculoCapital > #contenedorAcciones > #periodoI {
+.ResSaldoFavor > #contenedorAcciones > #periodoI {
 	grid-area: periodoI;
 }
 
-.RecalculoCapital > #contenedorAcciones > #periodoF {
+.ResSaldoFavor > #contenedorAcciones > #periodoF {
 	grid-area: periodoF;
 }
 
-.RecalculoCapital > #contenedorAcciones > #consulta {
+.ResSaldoFavor > #contenedorAcciones > #consulta {
 	grid-area: consulta;
 }

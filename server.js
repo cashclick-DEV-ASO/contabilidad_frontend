@@ -57,7 +57,8 @@ const createApp = (devMode) => {
         if (
             req.cookies.ORIGEN === "login" ||
             (req.path && req.cookies.SESION) ||
-            req.path.includes("images")
+            req.path.includes("images") ||
+            req.path.includes(".svg")
         ) {
             const archivo = ubicaArchivo(directorio, req.path)
             if (archivo) return res.sendFile(archivo)

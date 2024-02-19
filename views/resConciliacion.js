@@ -10,11 +10,13 @@ export class ResConciliacion extends Vista {
     constructor() {
         super("ResConciliacion")
         this.controlador = new Controlador(this, new Modelo())
-        return this.inicia()
+        this.inicia()
+        this.controlador.cargaInicial()
+        return this
     }
 
     inicia() {
-        this.titulo.setTexto("Reporte de Conciliación")
+        this.titulo.setTexto("Resumen de Conciliación")
 
         this.acciones.periodoI = new Periodo().setID("periodoI").setTitulo("Periodo Inicial")
         this.acciones.periodoF = new Periodo().setID("periodoF").setTitulo("Periodo Final")
@@ -23,32 +25,38 @@ export class ResConciliacion extends Vista {
             .addBoton("btnConsultar")
             .setIDContenedor("consultar")
             .setTexto("Consultar")
-            .habilitarBoton(false)
             .setListener(this.controlador.consultar)
 
         this.datos.tituloTrn = new Componente(SYS.LBL, {
             clase: "tituloRes",
             id: "tituloTrns"
         }).setTexto("Transacciones")
+
         this.datos.noTrn = new MuestraDato().setID("noTrn").setTxtEtiqueta("Totales:")
+
         this.datos.noTrnOK = new MuestraDato().setID("noTrnOK").setTxtEtiqueta("OK:")
-        this.datos.noTrnNoOK = new MuestraDato().setID("noTrnNoOK").setTxtEtiqueta("NO OK:")
+
+        this.datos.noTrnNoOK = new MuestraDato().setID("noTrnNoOK").setTxtEtiqueta("No OK:")
 
         this.datos.tituloAbonos = new Componente(SYS.LBL, {
             clase: "tituloRes",
             id: "tituloAbonos"
         }).setTexto("Abonos")
         this.datos.noAbonos = new MuestraDato().setID("noAbonos").setTxtEtiqueta("Totales:")
+
         this.datos.noAbonosOK = new MuestraDato().setID("noAbonosOK").setTxtEtiqueta("OK:")
-        this.datos.noAbonosNoOK = new MuestraDato().setID("noAbonosNoOK").setTxtEtiqueta("NO OK:")
+
+        this.datos.noAbonosNoOK = new MuestraDato().setID("noAbonosNoOK").setTxtEtiqueta("No OK:")
 
         this.datos.tituloCargos = new Componente(SYS.LBL, {
             clase: "tituloRes",
             id: "tituloCargos"
         }).setTexto("Cargos")
         this.datos.noCargos = new MuestraDato().setID("noCargos").setTxtEtiqueta("Totales:")
+
         this.datos.noCargosOK = new MuestraDato().setID("noCargosOK").setTxtEtiqueta("OK:")
-        this.datos.noCargosNoOK = new MuestraDato().setID("noCargosNoOK").setTxtEtiqueta("NO OK:")
+
+        this.datos.noCargosNoOK = new MuestraDato().setID("noCargosNoOK").setTxtEtiqueta("No OK:")
 
         return this
     }

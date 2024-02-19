@@ -1,6 +1,6 @@
 import Modelo from "./modelo.js"
 
-export class RecalculoInteresMdl extends Modelo {
+export class ResSaldoFavorMdl extends Modelo {
     constructor() {
         super()
     }
@@ -17,4 +17,4 @@ export class RecalculoInteresMdl extends Modelo {
     }
 }
 
-export default RecalculoInteresMdl
+export default ResSaldoFavorMdl
