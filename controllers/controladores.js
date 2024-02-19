@@ -1,6 +1,7 @@
 export { RegTrnBancosCtrl } from "./regTrnBancosCtrl.js"
 export { LayoutCtrl } from "./layoutCtrl.js"
-export { AclaracionesCtrl } from "./aclaracionesCtrl.js"
+export { RegAclaracionesCtrl } from "./regAclaracionesCtrl.js"
+export { ConAclaracionesCtrl } from "./conAclaracionesCtrl.js"
 export { AjustesCtrl } from "./ajustesCtrl.js"
 export { CarteraCtrl } from "./carteraCtrl.js"
 export { ConciliacionCtrl } from "./conciliacionCtrl.js"

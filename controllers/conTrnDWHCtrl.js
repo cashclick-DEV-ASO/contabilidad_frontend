@@ -44,9 +44,9 @@ export class ConTrnDWHCtrl extends Controlador {
     }
 
     cargaInicial = () => {
-        this.acciones.tipo.actulizaOpciones([
-            { texto: "Cargos", valor: 1 },
-            { texto: "Abonos", valor: 2 }
+        this.acciones.tipo.setOpciones([
+            { valor: 1, texto: "Cargos" },
+            { valor: 2, texto: "Abonos" }
         ])
     }
 

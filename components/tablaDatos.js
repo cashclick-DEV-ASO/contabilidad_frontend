@@ -402,6 +402,8 @@ export class TablaDatos extends Componente {
     }
 
     esFecha(valor) {
+        if (valor.length > 10) return false
+
         const expresionesRegulares = [
             /\b\d{1,2}-\d{1,2}-\d{2,4}\b/, // 31-12-2021
             /\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/, // 31/12/2021

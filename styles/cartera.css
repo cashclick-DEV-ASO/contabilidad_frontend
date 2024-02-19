@@ -1,8 +1,41 @@
 .Cartera > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 0.5fr;
+	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: max-content;
-	grid-template-areas: "";
+	grid-template-areas: "periodoI periodoF consulta";
 	justify-items: center;
 	align-items: center;
+}
+
+.Cartera > #contenedorAcciones > #periodoI {
+	grid-area: periodoI;
+}
+
+.Cartera > #contenedorAcciones > #periodoF {
+	grid-area: periodoF;
+}
+
+.Cartera > #contenedorAcciones > #consulta {
+	grid-area: consulta;
+}
+
+.Cartera > #contenedorDatos {
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	height: 50%;
+	align-items: center;
+}
+
+.Cartera  > #contenedorDatos > .tituloRes {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.Cartera > #contenedorDatos > .contenedorMuestraDato > .lblDato {
+	text-align: right;
+}
+
+.Cartera > #contenedorDatos > .contenedorMuestraDato > .txtDato {
+	width: 300px;
 }

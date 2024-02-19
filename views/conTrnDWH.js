@@ -49,11 +49,11 @@ export class ConTrnDWH extends Vista {
             .setListener(this.controlador.buscar)
 
         this.datos.tabla = new TablaDatos().setID("tabla")
-
-        this.controlador.cargaInicial()
         this.datos.tabla.permiteFiltro = true
         this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteEditar = true
+
+        this.controlador.cargaInicial()
 
         return this
     }

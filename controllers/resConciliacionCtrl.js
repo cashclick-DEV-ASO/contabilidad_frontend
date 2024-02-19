@@ -26,17 +26,17 @@ export class ResConciliacionCtrl extends Controlador {
     }
 
     consultar = async () => {
-        this.datos.noTrn.setTxtDato("0 - $0.00")
-        this.datos.noTrnOK.setTxtDato("0 - $0.00")
-        this.datos.noTrnNoOK.setTxtDato("0 - $0.00")
+        this.datos.noTrn.setValor("0 - $0.00")
+        this.datos.noTrnOK.setValor("0 - $0.00")
+        this.datos.noTrnNoOK.setValor("0 - $0.00")
 
-        this.datos.noAbonos.setTxtDato("0 - $0.00")
-        this.datos.noAbonosOK.setTxtDato("0 - $0.00")
-        this.datos.noAbonosNoOK.setTxtDato("0 - $0.00")
+        this.datos.noAbonos.setValor("0 - $0.00")
+        this.datos.noAbonosOK.setValor("0 - $0.00")
+        this.datos.noAbonosNoOK.setValor("0 - $0.00")
 
-        this.datos.noCargos.setTxtDato("0 - $0.00")
-        this.datos.noCargosOK.setTxtDato("0 - $0.00")
-        this.datos.noCargosNoOK.setTxtDato("0 - $0.00")
+        this.datos.noCargos.setValor("0 - $0.00")
+        this.datos.noCargosOK.setValor("0 - $0.00")
+        this.datos.noCargosNoOK.setValor("0 - $0.00")
 
         this.msjError("No se encontró información para los periodos seleccionados.")
     }

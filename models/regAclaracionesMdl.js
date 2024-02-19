@@ -1,6 +1,6 @@
 import Modelo from "./modelo.js"
 
-export class CarteraMdl extends Modelo {
+export class RegAclaracionesMdl extends Modelo {
     constructor() {
         super()
     }
@@ -17,4 +17,4 @@ export class CarteraMdl extends Modelo {
     }
 }
 
-export default CarteraMdl
+export default RegAclaracionesMdl

@@ -4,7 +4,8 @@ import Inicio from "./inicio.js"
 import RegTrnBancos from "./regTrnBancos.js"
 import Layout from "./layout.js"
 import Logout from "./logout.js"
-import Aclaraciones from "./aclaraciones.js"
+import RegAclaraciones from "./regAclaraciones.js"
+import ConAclaraciones from "./conAclaraciones.js"
 import Ajustes from "./ajustes.js"
 import Cartera from "./cartera.js"
 import Conciliacion from "./conciliacion.js"
@@ -55,7 +56,8 @@ const VISTAS = {
     Layout,
     Logout,
     OOPS,
-    Aclaraciones,
+    RegAclaraciones,
+    ConAclaraciones,
     Ajustes,
     Cartera,
     Conciliacion,

@@ -1,0 +1,16 @@
+.ConAclaraciones > #contenedorAcciones {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: max-content;
+	grid-template-areas: "estatus buscar";
+	justify-items: center;
+	align-items: center;
+}
+
+.ConAclaraciones > #contenedorAcciones > #credito {
+	grid-area: credito;
+}
+
+.ConAclaraciones > #contenedorAcciones > #buscar {
+	grid-area: buscar;
+}

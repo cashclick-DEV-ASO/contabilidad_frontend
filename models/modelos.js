@@ -1,6 +1,7 @@
 export { RegTrnBancosMdl } from "./regTrnBancosMdl.js"
 export { LayoutMdl } from "./layoutMdl.js"
-export { AclaracionesMdl } from "./aclaracionesMdl.js"
+export { RegAclaracionesMdl } from "./regAclaracionesMdl.js"
+export { ConAclaracionesMdl } from "./conAclaracionesMdl.js"
 export { AjustesMdl } from "./ajustesMdl.js"
 export { CarteraMdl } from "./carteraMdl.js"
 export { ConciliacionMdl } from "./conciliacionMdl.js"

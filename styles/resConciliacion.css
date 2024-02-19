@@ -32,6 +32,10 @@
 	font-weight: bold;
 }
 
+.ResConciliacion > #contenedorDatos > .contenedorMuestraDato > .lblDato {
+	text-align: right;
+}
+
 .ResConciliacion > #contenedorDatos > .contenedorMuestraDato > .txtDato {
 	width: 300px;
 }
