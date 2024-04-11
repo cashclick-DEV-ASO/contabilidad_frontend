@@ -34,10 +34,15 @@
 }
 
 .contenedorPeriodo > #anioPeriodo > input {
-	width: 60px;
+	width: 75px;
 	text-align: start;
 }
 
 .contenedorPeriodo > #mesPeriodo {
 	grid-area: mes;
+}
+
+.contenedorPeriodo > #mesPeriodo > input {
+	width: 60px;
+	text-align: start;
 }

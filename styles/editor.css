@@ -1,0 +1,66 @@
+.modalEditor {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	backdrop-filter: blur(5px);
+	background-color: rgba(0, 0, 0, 0.4);
+	display: grid;
+	grid-template-columns: minmax(20%, 90%);
+	grid-template-rows: minmax(20%, 90%);
+	justify-items: center;
+	align-items: center;
+	justify-content: center;
+	align-content: center;
+}
+
+.modalEditor > .modalMarco {
+	background-color: #fff;
+	border-radius: 10px;
+	display: grid;
+	grid-template-areas:
+		"titulo"
+		"mensaje"
+		"captura"
+		"boton";
+	grid-gap: 5px;
+	padding: 5px;
+	justify-items: center;
+}
+
+.modalEditor > .modalMarco > .modalTitulo {
+	grid-area: titulo;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: 1fr max-content;
+}
+
+.modalEditor > .modalMarco > .modalTitulo .titulo {
+	width: 100%;
+	height: 100%;
+	font-weight: bold;
+	font-size: large;
+}
+
+.modalEditor > .modalMarco > .modalTitulo .cerrar {
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+}
+
+.modalEditor > .modalMarco > .modalDatos {
+	display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+}
+
+.modalEditor > .modalMarco > .modalBotones {
+	grid-area: boton;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: space-evenly;
+}

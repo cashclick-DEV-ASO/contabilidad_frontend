@@ -35,6 +35,10 @@ export class Login extends Componente {
 
         this.btnLogin = new Componente("button", { clase: "btnLogin" })
         this.btnLogin.setTexto("Iniciar sesión")
+
+        this.gToken = new Componente("input", { id: "gToken" })
+        this.gToken.setPropiedad("type", "hidden")
+
         this.setListener("submit", this.controlador.login)
 
         this.addHijos([
@@ -42,7 +46,8 @@ export class Login extends Componente {
             this.titulo.mostrar(),
             this.usuario.mostrar(),
             this.password.mostrar(),
-            this.btnLogin.mostrar()
+            this.btnLogin.mostrar(),
+            this.gToken.mostrar()
         ])
         return this
     }

@@ -1,6 +1,15 @@
-import { Componente, ListaDesplegable, SolicitaDato, Botonera, MuestraDato } from "./componentes.js"
+import {
+    Componente,
+    ListaDesplegable,
+    SolicitaDato,
+    Botonera,
+    MuestraDato,
+    Editor,
+    Mensaje
+} from "./componentes.js"
 
 import { SYS, TABLA } from "../src/constantes.js"
+import Controlador from "../controllers/controlador.js"
 
 export class TablaDatos extends Componente {
     constructor() {
@@ -361,7 +370,7 @@ export class TablaDatos extends Componente {
         return this
     }
 
-    ordenarDatos(indice, direccion = 0) {
+    ordenarDatosO(indice, direccion = 0) {
         return (a, b) => {
             if (direccion === 0) {
                 const aID = parseInt(a.id)
@@ -391,14 +400,60 @@ export class TablaDatos extends Componente {
         }
     }
 
+    ordenarDatos(datos, condiciones) {
+        return datos.sort((a, b) => {
+            for (let i = 0; i < condiciones.length; i++) {
+                let columna = condiciones[i].columna
+                let desc = condiciones[i].desc
+                if (a[columna] < b[columna]) return desc ? 1 : -1
+                if (a[columna] > b[columna]) return desc ? -1 : 1
+            }
+
+            return 0
+        })
+    }
+
     editar(evento) {
         const celda = evento.target
-        celda.contentEditable = true
-        celda.focus()
+        const editor = new Editor()
+        editor.inicia().configura()
 
-        celda.addEventListener("blur", () => {
-            celda.contentEditable = false
+        const fila = celda.parentElement
+        fila.childNodes.forEach((celda, indice) => {
+            const valor = celda.textContent
+            const titulo = document.querySelector(
+                ".encabezadoTabla tr th:nth-child(" + (indice + 1) + ")"
+            ).textContent
+
+            editor.addCampo(titulo, valor)
         })
+
+        editor.setAccionModificar((cerrar) => {
+            const campos = editor.getCampos()
+            const fila = celda.parentElement
+            campos.forEach((campo, indice) => {
+                fila.childNodes[indice].textContent = campo.value
+            })
+
+            if (this.modifcaBaseDatos) {
+                const resultado = this.modifcaBaseDatos(campos)
+                if (resultado.success) {
+                    new Controlador().msjExito(resultado.mensaje)
+                } else {
+                    new Controlador().msjError(resultado.mensaje)
+                }
+            } else {
+                new Controlador().msjExito("Tabla actualizada correctamente.")
+            }
+
+            cerrar()
+        })
+        editor.mostrar()
+    }
+
+    setModificaBaseDatos(fnc) {
+        this.modifcaBaseDatos = fnc
+        return this
     }
 
     esFecha(valor) {

@@ -49,7 +49,7 @@ export class Modelo {
             const mensaje = this.response
                 ? this.mensajesError[this.response.status]
                 : this.mensajesError[500]
-            this.preocesaError(error, mensaje, recurso)
+            this.procesaError(error, mensaje, recurso)
         }
     }
 
@@ -68,9 +68,9 @@ export class Modelo {
                 return this.resultado
             }
 
-            return this.preocesaError(r.respuesta)
+            return this.procesaError(r.respuesta)
         } catch (error) {
-            return this.preocesaError(error)
+            return this.procesaError(error)
         }
     }
 
@@ -99,7 +99,17 @@ export class Modelo {
         }
     }
 
-    preocesaError(error, mensaje = null, recurso = null) {
+    procesaError(error, mensaje = null, recurso = null) {
+        if (recurso === "login") {
+            grecaptcha
+                .execute("6LfWk7cpAAAAAPkNuugHbI3Dd58xka1pTsgm6fol", {
+                    action: "validate_captcha"
+                })
+                .then((token) => {
+                    document.querySelector("#gToken").value = token
+                })
+        }
+
         if (!this.resultado && recurso !== "login") {
             this.mensaje = mensaje
             this.resultado = {
