@@ -5,6 +5,22 @@ export class RegTrnBancosCtrl extends Controlador {
         super(vista, modelo)
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
+        this.fechaConfig = { day: "2-digit", month: "2-digit", year: "numeric" }
+        this.monedaConfig = { style: "currency", currency: "MXN" }
+        this.formatoDetalles = {
+            Fecha_Operación: this.formatoFecha,
+            Fecha_Emisión: this.formatoFecha,
+            Saldo_Inicial: this.formatoMoneda,
+            Saldo_Final: this.formatoMoneda,
+            Total_Abonos: this.formatoMoneda,
+            Total_Cargos: this.formatoMoneda
+        }
+        this.formatoTabla = {
+            Fecha_Operación: this.formatoFecha,
+            Fecha_Valor: this.formatoFecha,
+            Monto: this.formatoMoneda,
+            Tipo_Movimiento: this.tipoMovimiento
+        }
     }
 
     cargaInicial = () => {
@@ -89,10 +105,10 @@ export class RegTrnBancosCtrl extends Controlador {
 
                 this.datos.tabla.setDetalles(
                     Object.assign({}, informacion.apertura, informacion.cierre),
-                    this.formatoDetalles()
+                    this.formatoDetalles
                 )
 
-                this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla()).actualizaTabla()
+                this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla).actualizaTabla()
 
                 this.acciones.guardar.habilitarBoton(true)
                 return
@@ -100,70 +116,6 @@ export class RegTrnBancosCtrl extends Controlador {
         }
 
         this.msjError(this.modelo.mensaje)
-    }
-
-    opcionesFecha() {
-        return {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
-    }
-
-    formatoDetalles = () => {
-        return {
-            Fecha_Operación: (dato) => {
-                return dato.toLocaleDateString("es-ES", this.opcionesFecha)
-            },
-            Fecha_Emisión: (dato) => {
-                return dato.toLocaleDateString("es-ES", this.opcionesFecha)
-            },
-            Saldo_Inicial: (dato) => {
-                return dato.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            },
-            Saldo_Final: (dato) => {
-                return dato.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            },
-            Total_Abonos: (dato) => {
-                return dato.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            },
-            Total_Cargos: (dato) => {
-                return dato.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            }
-        }
-    }
-
-    formatoTabla = () => {
-        return {
-            Fecha_Operación: (dato) => {
-                return dato.toLocaleDateString()
-            },
-            Fecha_Valor: (dato) => {
-                return dato.toLocaleDateString()
-            },
-            Monto: (dato) => {
-                return dato.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            },
-            Tipo_Movimiento: (dato) => {
-                const tipos = ["No Identificado", "Cargo", "Abono"]
-                return tipos[dato]
-            }
-        }
     }
 
     guardar = async () => {
@@ -235,6 +187,22 @@ export class RegTrnBancosCtrl extends Controlador {
 
     fechaMysql = (fecha) => {
         return fecha.toISOString().slice(0, 19).replace("T", " ")
+    }
+
+    validaModificacion = (datos) => {
+        const encabezados = this.datos.tabla.getEncabezados()
+        const noFila = this.datos.tabla.mostrarNoFila
+
+        return !datos.some((dato, indice) => {
+            const i = noFila ? indice + 1 : indice
+            if (encabezados[i].toLowerCase() === "monto") {
+                if (dato < 1) {
+                    this.msjError("El monto debe ser mayor a cero.")
+                    return true
+                }
+            }
+            return false
+        })
     }
 }
 

@@ -17,6 +17,12 @@ export class Editor extends Componente {
         this.botonesConfigurados = []
         this.callback = null
         this.txtTtl = "Modificación de datos"
+        this.txtModificar = "Modificar"
+        this.txtEliminar = "Eliminar"
+        this.txtCancelar = "Cancelar"
+        this.callbackModificar = null
+        this.callbackEliminar = null
+        this.campos = []
     }
 
     inicia() {
@@ -69,10 +75,15 @@ export class Editor extends Componente {
         return this
     }
 
+    setAccionEliminar(accion) {
+        this.callbackEliminar = accion
+        return this
+    }
+
     mostrar(bntDftl = true) {
-        this.addBoton("Confirmar", this.callbackModificar, true)
-        this.addBoton("Eliminar", this.callbackEliminar, false)
-        this.addBoton("Cancelar", (cierra) => cierra())
+        if (this.callbackModificar) this.addBoton(this.txtModificar, this.callbackModificar, true)
+        if (this.callbackEliminar) this.addBoton(this.txtEliminar, this.callbackEliminar, false)
+        this.addBoton(this.txtCancelar, (cierra) => cierra())
         this.configura().insertarEnDOM()
         return this
     }
@@ -108,14 +119,17 @@ export class Editor extends Componente {
         return this
     }
 
-    addCampo(titulo, valor) {
+    addCampo(titulo, valor, tipo = "text") {
         const dato = new SolicitaDato()
-        dato.setTxtEtiqueta(titulo).setValor(valor)
+        dato.setTxtEtiqueta(titulo).setTipo(tipo)
+        if (tipo === "date") dato.setValorFecha(valor || new Date())
+        else dato.setValor(valor)
+        this.campos.push(dato)
         this.datos.addHijo(dato.mostrar())
         return this
     }
 
     getCampos() {
-        return this.datos.getComponente().querySelectorAll("input")
+        return this.campos
     }
 }

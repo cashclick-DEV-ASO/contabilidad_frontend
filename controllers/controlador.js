@@ -21,6 +21,39 @@ export class Controlador {
         this.modelo = modelo
     }
 
+    formatoFecha(dato) {
+        return new Date(dato).toLocaleDateString("es-MX", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        })
+    }
+
+    formatoMoneda = (dato) => {
+        const numero = parseFloat(dato)
+        if (isNaN(numero)) return dato
+
+        return numero.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        })
+    }
+
+    formatoPorcentaje = (dato) => {
+        const numero = parseFloat(dato)
+        if (isNaN(numero)) return dato
+
+        return numero.toLocaleString("es-MX", {
+            style: "percent",
+            minimumFractionDigits: 2
+        })
+    }
+
+    tipoMovimiento = (dato) => {
+        const tipos = ["No Identificado", "Cargo", "Abono"]
+        return tipos[dato]
+    }
+
     /**
      * Muestra un mensaje en la interfaz de usuario.
      * @param {string} mensaje - El mensaje a mostrar.

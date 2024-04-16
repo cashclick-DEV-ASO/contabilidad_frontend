@@ -10,41 +10,16 @@ export class ConTrnBancosCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            fecha_valor: (dato) => {
-                return new Date(dato).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                })
-            },
-            fecha_creacion: (dato) => {
-                return new Date(dato).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                })
-            },
-            monto: (dato) => {
-                const numero = parseFloat(dato)
-                if (isNaN(numero)) return dato
-
-                return numero.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            },
-            tipo: (dato) => {
-                const tipos = ["No Identificado", "Cargo", "Abono"]
-                return tipos[dato]
-            }
+            fecha_valor: this.formatoFecha,
+            fecha_creacion: this.formatoFecha,
+            monto: this.formatoMoneda,
+            tipo: this.tipoMovimiento
         }
     }
 
     cargaInicial = () => {
         this.acciones.banco.setTemporalPH("Cargando bancos...")
-        this.llenaListaBancos().then(() => {
-            this.acciones.banco.actulizaOpciones(this.bancos)
-        })
+        this.llenaListaBancos().then(() => this.acciones.banco.actulizaOpciones(this.bancos))
     }
 
     cambiaFechaI = () => {
@@ -81,15 +56,26 @@ export class ConTrnBancosCtrl extends Controlador {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)
-
-            if (res.datos.length === 0) {
-                this.msjAdvertencia(
+            if (res.datos.length === 0)
+                return this.msjAdvertencia(
                     "No se encontraron transacciones para los criterios seleccionados."
                 )
-                return
-            }
 
             this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla).actualizaTabla()
+        })
+    }
+
+    validaModificacion = (datos) => {
+        const encabezados = this.datos.tabla.getEncabezados()
+        return datos.some((dato, indice) => {
+            const i = this.datos.tabla.mostrarNoFila ? indice + 1 : indice
+            if (encabezados[i].toLowerCase() === "monto") {
+                if (dato < 1) {
+                    this.msjError("El monto debe ser mayor a cero.")
+                    return true
+                }
+            }
+            return false
         })
     }
 }

@@ -79,11 +79,26 @@ export class SolicitaDato extends Componente {
     }
 
     setValorFecha(valor) {
-        this.fechaInicio = valor
+        const fechaRegexes = [
+            /^\d{1,2}\/\d{1,2}\/\d{2}$/, // dd/mm/yy
+            /^\d{1,2}\/\d{1,2}\/\d{4}$/, // dd/mm/yyyy
+            /^\d{4}-\d{2}-\d{2}$/, // yyyy-mm-dd
+            /^\d{1,2}-\d{1,2}-\d{2}$/, // yy-mm-dd
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ // "2023-08-20T06:00:00.000Z"
+        ]
+
+        if (fechaRegexes.some((regex) => regex.test(valor))) this.fechaInicio = new Date(valor)
+        else this.fechaInicio = valor
+
         return this
     }
 
     getValor() {
+        if (this.tipo === SYS.DT) {
+            const fecha = this.dato.getComponente().valueAsDate
+            return new Date(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate())
+        }
+        if (this.tipo === SYS.NMBR) return parseFloat(this.dato.getValor()) || 0
         return this.dato.getValor()
     }
 

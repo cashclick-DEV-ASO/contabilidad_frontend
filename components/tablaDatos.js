@@ -17,12 +17,22 @@ export class TablaDatos extends Componente {
         this.encabezados = []
         this.filas = []
         this.filasTmp = []
+        this.formatoEspecial = null
         this.permiteFiltro = true
-        this.permiteEditar = false
+        this.permiteEditar = true
         this.permiteExportar = true
         this.permiteOrdenar = true
-        this.muestraNoFila = true
-
+        this.permiteAgregar = true
+        this.permiteEliminar = true
+        this.permiteModificar = true
+        this.mostrarNoFila = true
+        this.tiposInput = {
+            string: SYS.TXT,
+            number: SYS.NMBR,
+            date: SYS.DT,
+            currency: SYS.NMBR
+        }
+        this.validaModificacion = null
         return this.inicia()
     }
 
@@ -59,8 +69,10 @@ export class TablaDatos extends Componente {
         this.botones = this.congifuraBotones()
 
         this.valorFiltro.habilitarInput(false)
-        if (this.botones.getNumeroBotones() > 0)
-            this.botones.habilitarBoton(false, TABLA.TXT_BTN_EXPORTAR)
+        if (this.botones.getNumeroBotones() > 0) {
+            if (this.permiteExportar) this.botones.habilitarBoton(false, TABLA.BTN_EXPORTAR)
+            if (this.permiteAgregar) this.botones.habilitarBoton(false, TABLA.BTN_AGREGAR)
+        }
 
         this.controles.addHijos([
             this.permiteFiltro ? this.selColFiltro.mostrar() : null,
@@ -81,12 +93,13 @@ export class TablaDatos extends Componente {
     }
 
     parseaJSON(datos = [], titulos = null, formatoEspecial = null, columnasOcultas = []) {
+        this.formatoEspecial = formatoEspecial
         this.encabezados = []
         this.filas = []
 
         if (!datos || typeof datos !== SYS.OBJ || datos.length === 0) return this
 
-        if (this.muestraNoFila) datos = datos.map((d, i) => ({ No: i + 1, ...d }))
+        if (this.mostrarNoFila) datos = datos.map((d, i) => ({ No: i + 1, ...d }))
 
         if (titulos) {
             this.encabezados = Object.keys(titulos).forEach((key) => {
@@ -98,14 +111,7 @@ export class TablaDatos extends Componente {
         }
 
         this.filas = datos.map((f) =>
-            this.encabezados
-                .map((k) => {
-                    if (formatoEspecial && formatoEspecial[k]) {
-                        if (formatoEspecial[k]) return formatoEspecial[k](f[k])
-                    }
-                    return f[k]
-                })
-                .filter((k) => !columnasOcultas.includes(k))
+            this.encabezados.map((k) => f[k]).filter((k) => !columnasOcultas.includes(k))
         )
 
         return this
@@ -153,14 +159,18 @@ export class TablaDatos extends Componente {
         tblCuerpo.addHijos(
             filas.map((f, i) => {
                 const fila = new Componente(SYS.TR, { clase: TABLA.TBL_FILA, id: i + 1 }).addHijos(
-                    f.map((c) => {
-                        const cld = new Componente(SYS.TD, { clase: TABLA.TBL_CELDA }).setTexto(c)
+                    f.map((c, j) => {
+                        let dato = c
+                        if (this.formatoEspecial && this.formatoEspecial[this.encabezados[j]])
+                            dato = this.formatoEspecial[this.encabezados[j]](c)
+
+                        const cld = new Componente(SYS.TD, { clase: TABLA.TBL_CELDA }).setTexto(
+                            dato
+                        )
 
                         cld.setClase(this.tipoDato(c))
 
-                        if (this.permiteEditar) {
-                            cld.setListener(SYS.DCLK, this.editar)
-                        }
+                        if (this.permiteEditar) cld.setListener(SYS.DCLK, this.editar)
                         return cld.getComponente()
                     })
                 )
@@ -197,13 +207,17 @@ export class TablaDatos extends Componente {
         if (this.filas.length == 0) {
             this.tablaSinDatos()
             this.valorFiltro.habilitarInput(false)
-            if (this.botones.getNumeroBotones() > 0)
-                this.botones.habilitarBoton(false, TABLA.TXT_BTN_EXPORTAR)
+            if (this.botones.getNumeroBotones() > 0) {
+                if (this.permiteExportar) this.botones.habilitarBoton(false, TABLA.BTN_EXPORTAR)
+                if (this.permiteAgregar) this.botones.habilitarBoton(false, TABLA.BTN_AGREGAR)
+            }
         } else {
             this.construirTabla(encabezados, filas)
             this.valorFiltro.habilitarInput(true)
-            if (this.botones.getNumeroBotones() > 0)
-                this.botones.habilitarBoton(true, TABLA.TXT_BTN_EXPORTAR)
+            if (this.botones.getNumeroBotones() > 0) {
+                if (this.permiteExportar) this.botones.habilitarBoton(true, TABLA.BTN_EXPORTAR)
+                if (this.permiteAgregar) this.botones.habilitarBoton(true, TABLA.BTN_AGREGAR)
+            }
         }
 
         this.mostrarDetalles()
@@ -325,25 +339,71 @@ export class TablaDatos extends Componente {
     }
 
     congifuraBotones() {
-        const btns = new Botonera().setIDContenedor(TABLA.PARAMETROS)
+        const btns = new Botonera().setIDContenedor(TABLA.PARAMETROS).setEstilo2()
 
         if (this.permiteExportar && this.lstnrExportar) {
-            btns.addBoton(TABLA.TXT_BTN_EXPORTAR)
-                .setTexto(TABLA.TXT_BTN_EXPORTAR)
+            btns.addBoton(TABLA.BTN_EXPORTAR)
+                .setTexto(TABLA.TXT_BTN_EXPORTAR, TABLA.BTN_EXPORTAR)
                 .setListener(() => {
                     this.lstnrExportar(this.tabla.getComponente())
-                })
+                }, TABLA.BTN_EXPORTAR)
+        }
+
+        if (this.permiteAgregar) {
+            btns.addBoton(TABLA.BTN_AGREGAR)
+                .setTexto(TABLA.TXT_BTN_AGREGAR, TABLA.BTN_AGREGAR)
+                .setListener(() => {
+                    const editor = new Editor()
+                    editor.inicia().configura()
+                    editor.txtTtl = "Datos Nueva Fila"
+                    editor.txtModificar = "Agregar Fila"
+
+                    this.encabezados.forEach((campo, indice) => {
+                        if (this.mostrarNoFila && campo === "No") return
+                        const datoEjemplo = this.filas.length > 0 ? this.filas[0][indice] : ""
+                        const tipo = this.tiposInput[this.tipoDato(datoEjemplo)]
+                        editor.addCampo(this.limpiarTitulo(campo), "", tipo)
+                    })
+
+                    editor.setAccionModificar((cerrar) => {
+                        const campos = editor.getCampos()
+                        const fila = campos.map((campo) => campo.getValor())
+                        if (this.validaModificacion && this.validaModificacion(fila)) return
+                        if (this.mostrarNoFila) fila.unshift(this.filas.length + 1)
+                        this.filas.push(fila)
+                        this.actualizaTabla({ updtFiltro: false })
+                        cerrar()
+                    })
+
+                    editor.mostrar()
+                }, TABLA.BTN_AGREGAR)
         }
 
         return btns
     }
 
     tipoDato(valor) {
+        if (valor === null || valor === undefined) return SYS.STRNG
+        const fechaRegexes = [
+            /^\d{1,2}\/\d{1,2}\/\d{2}$/, // dd/mm/yy
+            /^\d{1,2}\/\d{1,2}\/\d{4}$/, // dd/mm/yyyy
+            /^\d{4}-\d{2}-\d{2}$/, // yyyy-mm-dd
+            /^\d{1,2}-\d{1,2}-\d{2}$/, // yy-mm-dd
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ // "2023-08-20T06:00:00.000Z"
+        ]
+
+        if (typeof valor === SYS.OBJ || (valor.length >= 6 && Date.parse(valor))) return SYS.DT
+
         if (typeof valor === SYS.NMBR || !isNaN(valor)) return SYS.NMBR
+
         if (typeof valor === SYS.STRNG) {
-            if (this.esFecha(valor)) return SYS.DT
+            for (const regex of fechaRegexes) {
+                if (regex.test(valor)) return SYS.DT
+            }
+
             if (this.esMoneda(valor)) return SYS.MNY
         }
+
         return SYS.STRNG
     }
 
@@ -370,7 +430,7 @@ export class TablaDatos extends Componente {
         return this
     }
 
-    ordenarDatosO(indice, direccion = 0) {
+    ordenarDatos(indice, direccion = 0) {
         return (a, b) => {
             if (direccion === 0) {
                 const aID = parseInt(a.id)
@@ -400,7 +460,7 @@ export class TablaDatos extends Componente {
         }
     }
 
-    ordenarDatos(datos, condiciones) {
+    ordenarDatosS(datos, condiciones) {
         return datos.sort((a, b) => {
             for (let i = 0; i < condiciones.length; i++) {
                 let columna = condiciones[i].columna
@@ -413,46 +473,69 @@ export class TablaDatos extends Componente {
         })
     }
 
-    editar(evento) {
+    editar = (evento) => {
         const celda = evento.target
         const editor = new Editor()
         editor.inicia().configura()
 
-        const fila = celda.parentElement
-        fila.childNodes.forEach((celda, indice) => {
-            const valor = celda.textContent
-            const titulo = document.querySelector(
-                ".encabezadoTabla tr th:nth-child(" + (indice + 1) + ")"
-            ).textContent
-
-            editor.addCampo(titulo, valor)
+        this.encabezados.forEach((campo, indice) => {
+            if (this.mostrarNoFila && campo === "No") return
+            const datos = this.filas[celda.parentElement.rowIndex - 1]
+            const tipo = this.tiposInput[this.tipoDato(datos[indice])]
+            editor.addCampo(this.limpiarTitulo(campo), datos[indice], tipo)
         })
 
-        editor.setAccionModificar((cerrar) => {
-            const campos = editor.getCampos()
-            const fila = celda.parentElement
-            campos.forEach((campo, indice) => {
-                fila.childNodes[indice].textContent = campo.value
+        if (this.permiteModificar)
+            editor.setAccionModificar((cerrar) => {
+                const campos = editor.getCampos()
+                const oldFila = this.filas[celda.parentElement.rowIndex - 1]
+                const newFila = campos.map((campo) => campo.getValor())
+                if (this.validaModificacion && !this.validaModificacion(newFila)) return
+
+                oldFila.forEach((valor, indice) => {
+                    if (this.mostrarNoFila && indice === 0) return
+                    let i = this.mostrarNoFila ? indice - 1 : indice
+                    oldFila[indice] = newFila[i]
+                })
+                this.actualizaTabla({ updtFiltro: false })
+
+                if (this.modifcaBaseDatos) {
+                    const resultado = this.modifcaBaseDatos(campos)
+                    if (resultado.success) new Controlador().msjExito(resultado.mensaje)
+                    else new Controlador().msjError(resultado.mensaje)
+                } else {
+                    new Controlador().msjExito("Tabla actualizada correctamente.")
+                }
+
+                cerrar()
             })
 
-            if (this.modifcaBaseDatos) {
-                const resultado = this.modifcaBaseDatos(campos)
-                if (resultado.success) {
-                    new Controlador().msjExito(resultado.mensaje)
-                } else {
-                    new Controlador().msjError(resultado.mensaje)
-                }
-            } else {
-                new Controlador().msjExito("Tabla actualizada correctamente.")
-            }
+        if (this.permiteEliminar)
+            editor.setAccionEliminar((cerrar) => {
+                this.filas.splice(celda.parentElement.rowIndex - 1, 1)
+                this.actualizaTabla({ updtFiltro: false })
 
-            cerrar()
-        })
+                if (this.eliminaBaseDatos) {
+                    const resultado = this.eliminaBaseDatos(editor.getCampos())
+                    if (resultado.success) new Controlador().msjExito(resultado.mensaje)
+                    else new Controlador().msjError(resultado.mensaje)
+                } else {
+                    new Controlador().msjExito("Fila eliminada correctamente.")
+                }
+
+                cerrar()
+            })
+
         editor.mostrar()
     }
 
     setModificaBaseDatos(fnc) {
         this.modifcaBaseDatos = fnc
+        return this
+    }
+
+    setEliminaBaseDatos(fnc) {
+        this.eliminaBaseDatos = fnc
         return this
     }
 
@@ -493,6 +576,10 @@ export class TablaDatos extends Componente {
     setListenerExportar(callback) {
         this.lstnrExportar = callback
         return this
+    }
+
+    getEncabezados() {
+        return this.encabezados
     }
 
     getFilas() {
@@ -555,6 +642,11 @@ export class TablaDatos extends Componente {
                 this.valorFiltro.habilitarInput(true)
             }
         }
+    }
+
+    setValidaModificacion(fnc) {
+        this.validaModificacion = fnc
+        return this
     }
 }
 

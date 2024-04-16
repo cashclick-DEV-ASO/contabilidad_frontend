@@ -40,8 +40,6 @@ export class ConTrnBancos extends Vista {
         this.acciones.banco = new ListaDesplegable()
             .setTxtEtiqueta("Banco")
             .setID("banco")
-            .setTxtPhLleno("Todos")
-            .setBloquearPh(true)
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
         this.acciones.buscar = new Botonera()
@@ -51,10 +49,17 @@ export class ConTrnBancos extends Vista {
             .habilitarBoton(false)
             .setListener(this.controlador.buscar)
 
-        this.datos.tabla = new TablaDatos().setID("tabla")
+        this.datos.tabla = new TablaDatos()
+            .setID("tabla")
+            .setValidaModificacion(this.controlador.validaModificacion)
         this.datos.tabla.permiteFiltro = true
-        this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteEditar = true
+        this.datos.tabla.permiteExportar = true
+        this.datos.tabla.permiteOrdenar = true
+        this.datos.tabla.permiteAgregar = true
+        this.datos.tabla.permiteEliminar = true
+        this.datos.tabla.permiteModificar = true
+        this.mostrarNoFila = true
 
         this.controlador.cargaInicial()
 

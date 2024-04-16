@@ -35,6 +35,15 @@ export class ConTrnBancosMdl extends Modelo {
 
         return await this.post("noConfig", datosEnvio)
     }
+
+    async eliminarTransaccionBanco(datos) {
+        const datosEnvio = {
+            query: "DELETE FROM transaccion_banco WHERE id_transaccion = ?",
+            parametros: [datos.id]
+        }
+
+        return await this.post("noConfig", datosEnvio)
+    }
 }
 
 export default ConTrnBancosMdl

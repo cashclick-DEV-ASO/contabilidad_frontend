@@ -108,7 +108,7 @@ export class Botonera extends Componente {
     }
 
     habilitarBoton(habilitar = true, id = this.getIDUnico()) {
-        if (!id && !this.botones[id]) return this
+        if (!id || !this.botones[id]) return this
         this.botones[id].habilitar(habilitar)
         return this
     }
