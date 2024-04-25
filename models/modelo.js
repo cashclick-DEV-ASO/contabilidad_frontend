@@ -196,6 +196,13 @@ export class Modelo {
         const parametros = idBanco ? [idBanco] : []
         return this.getInformacionComponentes(query, parametros)
     }
+
+    fechaMySQL(fecha) {
+        if (!fecha) return null
+        if (typeof fecha === "string") fecha = new Date(fecha)
+
+        return fecha ? fecha.toISOString().split("T")[0] : null
+    }
 }
 
 export default Modelo

@@ -20,24 +20,6 @@ export class RegTrnDWHCtrl extends Controlador {
         }
     }
 
-    formatoFecha = (dato) => {
-        return new Date(dato).toLocaleDateString("es-ES", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        })
-    }
-
-    formatoMoneda = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
     cambioArchivo = () => {
         this.acciones.guardar.habilitarBoton(false)
         this.datos.tabla.limpiar()

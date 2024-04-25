@@ -43,10 +43,24 @@ export class ConTrnMambu extends Vista {
             .setTexto("Buscar")
             .setListener(this.controlador.buscar)
 
-        this.datos.tabla = new TablaDatos().setID("tabla")
+        this.datos.tabla = new TablaDatos()
+            .setID("tabla")
+            .setListenerExportar(
+                this.controlador.exportaExcel.bind(this.controlador),
+                "Transacciones Mambu"
+            )
+            .setValidaModificacion(this.controlador.validaModificacion)
+            .setModificaBaseDatos(this.controlador.modificaTransaccion)
+            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+
         this.datos.tabla.permiteFiltro = true
-        this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteEditar = true
+        this.datos.tabla.permiteExportar = true
+        this.datos.tabla.permiteOrdenar = true
+        this.datos.tabla.permiteAgregar = false
+        this.datos.tabla.permiteEliminar = true
+        this.datos.tabla.permiteModificar = true
+        this.datos.tabla.mostrarNoFila = true
 
         return this
     }

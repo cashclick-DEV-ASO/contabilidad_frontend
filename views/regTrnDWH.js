@@ -38,8 +38,13 @@ export class RegTrnDWH extends Vista {
 
         this.datos.tabla = new TablaDatos().setID("tabla")
         this.datos.tabla.permiteFiltro = true
-        this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteEditar = true
+        this.datos.tabla.permiteExportar = false
+        this.datos.tabla.permiteOrdenar = true
+        this.datos.tabla.permiteAgregar = false
+        this.datos.tabla.permiteEliminar = false
+        this.datos.tabla.permiteModificar = true
+        this.datos.tabla.mostrarNoFila = true
 
         return this
     }

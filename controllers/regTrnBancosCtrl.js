@@ -188,22 +188,6 @@ export class RegTrnBancosCtrl extends Controlador {
     fechaMysql = (fecha) => {
         return fecha.toISOString().slice(0, 19).replace("T", " ")
     }
-
-    validaModificacion = (datos) => {
-        const encabezados = this.datos.tabla.getEncabezados()
-        const noFila = this.datos.tabla.mostrarNoFila
-
-        return !datos.some((dato, indice) => {
-            const i = noFila ? indice + 1 : indice
-            if (encabezados[i].toLowerCase() === "monto") {
-                if (dato < 1) {
-                    this.msjError("El monto debe ser mayor a cero.")
-                    return true
-                }
-            }
-            return false
-        })
-    }
 }
 
 export default RegTrnBancosCtrl

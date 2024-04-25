@@ -58,10 +58,20 @@ export class ConSaldos extends Vista {
             .setListener(this.controlador.buscar)
             .habilitarBoton(false)
 
-        this.datos.tabla = new TablaDatos().setID("tabla")
+        this.datos.tabla = new TablaDatos()
+            .setID("tabla")
+            .setValidaModificacion(this.controlador.validaModificacion)
+            .setModificaBaseDatos(this.controlador.modificaTransaccion)
+            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+
         this.datos.tabla.permiteFiltro = true
-        this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteEditar = true
+        this.datos.tabla.permiteExportar = true
+        this.datos.tabla.permiteOrdenar = true
+        this.datos.tabla.permiteAgregar = false
+        this.datos.tabla.permiteEliminar = false
+        this.datos.tabla.permiteModificar = true
+        this.datos.tabla.mostrarNoFila = false
 
         this.controlador.cargaInicial()
 

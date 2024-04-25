@@ -61,17 +61,36 @@ export class ConTrnBancosCtrl extends Controlador {
                     "No se encontraron transacciones para los criterios seleccionados."
                 )
 
-            this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla).actualizaTabla()
+            this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla, ["id"]).actualizaTabla()
         })
     }
 
     validaModificacion = (datos) => {
-        const encabezados = this.datos.tabla.getEncabezados()
-        return datos.some((dato, indice) => {
-            const i = this.datos.tabla.mostrarNoFila ? indice + 1 : indice
-            if (encabezados[i].toLowerCase() === "monto") {
-                if (dato < 1) {
-                    this.msjError("El monto debe ser mayor a cero.")
+        return Object.keys(datos).some((dato) => {
+            if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
+                const fecha = new Date(datos[dato])
+                if (isNaN(fecha.getTime())) {
+                    this.msjError("La fecha no es válida.")
+                    return true
+                }
+                if (fecha < new Date("2020-01-01")) {
+                    this.msjError(`El campo ${dato} no puede ser menor a la fecha mínima.`)
+                    return true
+                }
+                if (fecha > new Date()) {
+                    this.msjError(`El campo ${dato} no puede ser mayor a la fecha actual.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "monto") {
+                if (datos[dato] < 1) {
+                    this.msjError(`El campo ${dato} debe ser mayor a cero.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "tipo") {
+                if (datos[dato] != 1 && datos[dato] != 2) {
+                    this.msjError(`El campo ${dato} no es válido, debe ser 1 (cargo) o 2 (abono).`)
                     return true
                 }
             }

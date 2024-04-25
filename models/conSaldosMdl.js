@@ -27,10 +27,34 @@ export class ConSaldosMdl extends Modelo {
         }
 
         const datosEnvio = {
-            query: `SELECT fecha, saldo_inicial, saldo_final FROM saldo_contable WHERE ${filtros.join(
+            query: `SELECT id, fecha, saldo_inicial, saldo_final FROM saldo_contable WHERE ${filtros.join(
                 " AND "
             )}`,
             parametros
+        }
+
+        return await this.post("noConfig", datosEnvio)
+    }
+
+    async modificaTransaccion(datos) {
+        const datosEnvio = {
+            query: `UPDATE saldo_contable SET fecha = ?, saldo_inicial = ?, saldo_final = ? WHERE id = ?`,
+
+            parametros: [
+                this.fechaMySQL(datos.fecha),
+                datos.saldo_inicial,
+                datos.saldo_final,
+                datos.id
+            ]
+        }
+
+        return await this.post("noConfig", datosEnvio)
+    }
+
+    async eliminaTransaccion(datos) {
+        const datosEnvio = {
+            query: "DELETE FROM saldo_contable WHERE id = ?",
+            parametros: [datos.id]
         }
 
         return await this.post("noConfig", datosEnvio)

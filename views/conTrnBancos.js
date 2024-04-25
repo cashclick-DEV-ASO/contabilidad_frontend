@@ -51,15 +51,22 @@ export class ConTrnBancos extends Vista {
 
         this.datos.tabla = new TablaDatos()
             .setID("tabla")
+            .setListenerExportar(
+                this.controlador.exportaExcel.bind(this.controlador),
+                "Transacciones Bancarias"
+            )
             .setValidaModificacion(this.controlador.validaModificacion)
+            .setModificaBaseDatos(this.controlador.modificaTransaccion)
+            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+
         this.datos.tabla.permiteFiltro = true
         this.datos.tabla.permiteEditar = true
         this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteOrdenar = true
-        this.datos.tabla.permiteAgregar = true
+        this.datos.tabla.permiteAgregar = false
         this.datos.tabla.permiteEliminar = true
         this.datos.tabla.permiteModificar = true
-        this.mostrarNoFila = true
+        this.datos.tabla.mostrarNoFila = true
 
         this.controlador.cargaInicial()
 

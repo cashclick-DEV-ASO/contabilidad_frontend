@@ -54,7 +54,7 @@ export class RegSaldos extends Vista {
             .setListener(SYS.KUP, () =>
                 this.controlador.formatoMoneda(this.acciones.inicial.dato.getComponente())
             )
-            .setListener(SYS.CHNG, this.controlador.validaModificacion)
+            .setListener(SYS.IN, this.controlador.validaModificacion)
 
         this.acciones.final = new SolicitaDato()
             .setID("saldoF")
@@ -67,7 +67,7 @@ export class RegSaldos extends Vista {
             .setListener(SYS.KUP, () =>
                 this.controlador.formatoMoneda(this.acciones.final.dato.getComponente())
             )
-            .setListener(SYS.CHNG, this.controlador.validaModificacion)
+            .setListener(SYS.IN, this.controlador.validaModificacion)
 
         this.acciones.guardar = new Botonera()
             .addBoton("guardar")

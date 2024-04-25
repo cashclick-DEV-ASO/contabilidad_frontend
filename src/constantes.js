@@ -225,7 +225,7 @@ export const LAYOUT = {
     MSJ_ERROR_ELIMINAR: "No se pudo eliminar el layout."
 }
 
-export const MSJ_PIE = `Dev by Alberto Soto to Cashclick &copy ${new Date().getFullYear()} - All rights reserved`
+export const MSJ_PIE = `Desarrollado por Alberto Soto Ortega para Cashclick &copy ${new Date().getFullYear()}`
 
 // Nombres de clases e ID's para elementos HTML
 export const NAVEGACION = "navegacion"

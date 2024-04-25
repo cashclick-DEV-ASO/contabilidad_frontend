@@ -8,30 +8,12 @@ export class ConTrnMambuCtrl extends Controlador {
         this.formatoTabla = {
             fecha_creacion: this.formatoFecha,
             fecha_valor: this.formatoFecha,
-            monto: this.formatoModena,
+            monto: this.formatoMoneda,
             tipo: (dato) => {
                 const tipos = ["No Identificado", "Cargo", "Abono"]
                 return tipos[dato]
             }
         }
-    }
-
-    formatoModena = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
-    formatoFecha = (dato) => {
-        return new Date(dato).toLocaleDateString("es-MX", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        })
     }
 
     cambiaFechaI = () => {
@@ -65,7 +47,21 @@ export class ConTrnMambuCtrl extends Controlador {
                 return
             }
 
-            this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla).actualizaTabla()
+            this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla, ["id"]).actualizaTabla()
+        })
+    }
+
+    validaModificacion = (datos) => {
+        const encabezados = this.datos.tabla.getEncabezados()
+        return datos.some((dato, indice) => {
+            const i = this.datos.tabla.mostrarNoFila ? indice + 1 : indice
+            if (encabezados[i].toLowerCase() === "monto") {
+                if (dato < 1) {
+                    this.msjError("El monto debe ser mayor a cero.")
+                    return true
+                }
+            }
+            return false
         })
     }
 }

@@ -55,6 +55,9 @@
 	display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;
+	justify-content: center;
+    justify-items: center;
+    align-items: center;
 }
 
 .modalEditor > .modalMarco > .modalBotones {

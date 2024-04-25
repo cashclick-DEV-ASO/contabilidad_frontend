@@ -22,6 +22,7 @@ export class Controlador {
     }
 
     formatoFecha(dato) {
+        if (!dato) return dato
         return new Date(dato).toLocaleDateString("es-MX", {
             year: "numeric",
             month: "2-digit",
@@ -243,6 +244,39 @@ export class Controlador {
             downloadLink.download = filename
             downloadLink.click()
         }
+    }
+
+    modificaTransaccion = (datos) => {
+        let msj = this.msjProcesando("Procesando solicitud...")
+
+        this.modelo.modificaTransaccion(datos).then((res) => {
+            msj.ocultar()
+
+            if (!res.success) return this.mostrarError(res.mensaje)
+            this.msjExito("Transacción modificada correctamente.", (cerrar) => {
+                this.buscar()
+                cerrar()
+            })
+        })
+    }
+
+    eliminaTransaccion = (datos) => {
+        this.msjContinuar("¿Está seguro de eliminar la información seleccionada?", {
+            callbackSi: (ocultar) => {
+                ocultar()
+                let msj = this.msjProcesando("Procesando solicitud...")
+
+                this.modelo.eliminaTransaccion(datos).then((res) => {
+                    msj.ocultar()
+
+                    if (!res.success) return this.mostrarError(res.mensaje)
+                    this.msjExito("Transacción eliminada correctamente.", (cerrar) => {
+                        this.buscar()
+                        cerrar()
+                    })
+                })
+            }
+        })
     }
 }
 

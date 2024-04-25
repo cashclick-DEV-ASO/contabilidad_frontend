@@ -15,13 +15,17 @@
 		"titulo"
 		"dato"
 		"boton";
+	justify-content: center;
 	justify-items: center;
+	align-items: center;
 }
 
 .contenedorSolicitaDato.ancho {
 	grid-template-columns: max-content 1fr max-content;
 	grid-template-areas: "titulo dato boton";
 	justify-content: center;
+    justify-items: center;
+    align-items: center;
 }
 
 .contenedorSolicitaDato > .lblDato {

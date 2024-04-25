@@ -32,6 +32,11 @@ export class RegTrnMambuCtrl extends Controlador {
             dic: "12"
         }
         this.formatoTabla = {
+            "Fecha reporte": this.formatoFecha,
+            "Fecha de inicio del crédito": this.formatoFecha,
+            "Fecha vencimiento del préstamo": this.formatoFecha,
+            "Fecha programada de pago": this.formatoFecha,
+            "Fecha de pago": this.formatoFecha,
             "Monto Crédito": this.formatoMoneda,
             "Importe Pago": this.formatoMoneda,
             "Capital pagado": this.formatoMoneda,
@@ -43,16 +48,6 @@ export class RegTrnMambuCtrl extends Controlador {
             "Cartera Vigente Total": this.formatoMoneda,
             "Cartera VencidaTotal": this.formatoMoneda
         }
-    }
-
-    formatoMoneda = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
     }
 
     cambioArchivo = () => {
@@ -105,7 +100,7 @@ export class RegTrnMambuCtrl extends Controlador {
         if (fecha === "") return fecha
         let f = fecha.split("-")
         f[1] = this.meses[f[1]]
-        return `${f[0]}-${f[1]}-${f[2]}`
+        return new Date(f[2], parseInt(f[1]) - 1, f[0])
     }
 
     guardar = async () => {

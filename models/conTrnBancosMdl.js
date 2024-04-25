@@ -27,7 +27,7 @@ export class ConTrnBancosMdl extends Modelo {
         }
 
         const datosEnvio = {
-            query: `SELECT informacion, fecha_creacion, fecha_valor, concepto, tipo, monto FROM transaccion_banco WHERE ${filtros.join(
+            query: `SELECT id, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto FROM transaccion_banco WHERE ${filtros.join(
                 " AND "
             )}`,
             parametros
@@ -36,9 +36,27 @@ export class ConTrnBancosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminarTransaccionBanco(datos) {
+    async modificaTransaccion(datos) {
         const datosEnvio = {
-            query: "DELETE FROM transaccion_banco WHERE id_transaccion = ?",
+            query: `UPDATE transaccion_banco SET informacion = ?, fecha_creacion = ?, fecha_valor = ?, concepto = ?, tipo = ?, monto = ? WHERE id = ?`,
+
+            parametros: [
+                datos.informacion,
+                this.fechaMySQL(datos.fecha_creacion),
+                this.fechaMySQL(datos.fecha_valor),
+                datos.concepto,
+                datos.tipo,
+                datos.monto,
+                datos.id
+            ]
+        }
+
+        return await this.post("noConfig", datosEnvio)
+    }
+
+    async eliminaTransaccion(datos) {
+        const datosEnvio = {
+            query: "DELETE FROM transaccion_banco WHERE id = ?",
             parametros: [datos.id]
         }
 

@@ -33,6 +33,8 @@ export class TablaDatos extends Componente {
             currency: SYS.NMBR
         }
         this.validaModificacion = null
+        this.datosOriginales = []
+        this.tituloExcel = null
         return this.inicia()
     }
 
@@ -107,6 +109,7 @@ export class TablaDatos extends Componente {
                 return titulos[key]
             })
         } else {
+            this.datosOriginales = datos
             this.encabezados = Object.keys(datos[0]).filter((k) => !columnasOcultas.includes(k))
         }
 
@@ -345,7 +348,7 @@ export class TablaDatos extends Componente {
             btns.addBoton(TABLA.BTN_EXPORTAR)
                 .setTexto(TABLA.TXT_BTN_EXPORTAR, TABLA.BTN_EXPORTAR)
                 .setListener(() => {
-                    this.lstnrExportar(this.tabla.getComponente())
+                    this.lstnrExportar(this.tabla.getComponente(), this.tituloExcel)
                 }, TABLA.BTN_EXPORTAR)
         }
 
@@ -366,12 +369,15 @@ export class TablaDatos extends Componente {
                     })
 
                     editor.setAccionModificar((cerrar) => {
+                        const msjInfo = new Controlador().msjProcesando("Agregando fila...")
                         const campos = editor.getCampos()
                         const fila = campos.map((campo) => campo.getValor())
                         if (this.validaModificacion && this.validaModificacion(fila)) return
                         if (this.mostrarNoFila) fila.unshift(this.filas.length + 1)
                         this.filas.push(fila)
                         this.actualizaTabla({ updtFiltro: false })
+                        msjInfo.ocultar()
+                        new Controlador().msjExito("Fila agregada correctamente.")
                         cerrar()
                     })
 
@@ -392,7 +398,11 @@ export class TablaDatos extends Componente {
             /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ // "2023-08-20T06:00:00.000Z"
         ]
 
-        if (typeof valor === SYS.OBJ || (valor.length >= 6 && Date.parse(valor))) return SYS.DT
+        if (
+            typeof valor === SYS.OBJ ||
+            (valor.length >= 6 && valor.includes("-") && valor.includes("/") && Date.parse(valor))
+        )
+            return SYS.DT
 
         if (typeof valor === SYS.NMBR || !isNaN(valor)) return SYS.NMBR
 
@@ -488,41 +498,49 @@ export class TablaDatos extends Componente {
         if (this.permiteModificar)
             editor.setAccionModificar((cerrar) => {
                 const campos = editor.getCampos()
-                const oldFila = this.filas[celda.parentElement.rowIndex - 1]
-                const newFila = campos.map((campo) => campo.getValor())
-                if (this.validaModificacion && !this.validaModificacion(newFila)) return
-
-                oldFila.forEach((valor, indice) => {
-                    if (this.mostrarNoFila && indice === 0) return
-                    let i = this.mostrarNoFila ? indice - 1 : indice
-                    oldFila[indice] = newFila[i]
-                })
-                this.actualizaTabla({ updtFiltro: false })
 
                 if (this.modifcaBaseDatos) {
-                    const resultado = this.modifcaBaseDatos(campos)
-                    if (resultado.success) new Controlador().msjExito(resultado.mensaje)
-                    else new Controlador().msjError(resultado.mensaje)
-                } else {
-                    new Controlador().msjExito("Tabla actualizada correctamente.")
-                }
+                    const datos = this.datosOriginales[celda.parentElement.rowIndex - 1]
+                    const newDatos = campos.map((campo) => campo.getValor())
 
+                    this.encabezados.forEach((campo, indice) => {
+                        if (this.mostrarNoFila && indice === 0) return
+                        let i = this.mostrarNoFila ? indice - 1 : indice
+                        if (datos[campo]) datos[campo] = newDatos[i]
+                    })
+                    if (this.validaModificacion && this.validaModificacion(datos)) return
+                    this.modifcaBaseDatos(datos)
+                } else {
+                    const msjInfo = new Controlador().msjProcesando("Actualizando fila...")
+                    const oldFila = this.filas[celda.parentElement.rowIndex - 1]
+                    const newFila = campos.map((campo) => campo.getValor())
+                    if (this.validaModificacion && this.validaModificacion(newFila)) return
+
+                    oldFila.forEach((valor, indice) => {
+                        if (this.mostrarNoFila && indice === 0) return
+                        let i = this.mostrarNoFila ? indice - 1 : indice
+                        oldFila[indice] = newFila[i]
+                    })
+
+                    this.actualizaTabla({ updtFiltro: false })
+                    msjInfo.ocultar()
+                    new Controlador().msjExito("Fila actualizada correctamente.")
+                }
                 cerrar()
             })
 
         if (this.permiteEliminar)
             editor.setAccionEliminar((cerrar) => {
-                this.filas.splice(celda.parentElement.rowIndex - 1, 1)
-                this.actualizaTabla({ updtFiltro: false })
-
                 if (this.eliminaBaseDatos) {
-                    const resultado = this.eliminaBaseDatos(editor.getCampos())
-                    if (resultado.success) new Controlador().msjExito(resultado.mensaje)
-                    else new Controlador().msjError(resultado.mensaje)
+                    const datos = this.datosOriginales[celda.parentElement.rowIndex - 1]
+                    this.eliminaBaseDatos(datos)
                 } else {
+                    const msjInfo = new Controlador().msjProcesando("Eliminando fila...")
+                    this.filas.splice(celda.parentElement.rowIndex - 1, 1)
+                    this.actualizaTabla({ updtFiltro: false })
+                    msjInfo.ocultar()
                     new Controlador().msjExito("Fila eliminada correctamente.")
                 }
-
                 cerrar()
             })
 
@@ -573,8 +591,9 @@ export class TablaDatos extends Componente {
         return isNaN(numero) ? null : numero
     }
 
-    setListenerExportar(callback) {
+    setListenerExportar(callback, titulo) {
         this.lstnrExportar = callback
+        this.tituloExcel = titulo
         return this
     }
 

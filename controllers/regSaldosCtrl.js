@@ -70,7 +70,7 @@ export class RegSaldosCtrl extends Controlador {
         return true
     }
 
-    verificarDatos = async (cerrar = null) => {
+    verificarDatos = async () => {
         if (!this.validaModificacion()) return false
 
         const fecha = new Date(this.acciones.fecha.getValor())
@@ -95,8 +95,6 @@ export class RegSaldosCtrl extends Controlador {
             this.msjExito("Saldo registrado correctamente.")
             this.limpiaCampos()
             this.acciones.guardar.habilitarBoton(false)
-
-            if (cerrar) cerrar()
         })
     }
 

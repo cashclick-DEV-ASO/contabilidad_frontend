@@ -107,7 +107,9 @@ export class ConSaldosCtrl extends Controlador {
                 return
             }
 
-            this.datos.tabla.parseaJSON(resultado.datos, null, this.formatoTabla).actualizaTabla()
+            this.datos.tabla
+                .parseaJSON(resultado.datos, null, this.formatoTabla, ["id"])
+                .actualizaTabla()
         })
     }
 
@@ -138,6 +140,33 @@ export class ConSaldosCtrl extends Controlador {
         }
 
         return true
+    }
+
+    validaModificacion = (datos) => {
+        return Object.keys(datos).some((dato) => {
+            if (dato.toLowerCase() === "fecha") {
+                const fecha = new Date(datos[dato])
+                if (isNaN(fecha.getTime())) {
+                    this.msjError("La fecha no es válida.")
+                    return true
+                }
+                if (fecha < new Date("2020-01-01")) {
+                    this.msjError("La fecha no puede ser menor al 01/01/2020.")
+                    return true
+                }
+                if (fecha > new Date()) {
+                    this.msjError("La fecha no puede ser mayor a la del día actual.")
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "saldo_inicial" || dato.toLowerCase() === "saldo_final") {
+                if (datos[dato] < 1) {
+                    this.msjError(`El campo ${dato} debe ser mayor a cero.`)
+                    return true
+                }
+            }
+            return false
+        })
     }
 }
 
