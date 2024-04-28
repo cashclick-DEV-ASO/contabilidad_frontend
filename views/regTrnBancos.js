@@ -10,10 +10,12 @@ import {
     Botonera
 } from "../components/componentes.js"
 import { SYS } from "../src/constantes.js"
+import { leerCookie } from "../src/utils.js"
 
 export class RegTrnBancos extends Vista {
     constructor() {
         super("RegTrnBancos")
+        this.perfil = leerCookie("CSHPERFIL")
         this.controlador = new Controlador(this, new Modelo())
         return this.inicia()
     }
@@ -48,14 +50,38 @@ export class RegTrnBancos extends Vista {
 
         this.datos.tabla = new TablaDatos().setID("tabla")
 
-        this.datos.tabla.permiteFiltro = true
-        this.datos.tabla.permiteEditar = true
-        this.datos.tabla.permiteExportar = false
-        this.datos.tabla.permiteOrdenar = true
-        this.datos.tabla.permiteAgregar = false
-        this.datos.tabla.permiteEliminar = false
-        this.datos.tabla.permiteModificar = true
-        this.datos.tabla.mostrarNoFila = true
+        if (this.perfil == 1 || this.perfil == 2) {
+            this.datos.tabla.permiteFiltro = true
+            this.datos.tabla.permiteEditar = true
+            this.datos.tabla.permiteExportar = true
+            this.datos.tabla.permiteOrdenar = true
+            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteEliminar = true
+            this.datos.tabla.permiteModificar = true
+            this.datos.tabla.mostrarNoFila = true
+        }
+
+        if (this.perfil == 3) {
+            this.datos.tabla.permiteFiltro = true
+            this.datos.tabla.permiteEditar = true
+            this.datos.tabla.permiteExportar = false
+            this.datos.tabla.permiteOrdenar = true
+            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteEliminar = false
+            this.datos.tabla.permiteModificar = true
+            this.datos.tabla.mostrarNoFila = true
+        }
+
+        if (this.perfil == 4) {
+            this.datos.tabla.permiteFiltro = true
+            this.datos.tabla.permiteEditar = false
+            this.datos.tabla.permiteExportar = false
+            this.datos.tabla.permiteOrdenar = true
+            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteEliminar = false
+            this.datos.tabla.permiteModificar = false
+            this.datos.tabla.mostrarNoFila = true
+        }
 
         this.controlador.cargaInicial()
         return this

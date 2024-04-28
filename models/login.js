@@ -39,9 +39,10 @@ export class LoginModel extends Modelo {
                 return false
             }
 
-            const { nombre, mapa } = this.resultado.datos[0]
+            const { nombre, perfil, mapa } = this.resultado.datos[0]
             escribirCookie("SESION", true)
             escribirCookie("NOMBRE", nombre)
+            escribirCookie("CSHPERFIL", perfil)
             escribirCookie("RUTAS", mapa)
         } else if (this.error) {
             if (this.resultado.errores) {

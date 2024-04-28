@@ -39,6 +39,10 @@
 	text-align: center;
 }
 
+.contenedorMuestraDato > .txtDato:disabled {
+	cursor: default;
+}
+
 .contenedorMuestraDato > .btnDato {
 	grid-area: boton;
 }
