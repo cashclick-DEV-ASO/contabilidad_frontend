@@ -119,7 +119,7 @@ export class Menu extends Componente {
             administracion: {
                 cuentasBancarias: { registro: true, consulta: true },
                 cuentasContables: { registro: true, consulta: true },
-                plantillas: { registro: true, consulta: true },
+                plantillas: { layout: true, Etiquetas: true },
                 usuarios: { registro: true, consulta: true }
             },
             logout: true
