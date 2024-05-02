@@ -64,31 +64,26 @@ export class RegTrnMambuCtrl extends Controlador {
 
         let reader = new FileReader()
         reader.onload = (e) => {
-            let data = new Uint8Array(e.target.result)
-            let libro = XLSX.read(data, { type: "array", codepage: 65001 })
-            let hoja = XLSX.utils.sheet_to_json(libro.Sheets["InformacionGeneral"], { header: 1 })
-            let titulos = hoja[1]
-            let transacciones = []
+            const datos = new Uint8Array(e.target.result)
+            const libro = XLSX.read(datos, { type: "array" })
 
-            hoja.forEach((fila, i) => {
-                if (i <= 1 || fila[0] === "") return
-                let filaTmp = {}
-                titulos.forEach((key, j) => {
-                    let d = fila[j]
-                    if (this.fechas.includes(key)) d = this.numeroMes(d)
-
-                    filaTmp[key] = d
+            const nombreHoja = libro.SheetNames[0]
+            const hoja = libro.Sheets[nombreHoja]
+            const filas = XLSX.utils.sheet_to_json(hoja, { range: 1, defval: "" })
+            filas.forEach((fila) => {
+                Object.keys(fila).forEach((titulo) => {
+                    const dato = fila[titulo] || ""
+                    fila[titulo] = this.fechas.includes(titulo) ? this.numeroMes(dato) : dato
                 })
-                transacciones.push(filaTmp)
             })
 
-            if (transacciones.length === 0) {
+            if (filas.length === 0) {
                 msj.ocultar()
-                return this.msjError("El archivo no tiene el formato esperado.")
+                return this.msjError("El archivo no tiene información para importar.")
             }
 
-            this.contenido = transacciones
-            this.datos.tabla.parseaJSON(transacciones, null, this.formatoTabla).actualizaTabla()
+            this.contenido = filas
+            this.datos.tabla.parseaJSON(filas, null, this.formatoTabla).actualizaTabla()
             this.acciones.guardar.habilitarBoton(true)
             msj.ocultar()
         }

@@ -31,12 +31,12 @@ export class RegTrnDWHCtrl extends Controlador {
         const lectura = await this.acciones.archivo.getArchivo().text()
         const datos = JSON.parse(lectura)
 
-        if (!datos.datos) {
+        if (!datos) {
             msj.ocultar()
             return this.msjError("El archivo no tiene el formato esperado.")
         }
 
-        this.datos.tabla.parseaJSON(datos.datos, null, this.formatoTabla).actualizaTabla()
+        this.datos.tabla.parseaJSON(datos, null, this.formatoTabla).actualizaTabla()
 
         this.acciones.guardar.habilitarBoton(true)
         msj.ocultar()
@@ -58,7 +58,7 @@ export class RegTrnDWHCtrl extends Controlador {
         const lectura = await this.acciones.archivo.getArchivo().text()
         const dwh = JSON.parse(lectura)
 
-        this.modelo.guardar(dwh.datos).then((resultado) => {
+        this.modelo.guardar(dwh).then((resultado) => {
             msj.ocultar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 

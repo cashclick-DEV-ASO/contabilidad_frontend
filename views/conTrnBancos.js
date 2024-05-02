@@ -42,13 +42,15 @@ export class ConTrnBancos extends Vista {
         this.acciones.banco = new ListaDesplegable()
             .setTxtEtiqueta("Banco")
             .setID("banco")
+            .setTxtPhLleno("Todos")
+            .setBloquearPh(false)
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
         this.acciones.buscar = new Botonera()
             .addBoton("buscar")
             .setIDContenedor("buscar")
             .setTexto("Buscar")
-            .habilitarBoton(false)
+            .habilitarBoton(true)
             .setListener(this.controlador.buscar)
 
         this.datos.tabla = new TablaDatos()

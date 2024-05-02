@@ -136,6 +136,10 @@ export class SolicitaDato extends Componente {
         this.dato.habilitar(disabled)
         return this
     }
+
+    getClases() {
+        return this.dato.getClases()
+    }
 }
 
 export default SolicitaDato

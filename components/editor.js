@@ -120,6 +120,19 @@ export class Editor extends Componente {
     }
 
     addCampo(titulo, valor, tipo = "text") {
+        if (tipo == "text" && valor && valor.includes("||")) {
+            const opciones = valor.split("||")
+            opciones.forEach((opcion, i) => {
+                const dato = new SolicitaDato()
+                dato.setTxtEtiqueta(`${titulo} ${i + 1}`)
+                    .setTipo("text")
+                    .setValor(opcion)
+                    .setClaseDato("pieza")
+                this.campos.push(dato)
+                this.datos.addHijo(dato.mostrar())
+            })
+            return this
+        }
         const dato = new SolicitaDato()
         dato.setTxtEtiqueta(titulo).setTipo(tipo)
         if (tipo === "date") dato.setValorFecha(valor || new Date())
@@ -130,6 +143,24 @@ export class Editor extends Componente {
     }
 
     getCampos() {
-        return this.campos
+        let campos = []
+        let piezas = []
+        this.campos.forEach((campo) => {
+            if (campo.getClases().contains("pieza")) {
+                piezas.push(campo.getValor())
+            } else {
+                campos.push(campo)
+            }
+        })
+
+        if (piezas.length > 0) {
+            campos.unshift({
+                getValor: () => {
+                    return piezas.join("||")
+                }
+            })
+        }
+
+        return campos
     }
 }

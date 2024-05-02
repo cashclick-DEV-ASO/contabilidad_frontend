@@ -15,7 +15,7 @@ export const SYS = {
     SPAN: "span",
     LST: "select",
     OPT: "option",
-    TXT: "textarea",
+    TXT: "text",
     CHK: "checkbox",
     RAD: "radio",
     TBL: "table",

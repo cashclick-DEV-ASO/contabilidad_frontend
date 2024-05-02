@@ -1,20 +1,39 @@
 import Modelo from "./modelo.js"
 
 import { mostrarError } from "../src/utils.js"
-import { anchoBBVA } from "../src/layoutParser.js"
+import { anchoBBVA, delimitadoCONEKTA, excelSTP } from "../src/layoutParser.js"
 
 export class RegTrnBancosMdl extends Modelo {
     constructor() {
         super()
     }
 
-    async leerArchivo(archivo) {
+    async leerArchivo(archivo, xls = false) {
         if (!archivo) {
             this.mensaje = "No se ha seleccionado un archivo."
             return null
         }
 
         try {
+            if (xls) {
+                return new Promise((resolve, reject) => {
+                    const lector = new FileReader()
+
+                    lector.onload = (e) => {
+                        const datos = new Uint8Array(e.target.result)
+                        const libro = XLSX.read(datos, { type: "array" })
+
+                        const nombreHoja = libro.SheetNames[0]
+                        const hoja = libro.Sheets[nombreHoja]
+
+                        resolve(hoja)
+                    }
+
+                    lector.onerror = (error) => reject(error)
+
+                    lector.readAsArrayBuffer(archivo)
+                })
+            }
             return await archivo.text()
         } catch (error) {
             mostrarError(error)
@@ -38,9 +57,15 @@ export class RegTrnBancosMdl extends Modelo {
 
         const { tipo, layout } = lyt
 
-        if (banco.texto === "BBVA" && tipo === "fijo") {
-            const r = anchoBBVA(contenidoArchivo, JSON.parse(layout))
+        let r = { success: false }
+        if (banco.texto === "BBVA" && tipo === "fijo")
+            r = anchoBBVA(contenidoArchivo, JSON.parse(layout))
+        if (banco.texto === "Conekta" && tipo === "delimitado")
+            r = delimitadoCONEKTA(contenidoArchivo, JSON.parse(layout))
+        if (banco.texto === "STP" && tipo === "excel")
+            r = excelSTP(contenidoArchivo, JSON.parse(layout))
 
+        if (r.success) {
             this.mensaje = r.mensaje
 
             this.resultado = {
@@ -50,9 +75,6 @@ export class RegTrnBancosMdl extends Modelo {
             }
             return this.resultado.success
         }
-
-        if (tipo === "delimitado")
-            contenidoArchivo = this.layoutDelimitado(contenidoArchivo, layout)
 
         this.mensaje =
             "No se cuenta con la configuración necesaria para ese layout.\nFavor de notificar al administrador."
@@ -84,12 +106,13 @@ export class RegTrnBancosMdl extends Modelo {
                 trn.concepto,
                 trn.tipo,
                 this.monedaToFloat(trn.monto),
-                edoCta.id_layout
+                edoCta.id_layout,
+                trn.id_banco
             ]
         })
 
         const datos = {
-            query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto, id_layout) VALUES ?",
+            query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto, id_layout, id_banco) VALUES ?",
             parametros: [trnsToSend]
         }
 
@@ -106,6 +129,7 @@ export class RegTrnBancosMdl extends Modelo {
     }
 
     txtToFechaMysql(fecha) {
+        if (!fecha) return null
         const [dia, mes, anio] = fecha.split("/")
         return `${anio}-${mes}-${dia}`
     }

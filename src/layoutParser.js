@@ -110,6 +110,104 @@ const convierte = (valor, tipo) => {
     return valor
 }
 
+export const delimitadoCONEKTA = (contenidoArchivo, layout) => {
+    const lineas = contenidoArchivo.split("\n")
+    const resultado = {
+        success: false,
+        mensaje: "",
+        informacion: {},
+        movimientos: [],
+        lineaError: []
+    }
+
+    lineas.forEach((texto, linea) => {
+        if (layout.encabezados && layout.encabezados == linea + 1) return
+        const c = texto.split(layout.delimitador)
+        if (c.length === 0) return
+
+        const campos = []
+        for (var j = 0; j < c.length; j++) {
+            if (c[j].charAt(0) === '"') {
+                var campoCombinado = c[j]
+                while (
+                    campoCombinado.charAt(campoCombinado.length - 1) !== '"' ||
+                    campoCombinado.length < 2
+                ) {
+                    j++
+                    campoCombinado += "," + c[j]
+                }
+                c[j] = campoCombinado
+            }
+            campos.push(c[j])
+        }
+
+        const movimiento = {}
+        layout.columnas.forEach((columna) => {
+            const { nombre, tipo, posicion } = columna
+            const valor = campos[posicion - 1]
+            movimiento[nombre] = convertidorCONEKTA(valor, tipo)
+        })
+
+        resultado.movimientos.push(movimiento)
+    })
+
+    resultado.success = true
+    resultado.mensaje = "El archivo se leyó correctamente."
+    return resultado
+}
+
+const convertidorCONEKTA = (valor, tipo) => {
+    if (tipo === "number" || tipo === "decimal") return Number(valor)
+    if (tipo === "date" && Date.parse(valor)) {
+        valor = valor.replace(/([-+]\d{2})(\d{2})$/, "$1:$2")
+        return new Date(valor)
+    }
+    return valor ? valor.trim() : ""
+}
+
+export const excelSTP = (contenidoArchivo, layout) => {
+    const resultado = {
+        success: false,
+        mensaje: "",
+        informacion: {},
+        movimientos: [],
+        lineaError: []
+    }
+
+    const filas = XLSX.utils.sheet_to_json(contenidoArchivo, {
+        range: layout.encabezados ? layout.encabezados - 1 : 0
+    })
+
+    filas.forEach((fila) => {
+        const movimiento = {}
+        layout.columnas.forEach((columna) => {
+            const { nombre, tipo } = columna
+            movimiento[nombre] = convertidorSTP(fila[nombre], tipo)
+        })
+
+        resultado.movimientos.push(movimiento)
+    })
+
+    resultado.success = true
+    resultado.mensaje = "El archivo se leyó correctamente."
+    return resultado
+}
+
+const convertidorSTP = (valor, tipo) => {
+    if (tipo === "number" || tipo === "decimal") return Number(valor)
+    if (tipo === "date") {
+        if (valor.length === 8) {
+            const aa = valor.substr(0, 4)
+            const mm = valor.substr(4, 2)
+            const dd = valor.substr(6, 2)
+            return new Date(`${aa}`, parseInt(mm) - 1, dd)
+        } else return new Date(valor)
+    }
+    return valor ? valor.trim() : ""
+}
+
 export default {
-    anchoBBVA
+    anchoBBVA,
+    delimitadoCONEKTA,
+    excelSTP
 }

@@ -9,9 +9,13 @@ export class LoginController extends Controlador {
     login = async (event) => {
         event.preventDefault()
 
+        const token = await grecaptcha.execute("6LfWk7cpAAAAAPkNuugHbI3Dd58xka1pTsgm6fol", {
+            action: "validate_captcha"
+        })
+
         this.modelo.setUsuario(this.vista.usuario.getValor())
         this.modelo.setPassword(this.vista.password.getValor())
-        this.modelo.setGToken(this.vista.gToken.getValor())
+        this.modelo.setGToken(token)
 
         await this.modelo.login()
 

@@ -70,27 +70,36 @@ export class ConTrnBancosCtrl extends Controlador {
             if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {
-                    this.msjError("La fecha no es válida.")
+                    this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
                     return true
                 }
                 if (fecha < new Date("2020-01-01")) {
-                    this.msjError(`El campo ${dato} no puede ser menor a la fecha mínima.`)
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser menor a la fecha mínima.`
+                    )
                     return true
                 }
                 if (fecha > new Date()) {
-                    this.msjError(`El campo ${dato} no puede ser mayor a la fecha actual.`)
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser mayor a la fecha actual.`
+                    )
                     return true
                 }
             }
             if (dato.toLowerCase() === "monto") {
                 if (datos[dato] < 1) {
-                    this.msjError(`El campo ${dato} debe ser mayor a cero.`)
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
                     return true
                 }
             }
             if (dato.toLowerCase() === "tipo") {
                 if (datos[dato] != 1 && datos[dato] != 2) {
-                    this.msjError(`El campo ${dato} no es válido, debe ser 1 (cargo) o 2 (abono).`)
+                    this.msjError(
+                        `El campo ${dato.replace(
+                            "_",
+                            " "
+                        )} no es válido, debe ser 1 (cargo) o 2 (abono).`
+                    )
                     return true
                 }
             }

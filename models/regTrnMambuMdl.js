@@ -23,7 +23,7 @@ export class RegTrnMambuMdl extends Modelo {
                 trn["ID crédito"],
                 trn["Folio"],
                 trn["Medio de pago"],
-                2,
+                1,
                 trn["Importe Pago"],
                 trn["No. pago"]
             ]
@@ -38,8 +38,14 @@ export class RegTrnMambuMdl extends Modelo {
     }
 
     txtToFechaMysql(fecha) {
-        if (typeof fecha === "object") return fecha
-        const [dia, mes, anio] = fecha.split("-")
+        if (!fecha) return null
+        if (typeof fecha === "object")
+            fecha = fecha.toLocaleDateString("es-MX", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            })
+        const [dia, mes, anio] = fecha.split("/")
         return `${anio}-${mes}-${dia}`
     }
 }

@@ -22,7 +22,7 @@ export class ConTrnBancosMdl extends Modelo {
         }
 
         if (datos.banco && datos.banco.valor !== SYS.DFLT) {
-            filtros.push("id_edo_cta in (SELECT id_edo_cta FROM edo_cta WHERE id_cuenta = ?)")
+            filtros.push("id_banco = ?")
             parametros.push(datos.banco.valor)
         }
 

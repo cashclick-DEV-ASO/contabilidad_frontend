@@ -15,11 +15,29 @@ export class RegTrnBancosCtrl extends Controlador {
             Total_Abonos: this.formatoMoneda,
             Total_Cargos: this.formatoMoneda
         }
-        this.formatoTabla = {
+        this.formatoTablaBBVA = {
             Fecha_Operación: this.formatoFecha,
             Fecha_Valor: this.formatoFecha,
             Monto: this.formatoMoneda,
             Tipo_Movimiento: this.tipoMovimiento
+        }
+        this.formatoTablaConekta = {
+            Fecha_Creación: this.formatoFecha,
+            Fecha_Pago: this.formatoFecha,
+            Monto: this.formatoMoneda,
+            Estatus: (dato) => {
+                const tipos = {
+                    paid: "Pagado",
+                    pending_payment: "Pendiente",
+                    refunded: "Reembolsado"
+                }
+                return tipos[dato] || dato
+            }
+        }
+        this.formatoTablaSTP = {
+            "Fecha Captura": this.formatoFecha,
+            "Fecha Operación": this.formatoFecha,
+            Monto: this.formatoMoneda
         }
     }
 
@@ -95,7 +113,10 @@ export class RegTrnBancosCtrl extends Controlador {
             return
         }
 
-        const lecturaOK = await this.modelo.leerArchivo(this.acciones.selArchivo.ruta)
+        const lecturaOK = await this.modelo.leerArchivo(
+            this.acciones.selArchivo.ruta,
+            this.banco.texto === "STP"
+        )
 
         if (lecturaOK) {
             await this.modelo.aplicaLayout(this.banco, this.layout, lecturaOK)
@@ -108,7 +129,12 @@ export class RegTrnBancosCtrl extends Controlador {
                     this.formatoDetalles
                 )
 
-                this.datos.tabla.parseaJSON(movimientos, null, this.formatoTabla).actualizaTabla()
+                let formato = {}
+                if (this.banco.texto === "BBVA") formato = this.formatoTablaBBVA
+                if (this.banco.texto === "Conekta") formato = this.formatoTablaConekta
+                if (this.banco.texto === "STP") formato = this.formatoTablaSTP
+
+                this.datos.tabla.parseaJSON(movimientos, null, formato).actualizaTabla()
 
                 this.acciones.guardar.habilitarBoton(true)
                 return
@@ -119,18 +145,85 @@ export class RegTrnBancosCtrl extends Controlador {
     }
 
     guardar = async () => {
+        let cb = null
+        if (this.banco.texto === "BBVA") cb = this.preparaDatosBBVA
+        if (this.banco.texto === "Conekta") cb = this.preparaDatosConekta
+        if (this.banco.texto === "STP") cb = this.preparaDatosSTP
+
         this.msjContinuar(
             `Se guardará la información del archivo:<br><br>${this.acciones.selArchivo.ruta.name}<br><br>¿Desea continuar?`,
             {
                 txtSi: "Si, guardar",
                 txtNo: "No, cancelar",
-                callbackSi: this.preparaDatos
+                callbackSi: cb
             }
         )
     }
 
-    preparaDatos = async (cerrar = null) => {
+    preparaDatosBBVA = async (cerrar = null) => {
         const msj = this.msjProcesando("Guardando transacciones...")
+
+        this.saveData(
+            this.getData().map((trn) => {
+                return {
+                    linea: trn.no,
+                    informacion: `${trn.descripción1}||${trn.descripción2}||${trn.descripción3}`,
+                    fecha_creacion: trn.fechaoperación,
+                    fecha_valor: trn.fechavalor,
+                    concepto: trn.idoperación,
+                    tipo: trn.tipomovimiento === "Cargo" ? 1 : 2,
+                    monto: trn.monto,
+                    id_banco: this.banco.valor
+                }
+            }),
+            msj,
+            cerrar
+        )
+    }
+
+    preparaDatosConekta = (cerrar = null) => {
+        const msj = this.msjProcesando("Guardando transacciones...")
+
+        this.saveData(
+            this.getData().map((trn) => {
+                return {
+                    linea: trn.no,
+                    informacion: `${trn.identificador}||${trn.nombrecliente}||${trn.observaciones}||${trn.estatus}`,
+                    fecha_creacion: trn.fechacreación,
+                    fecha_valor: trn.fechapago,
+                    concepto: trn.estatus,
+                    tipo: 2,
+                    monto: trn.monto,
+                    id_banco: this.banco.valor
+                }
+            }),
+            msj,
+            cerrar
+        )
+    }
+
+    preparaDatosSTP = (cerrar = null) => {
+        const msj = this.msjProcesando("Guardando transacciones...")
+
+        this.saveData(
+            this.getData().map((trn) => {
+                return {
+                    linea: trn.no,
+                    informacion: `${trn.conceptodelpago}||${trn.beneficiario}||${trn.causadevolución}`,
+                    fecha_creacion: trn.fechacaptura,
+                    fecha_valor: trn.fechaoperación,
+                    concepto: trn.rastreo,
+                    tipo: 2,
+                    monto: trn.monto,
+                    id_banco: this.banco.valor
+                }
+            }),
+            msj,
+            cerrar
+        )
+    }
+
+    getData = () => {
         const table = this.datos.tabla.tabla.getComponente()
 
         var data = []
@@ -148,19 +241,10 @@ export class RegTrnBancosCtrl extends Controlador {
             }
             data.push(rowData)
         }
+        return data
+    }
 
-        const trns = data.map((trn) => {
-            return {
-                linea: trn.no,
-                informacion: trn.descripción1 + "||" + trn.descripción2 + "||" + trn.descripción3,
-                fecha_creacion: trn.fechaoperación,
-                fecha_valor: trn.fechavalor,
-                concepto: trn.idoperación,
-                tipo: trn.tipomovimiento === "Cargo" ? 1 : 2,
-                monto: trn.monto
-            }
-        })
-
+    saveData = (trns, msj, cerrar) => {
         const periodo = this.acciones.selPeriodo.getPeriodo()
 
         const final = {
