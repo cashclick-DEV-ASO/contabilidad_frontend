@@ -1,9 +1,18 @@
+.RegCtasBancarias {
+	display: grid !important;
+	grid-template-rows: max-content 1fr !important;
+	grid-template-areas: "titulo" "acciones" !important;
+	justify-items: center !important;
+	align-items: center !important;
+	justify-content: center !important;
+	align-content: center !important;
+}
+
 .RegCtasBancarias > #contenedorAcciones {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: max-content;
-	grid-template-areas: "banco guardar";
+	display: flex;
+	flex-direction: column;
 	justify-items: center;
+	height: 50%;
 	align-items: center;
 }
 
@@ -11,14 +20,38 @@
 	grid-area: banco;
 }
 
+.RegCtasBancarias > #contenedorAcciones > #cuenta {
+	grid-area: cuenta;
+}
+
+.RegCtasBancarias > #contenedorAcciones > #confirmacion {
+	grid-area: confirmacion;
+}
+
+.RegCtasBancarias > #contenedorAcciones > #saldoInicial {
+	grid-area: saldoInicial;
+}
+
+.RegCtasBancarias > #contenedorAcciones > #fecha {
+	grid-area: fecha;
+}
+
+.RegCtasBancarias > #contenedorAcciones > #comentarios {
+	grid-area: comentarios;
+}
+
 .RegCtasBancarias > #contenedorAcciones > #guardar {
 	grid-area: guardar;
 }
 
 .RegCtasBancarias > #contenedorDatos {
-	display: flex;
-	flex-direction: column;
-	justify-items: center;
-	height: 30%;
-	align-items: center;
+	display: none;
+}
+
+.RegCtasBancarias > #contenedorAcciones > .contenedorListaDesplegable {
+	width: 100%;
+}
+
+.RegCtasBancarias > #contenedorAcciones > .contenedorSolicitaDato {
+	width: 100%;
 }

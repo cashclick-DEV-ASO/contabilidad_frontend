@@ -42,6 +42,7 @@
 @import url("./regTrnDWH.css");
 @import url("./conTrnDWH.css");
 @import url("./variables.css");
+@import url("./regUsuarios.css");
 
 .contenedor {
 	width: 100%;

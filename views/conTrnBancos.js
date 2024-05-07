@@ -44,6 +44,7 @@ export class ConTrnBancos extends Vista {
             .setID("banco")
             .setTxtPhLleno("Todos")
             .setBloquearPh(false)
+            .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
         this.acciones.buscar = new Botonera()

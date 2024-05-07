@@ -1,0 +1,20 @@
+.RegUsuarios > #contenedorAcciones {
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: max-content;
+	grid-template-areas: "periodo archivo guardar";
+	justify-items: center;
+	align-items: center;
+}
+
+.RegUsuarios > #contenedorAcciones > #periodo {
+	grid-area: periodo;
+}
+
+.RegUsuarios > #contenedorAcciones > #archivo {
+	grid-area: archivo;
+}
+
+.RegUsuarios > #contenedorAcciones > #guardar {
+	grid-area: guardar;
+}

@@ -176,8 +176,8 @@ export class Modelo {
     }
 
     async getBancos(idBanco = null) {
-        const query = `SELECT id, nombre FROM banco${
-            idBanco ? " WHERE id_banco = ? " : " "
+        const query = `SELECT b.id, b.nombre FROM banco b WHERE b.id IN (SELECT ca.id_banco FROM cuenta_bancaria ca GROUP BY ca.id_banco)${
+            idBanco ? " AND b.id_banco = ? " : " "
         }ORDER BY nombre`
         const parametros = idBanco ? [idBanco] : []
         return this.getInformacionComponentes(query, parametros)

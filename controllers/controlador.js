@@ -225,25 +225,11 @@ export class Controlador {
     }
 
     exportaExcel = (tableSelect, filename = "") => {
-        if (tableSelect === undefined || tableSelect === null) return
-        var downloadLink
-        var dataType = "application/vnd.ms-excel"
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, "%20")
-        filename = filename ? filename + ".xls" : "excel_data.xls"
-        downloadLink = document.createElement("a")
-
-        document.body.appendChild(downloadLink)
-
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(["ufeff", tableHTML], {
-                type: dataType
-            })
-            navigator.msSaveOrOpenBlob(blob, filename)
-        } else {
-            downloadLink.href = "data:" + dataType + ", " + tableHTML
-            downloadLink.download = filename
-            downloadLink.click()
-        }
+        const table = tableSelect.cloneNode(true)
+        const ws = XLSX.utils.table_to_sheet(table)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, "Hoja 1")
+        XLSX.writeFile(wb, `${filename}.xlsx`)
     }
 
     modificaTransaccion = (datos) => {

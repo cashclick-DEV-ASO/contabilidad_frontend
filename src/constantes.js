@@ -16,6 +16,7 @@ export const SYS = {
     LST: "select",
     OPT: "option",
     TXT: "text",
+    TXTAREA: "textarea",
     CHK: "checkbox",
     RAD: "radio",
     TBL: "table",
@@ -28,6 +29,7 @@ export const SYS = {
     PH: "placeholder",
     BLR: "blur",
     KUP: "keyup",
+    KDWN: "keydown",
     CHNG: "change",
     CLK: "click",
     DCLK: "dblclick",
@@ -55,7 +57,9 @@ export const SYS = {
 export const COMPONENTE = {
     CONTENEDOR: "contenedorComponente",
     ESTILO_1: "alto",
-    ESTILO_2: "ancho"
+    ESTILO_2: "ancho",
+    ESTILO_3: "alto2",
+    ESTILO_4: "ancho2"
 }
 
 //Selector de Peridos

@@ -24,49 +24,17 @@ export class ConCtasBancariasCtrl extends Controlador {
         })
     }
 
-    cargaInicial = async () => {
-        this.acciones.banco.setOpciones([
-            { texto: "BBVA", valor: 2 },
-            { texto: "STP", valor: 19 },
-            { texto: "Conekta", valor: 20 }
-        ])
+    cargaInicial = () => {
+        this.acciones.banco.setTemporalPH("Cargando bancos...")
+        this.llenaListaBancos().then(() => this.acciones.banco.actulizaOpciones(this.bancos))
     }
 
-    consultar = async () => {
-        if (this.datos.tabla.getFilas().length > 0) {
-            this.datos.tabla.limpiar()
-            this.msjError("No se encontraron registros.")
-            return
-        }
+    buscar = async () => {
+        const res = await this.modelo.buscar(this.acciones.banco.getValorSeleccionado())
+        if (!res.success) return mostrarError(res.mensaje)
 
         this.datos.tabla
-            .parseaJSON(
-                [
-                    {
-                        banco: "BBVA",
-                        cuenta: 35454343435453,
-                        fecha_registro: "18/05/2020",
-                        estatus: "Activa",
-                        saldo: 12354879.54
-                    },
-                    {
-                        banco: "BBVA",
-                        cuenta: 12348354686554,
-                        fecha_registro: "25/05/2020",
-                        estatus: "Activa",
-                        saldo: 1365455.25
-                    },
-                    {
-                        banco: "Conekta",
-                        cuenta: 864433541685,
-                        fecha_registro: "06/09/2022",
-                        estatus: "Activa",
-                        saldo: 3554.87
-                    }
-                ],
-                null,
-                this.formatoTabla
-            )
+            .parseaJSON(res.datos, null, this.formatoTabla, ["id_c", "id_b"])
             .actualizaTabla()
     }
 }

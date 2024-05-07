@@ -20,12 +20,28 @@
 	align-items: center;
 }
 
+.contenedorSolicitaDato.alto2 {
+	grid-template-rows: 1fr 1fr;
+	grid-template-areas:
+		"titulo"
+		"dato";
+	justify-content: center;
+	align-items: center;
+}
+
 .contenedorSolicitaDato.ancho {
 	grid-template-columns: max-content 1fr max-content;
 	grid-template-areas: "titulo dato boton";
 	justify-content: center;
     justify-items: center;
     align-items: center;
+}
+
+.contenedorSolicitaDato.ancho2 {
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas: "titulo dato";
+	justify-content: center;
+	align-items: center;
 }
 
 .contenedorSolicitaDato > .lblDato {
@@ -37,6 +53,11 @@
 .contenedorSolicitaDato > .txtDato {
 	grid-area: dato;
 	width: max-content;
+}
+
+.contenedorSolicitaDato > textarea.txtDato {
+    width: 200%;
+    height: 100%;
 }
 
 .contenedorSolicitaDato > .btnDato {

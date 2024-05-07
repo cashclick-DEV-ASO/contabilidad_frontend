@@ -11,75 +11,87 @@ export class RegCtasBancariasCtrl extends Controlador {
         this.datos = this.vista.datos
     }
 
-    cargaInicial = async () => {
-        this.acciones.banco.setOpciones([
-            { texto: "Banorte", valor: 1 },
-            { texto: "BBVA", valor: 2 },
-            { texto: "Santander", valor: 3 },
-            { texto: "HSBC", valor: 4 },
-            { texto: "Scotiabank", valor: 5 },
-            { texto: "Banco Azteca", valor: 6 },
-            { texto: "Inbursa", valor: 7 },
-            { texto: "Banco del Bajío", valor: 8 },
-            { texto: "Banco Mifel", valor: 9 },
-            { texto: "Banco Forjadores", valor: 11 },
-            { texto: "Banco Autofin", valor: 12 },
-            { texto: "Banco Ve por Más", valor: 14 },
-            { texto: "Banco Invex", valor: 15 },
-            { texto: "Banco Monex", valor: 16 },
-            { texto: "Banco Multiva", valor: 17 },
-            { texto: "Banco Actinver", valor: 18 },
-            { texto: "STP", valor: 19 }
-        ])
+    cargaInicial = () => {
+        this.acciones.banco.setTemporalPH("Cargando bancos...")
+        this.llenaListaBancosTodos().then(() => this.acciones.banco.actulizaOpciones(this.bancos))
+    }
+
+    async llenaListaBancosTodos() {
+        await this.modelo.getBancosTodos()
+
+        this.bancos = this.getLista((banco) => ({
+            valor: banco.id,
+            texto: banco.nombre
+        }))
     }
 
     guardar = async () => {
-        if (
-            this.datos.confirmacion.getValor() !== this.datos.cuenta.getValor() ||
-            this.datos.layout.dfltSelecciondo()
-        ) {
-            this.msjError("Los números de cuenta no coinciden.")
-            return
-        }
+        if (this.datos.confirmacion.getValor() !== this.datos.cuenta.getValor())
+            return this.msjError("Los números de cuenta no coinciden.")
+        if (this.datos.saldo.getValor() === "") return this.msjError("Ingrese el saldo inicial.")
 
+        const res = await this.modelo.guardarCuenta(
+            [
+                this.datos.cuenta.getValor(),
+                this.acciones.banco.getValorSeleccionado(),
+                this.datos.comentarios.getValor()
+            ],
+            [this.datos.fecha.getValorFecha(), 0, this.datos.saldo.getValor()]
+        )
+
+        if (res.error) return this.msjError(res.error)
         this.msjExito("Cuenta bancaria registrada exitosamente.")
     }
 
     cambioBanco = async () => {
         this.datos.cuenta.setValor("")
         this.datos.confirmacion.setValor("")
+        this.datos.saldo.setValor("")
         this.datos.cuenta.habilitarInput(true)
+        this.datos.saldo.habilitarInput(false)
+        this.datos.fecha.habilitarInput(false)
+        this.datos.comentarios.habilitarInput(false)
         this.acciones.guardar.habilitarBoton(false)
-        this.datos.layout.actulizaOpciones([])
     }
 
     modificacionCuenta = async () => {
         this.acciones.guardar.habilitarBoton(false)
         this.datos.confirmacion.setValor("")
+        this.datos.saldo.setValor("")
         this.datos.confirmacion.habilitarInput(false)
-        this.datos.layout.actulizaOpciones([])
+        this.datos.saldo.habilitarInput(false)
+        this.datos.fecha.habilitarInput(false)
+        this.datos.comentarios.habilitarInput(false)
+        this.acciones.guardar.habilitarBoton(false)
 
-        if (this.datos.cuenta.getValor().length > 5) {
-            this.datos.confirmacion.habilitarInput(true)
-        }
+        if (this.datos.cuenta.getValor().length > 5) this.datos.confirmacion.habilitarInput(true)
     }
 
     validarCuenta = async () => {
-        if (this.datos.confirmacion.getValor().length < 5) {
+        this.datos.fecha.habilitarInput(false)
+        this.datos.comentarios.habilitarInput(false)
+        this.acciones.guardar.habilitarBoton(false)
+        if (this.datos.confirmacion.getValor().length < 5) this.datos.saldo.setValor("")
+
+        const habilita = this.datos.confirmacion.getValor() === this.datos.cuenta.getValor()
+        this.datos.saldo.habilitarInput(habilita)
+        this.datos.fecha.habilitarInput(habilita)
+        this.datos.comentarios.habilitarInput(habilita)
+        if (!habilita) this.datos.saldo.setValor("")
+    }
+
+    validarSaldo = async () => {
+        if (this.datos.saldo.getValor() === "") {
             this.acciones.guardar.habilitarBoton(false)
-            this.datos.layout.actulizaOpciones([])
+            this.datos.fecha.habilitarInput(false)
+            this.datos.comentarios.habilitarInput(false)
+            this.acciones.guardar.habilitarBoton(false)
             return
         }
 
-        this.datos.layout.actulizaOpciones([
-            { texto: "CSV", valor: 1 },
-            { texto: "Texto", valor: 2 },
-            { texto: "JSON", valor: 3 },
-            { texto: "XML", valor: 4 }
-        ])
-    }
-
-    cambioLayout = async () => {
+        this.acciones.guardar.habilitarBoton(true)
+        this.datos.fecha.habilitarInput(true)
+        this.datos.comentarios.habilitarInput(true)
         this.acciones.guardar.habilitarBoton(true)
     }
 }

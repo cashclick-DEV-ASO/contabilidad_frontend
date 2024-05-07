@@ -24,13 +24,13 @@ export class RegSaldos extends Vista {
         this.acciones.banco = new ListaDesplegable()
             .setTxtEtiqueta("Banco")
             .setID("banco")
-            .setEstilo2()
+            .setEstilo4()
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
         this.acciones.cuenta = new ListaDesplegable()
             .setTxtEtiqueta("Cuenta")
             .setID("cuenta")
-            .setEstilo2()
+            .setEstilo4()
             .setListener(SYS.CHNG, this.controlador.cambioCuenta)
 
         this.acciones.fecha = new SolicitaDato()
@@ -40,14 +40,14 @@ export class RegSaldos extends Vista {
             .setPropiedad("max", new Date().toISOString().split("T")[0])
             .setPropiedad("min", "2020-01-01")
             .setValorFecha(new Date())
-            .setEstilo2()
+            .setEstilo4()
             .setListener(SYS.CHNG, this.controlador.validaModificacion)
 
         this.acciones.inicial = new SolicitaDato()
             .setID("saldoI")
             .setTxtEtiqueta("Saldo Inicial")
             .setTxtPlaceholder("$1,000,000.00")
-            .setEstilo2()
+            .setEstilo4()
             .setListener(SYS.BLR, () =>
                 this.controlador.formatoMoneda(this.acciones.inicial.dato.getComponente(), true)
             )
@@ -60,7 +60,7 @@ export class RegSaldos extends Vista {
             .setID("saldoF")
             .setTxtEtiqueta("Saldo Final")
             .setTxtPlaceholder("$1,000,000.00")
-            .setEstilo2()
+            .setEstilo4()
             .setListener(SYS.BLR, () =>
                 this.controlador.formatoMoneda(this.acciones.final.dato.getComponente(), true)
             )

@@ -43,3 +43,11 @@
 .RegSaldos > #contenedorDatos {
 	display: none;
 }
+
+.RegSaldos > #contenedorAcciones > .contenedorListaDesplegable {
+	width: 100%;
+}
+
+.RegSaldos > #contenedorAcciones > .contenedorSolicitaDato {
+	width: 100%;
+}

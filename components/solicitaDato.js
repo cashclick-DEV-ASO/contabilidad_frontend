@@ -3,14 +3,14 @@ import { Componente } from "./componentes.js"
 import { SYS, SOLICITA_DATO } from "../src/constantes.js"
 
 export class SolicitaDato extends Componente {
-    constructor() {
+    constructor(tipo = SYS.TXT) {
         super(SYS.SCTN, { clase: SOLICITA_DATO.CONTENEDOR })
 
         this.txtEtiqueta = SOLICITA_DATO.TXT_ETIQUETA
         this.txtPlaceholder = SOLICITA_DATO.TXT_PLACEHOLDER
         this.fechaInicio = null
         this.boton = null
-        this.tipo = SYS.TXT
+        this.tipo = tipo
 
         return this.inicia()
     }
@@ -20,7 +20,9 @@ export class SolicitaDato extends Componente {
 
         this.lbl = new Componente(SYS.LBL, { clase: SOLICITA_DATO.LBL })
 
-        this.dato = new Componente(SYS.IN, { clase: SOLICITA_DATO.IN })
+        if (this.tipo === SYS.TXTAREA)
+            this.dato = new Componente(SYS.TXTAREA, { clase: SOLICITA_DATO.IN })
+        else this.dato = new Componente(SYS.IN, { clase: SOLICITA_DATO.IN })
 
         return this
     }
@@ -30,7 +32,9 @@ export class SolicitaDato extends Componente {
 
         this.lbl.setTexto(this.txtEtiqueta)
 
-        this.dato.setPropiedad("type", this.tipo).setPropiedad(SYS.PH, this.txtPlaceholder)
+        if (this.tipo !== SYS.TXTAREA) this.dato.setPropiedad("type", this.tipo)
+
+        this.dato.setPropiedad(SYS.PH, this.txtPlaceholder)
 
         this.addHijos([
             this.lbl.mostrar(),
@@ -87,6 +91,8 @@ export class SolicitaDato extends Componente {
             /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ // "2023-08-20T06:00:00.000Z"
         ]
 
+        // if (valor instanceof Date) this.fechaInicio = valor.toISOString().split("T")[0]
+        // else
         if (fechaRegexes.some((regex) => regex.test(valor))) this.fechaInicio = new Date(valor)
         else this.fechaInicio = valor
 
@@ -100,6 +106,10 @@ export class SolicitaDato extends Componente {
         }
         if (this.tipo === SYS.NMBR) return parseFloat(this.dato.getValor()) || 0
         return this.dato.getValor()
+    }
+
+    getValorFecha() {
+        return this.dato.getComponente().value
     }
 
     setListenerCambio(callback, evento = SYS.CHNG) {
@@ -139,6 +149,46 @@ export class SolicitaDato extends Componente {
 
     getClases() {
         return this.dato.getClases()
+    }
+
+    setModoMoneda(negativo = false) {
+        this.dato.setPropiedad("type", SYS.NMBR)
+        this.dato.setListener(SYS.KDWN, (e) => {
+            if (
+                e.key === "0" ||
+                e.key === "1" ||
+                e.key === "2" ||
+                e.key === "3" ||
+                e.key === "4" ||
+                e.key === "5" ||
+                e.key === "6" ||
+                e.key === "7" ||
+                e.key === "8" ||
+                e.key === "9" ||
+                e.key === "." ||
+                e.key === "Backspace" ||
+                e.key === "Delete" ||
+                e.key === "ArrowLeft" ||
+                e.key === "ArrowRight" ||
+                e.key === "ArrowUp" ||
+                e.key === "ArrowDown" ||
+                e.key === "Tab" ||
+                e.key === "Enter"
+            )
+                return
+            if (negativo && e.key === "-") return
+            e.preventDefault()
+        })
+
+        return this
+    }
+
+    setModoFecha() {
+        this.dato.setPropiedad("type", SYS.DT)
+        this.setValorFecha(new Date().toISOString().split("T")[0])
+        this.dato.setPropiedad("min", "2020-01-01")
+        this.dato.setPropiedad("max", new Date().toISOString().split("T")[0])
+        return this
     }
 }
 

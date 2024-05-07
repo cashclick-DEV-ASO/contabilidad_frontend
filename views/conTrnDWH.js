@@ -23,16 +23,15 @@ export class ConTrnDWH extends Vista {
     inicia() {
         this.titulo.setTexto(CON_TRN_DWH.TITULO)
 
-        this.acciones.fechaI = new SolicitaDato()
+        this.acciones.fechaI = new SolicitaDato(SYS.DT)
             .setID("fechaI")
-            .setTipo("date")
+            .setModoFecha()
             .setTxtEtiqueta("Fecha Inicial")
-            .setValorFecha(new Date())
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
-        this.acciones.fechaF = new SolicitaDato()
+        this.acciones.fechaF = new SolicitaDato(SYS.DT)
             .setID("fechaF")
-            .setTipo("date")
+            .setModoFecha()
             .setTxtEtiqueta("Fecha Final")
             .setValorFecha(new Date())
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)

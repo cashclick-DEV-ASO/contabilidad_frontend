@@ -41,25 +41,29 @@ body {
 }
 
 select,
-input {
+input,
+textarea {
 	border-radius: 15px;
 	padding: 3px 5px;
 	border: 2px solid black;
 }
 
 select:focus,
-input:focus {
+input:focus,
+textarea:focus {
 	outline: none;
 }
 
 select:not(:disabled):hover,
-input:not(:disabled):hover {
+input:not(:disabled):hover,
+textarea:not(:disabled):hover {
 	border: 2px solid var(--azul_medio_1);
 	cursor: pointer;
 }
 
 select:hover,
-input:hover {
+input:hover,
+textarea:hover {
 	border: 2px solid var(--error);
 	cursor: not-allowed;
 }

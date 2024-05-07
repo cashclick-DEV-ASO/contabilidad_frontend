@@ -14,16 +14,37 @@
 		"titulo"
 		"lista";
 	justify-items: center;
+	justify-items: center;
+	align-items: center;
+}
+
+.contenedorListaDesplegable.alto2 {
+	grid-template-rows: 1fr 1fr;
+	grid-template-areas:
+		"titulo"
+		"lista";
+	justify-content: center;
+	align-items: center;
 }
 
 .contenedorListaDesplegable.ancho {
 	grid-template-areas: "titulo lista";
 	justify-content: center;
+	justify-items: center;
+	align-items: center;
+}
+
+.contenedorListaDesplegable.ancho2 {
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas: "titulo lista";
+	justify-content: center;
+	align-items: center;
 }
 
 .contenedorListaDesplegable > .lblLista {
 	grid-area: titulo;
 	font-weight: bold;
+	width: max-content;
 }
 
 .contenedorListaDesplegable > .ListaDesplegable {

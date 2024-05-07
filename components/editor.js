@@ -57,6 +57,13 @@ export class Editor extends Componente {
             })
         }
 
+        this.datos.setPropiedad(
+            "style",
+            `grid-template-columns: repeat(${
+                this.campos.length > 5 ? 5 : this.campos.length
+            }, 1fr);`
+        )
+
         this.addHijos([
             this.marco
                 .addHijos([
