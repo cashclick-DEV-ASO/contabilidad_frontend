@@ -146,7 +146,11 @@ export class ListaDesplegable extends Componente {
     }
 
     setSeleccionByTexto(texto) {
-        this.lista.getComponente().value = texto
+        this.lista.getComponente().childNodes.forEach((opcion) => {
+            if (opcion.textContent === texto) {
+                opcion.selected = true
+            }
+        })
         return this
     }
 

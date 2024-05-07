@@ -1,8 +1,7 @@
 import { MSJ_CONTENEDOR_CLS } from "../src/constantes.js"
 import Botonera from "./botonera.js"
 
-import Componente from "./componente.js"
-import SolicitaDato from "./solicitaDato.js"
+import { Componente, ListaDesplegable, SolicitaDato } from "../components/componentes.js"
 
 /**
  * @class Mensaje
@@ -169,5 +168,15 @@ export class Editor extends Componente {
         }
 
         return campos
+    }
+
+    campoEspecial(campo, valor) {
+        this.campos.push(campo)
+        this.datos.addHijo(campo.mostrar())
+
+        if (campo instanceof ListaDesplegable) campo.setSeleccionByTexto(valor)
+        if (campo instanceof SolicitaDato) campo.setValor(valor)
+
+        return this
     }
 }

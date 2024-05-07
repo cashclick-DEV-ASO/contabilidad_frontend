@@ -154,7 +154,7 @@ export class Menu extends Componente {
                 cuentasBancarias: { registro: true, consulta: true },
                 cuentasContables: { registro: true, consulta: true },
                 plantillas: { registro: false, consulta: false },
-                usuarios: { registro: false, consulta: false }
+                usuarios: { registro: false, consulta: true }
             },
             logout: true
         }

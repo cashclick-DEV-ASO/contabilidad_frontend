@@ -35,6 +35,7 @@ export class TablaDatos extends Componente {
         this.validaModificacion = null
         this.datosOriginales = []
         this.tituloExcel = null
+        this.camposEspeciales = {}
         return this.inicia()
     }
 
@@ -492,6 +493,11 @@ export class TablaDatos extends Componente {
             if (this.mostrarNoFila && campo === "No") return
             const datos = this.filas[celda.parentElement.rowIndex - 1]
             const tipo = this.tiposInput[this.tipoDato(datos[indice])]
+            if (this.camposEspeciales[campo]) {
+                editor.campoEspecial(this.camposEspeciales[campo], datos[indice])
+                return
+            }
+
             editor.addCampo(this.limpiarTitulo(campo), datos[indice], tipo)
         })
 
@@ -501,12 +507,15 @@ export class TablaDatos extends Componente {
 
                 if (this.modifcaBaseDatos) {
                     const datos = this.datosOriginales[celda.parentElement.rowIndex - 1]
-                    const newDatos = campos.map((campo) => campo.getValor())
+                    const newDatos = campos.map((campo) => {
+                        if (campo instanceof ListaDesplegable) return campo.getValorSeleccionado()
+                        return campo.getValor()
+                    })
 
                     this.encabezados.forEach((campo, indice) => {
                         if (this.mostrarNoFila && indice === 0) return
                         let i = this.mostrarNoFila ? indice - 1 : indice
-                        if (datos[campo]) datos[campo] = newDatos[i]
+                        if (datos.hasOwnProperty(campo)) datos[campo] = newDatos[i]
                     })
                     if (this.validaModificacion && this.validaModificacion(datos)) return
                     this.modifcaBaseDatos(datos)

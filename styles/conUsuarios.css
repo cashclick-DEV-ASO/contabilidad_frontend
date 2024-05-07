@@ -1,20 +1,12 @@
 .ConUsuarios > #contenedorAcciones {
-	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
-	grid-template-rows: max-content;
-	grid-template-areas: "periodo archivo guardar";
-	justify-items: center;
-	align-items: center;
+    display: grid;
+    /* grid-template-columns: repeat(1, 1fr); */
+    grid-template-rows: max-content;
+    grid-template-areas: "actualizar";
+    justify-items: center;
+    align-items: center;
 }
 
-.ConUsuarios > #contenedorAcciones > #periodo {
-	grid-area: periodo;
-}
-
-.ConUsuarios > #contenedorAcciones > #archivo {
-	grid-area: archivo;
-}
-
-.ConUsuarios > #contenedorAcciones > #guardar {
-	grid-area: guardar;
+.ConUsuarios > #contenedorAcciones > #actualizar {
+    grid-area: actualizar;
 }

@@ -1,20 +1,49 @@
+.RegUsuarios {
+    display: grid !important;
+    grid-template-rows: max-content 1fr !important;
+    grid-template-areas: "titulo" "acciones" !important;
+    justify-items: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-content: center !important;
+}
+
 .RegUsuarios > #contenedorAcciones {
-	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
-	grid-template-rows: max-content;
-	grid-template-areas: "periodo archivo guardar";
-	justify-items: center;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    height: 50%;
+    align-items: center;
 }
 
-.RegUsuarios > #contenedorAcciones > #periodo {
-	grid-area: periodo;
+.RegUsuarios > #contenedorAcciones > #nombre1 {
+    grid-area: nombre1;
 }
 
-.RegUsuarios > #contenedorAcciones > #archivo {
-	grid-area: archivo;
+.RegUsuarios > #contenedorAcciones > #nombre2 {
+    grid-area: nombre2;
 }
 
-.RegUsuarios > #contenedorAcciones > #guardar {
-	grid-area: guardar;
+.RegUsuarios > #contenedorAcciones > #apellido1 {
+    grid-area: apellido1;
+}
+
+.RegUsuarios > #contenedorAcciones > #apellido2 {
+    grid-area: apellido2;
+}
+
+.RegUsuarios > #contenedorAcciones > #correo {
+    grid-area: correo;
+}
+
+.RegUsuarios > #contenedorAcciones > #perfil {
+    grid-area: perfil;
+}
+
+.RegUsuarios > #contenedorAcciones > .contenedorListaDesplegable {
+	width: 100%;
+}
+
+.RegUsuarios > #contenedorAcciones > .contenedorSolicitaDato {
+	width: 100%;
 }

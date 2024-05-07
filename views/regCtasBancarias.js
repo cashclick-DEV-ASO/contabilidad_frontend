@@ -2,7 +2,7 @@ import Vista from "./vista.js"
 import { RegCtasBancariasCtrl as Controlador } from "../controllers/controladores.js"
 import { RegCtasBancariasMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, ListaDesplegable, SolicitaDato, TablaDatos } from "../components/componentes.js"
+import { Botonera, ListaDesplegable, SolicitaDato } from "../components/componentes.js"
 
 import { SYS } from "../src/constantes.js"
 

@@ -16,6 +16,7 @@ export const SYS = {
     LST: "select",
     OPT: "option",
     TXT: "text",
+    PASS: "password",
     TXTAREA: "textarea",
     CHK: "checkbox",
     RAD: "radio",
