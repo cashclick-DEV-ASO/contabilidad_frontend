@@ -1,6 +1,7 @@
 import { Componente } from "./componentes.js"
 
 import { SYS, SOLICITA_DATO } from "../src/constantes.js"
+import { campoMoneda } from "../src/utils.js"
 
 export class SolicitaDato extends Componente {
     constructor(tipo = SYS.TXT) {
@@ -11,13 +12,13 @@ export class SolicitaDato extends Componente {
         this.fechaInicio = null
         this.boton = null
         this.tipo = tipo
+        this.modoMoneda = false
 
         return this.inicia()
     }
 
     inicia() {
         this.setEstilo1()
-
         this.lbl = new Componente(SYS.LBL, { clase: SOLICITA_DATO.LBL })
 
         if (this.tipo === SYS.TXTAREA)
@@ -34,15 +35,17 @@ export class SolicitaDato extends Componente {
 
         if (this.tipo !== SYS.TXTAREA) this.dato.setPropiedad("type", this.tipo)
 
+        this.dato.vaciar()
         this.dato.setPropiedad(SYS.PH, this.txtPlaceholder)
+
+        if (this.fechaInicio) this.dato.getComponente().valueAsDate = this.fechaInicio
+        if (this.modoMoneda) campoMoneda(this.dato.getComponente())
 
         this.addHijos([
             this.lbl.mostrar(),
             this.dato.mostrar(),
             this.boton ? this.btn.mostrar() : null
         ])
-
-        if (this.fechaInicio) this.dato.getComponente().valueAsDate = this.fechaInicio
 
         return this
     }
@@ -79,6 +82,7 @@ export class SolicitaDato extends Componente {
 
     setValor(valor) {
         this.dato.setValor(valor)
+        if (this.modoMoneda) campoMoneda(this.dato.getComponente(), true)
         return this
     }
 
@@ -102,9 +106,11 @@ export class SolicitaDato extends Componente {
     getValor() {
         if (this.tipo === SYS.DT) {
             const fecha = this.dato.getComponente().valueAsDate
+            if (!fecha) return null
             return new Date(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate())
         }
         if (this.tipo === SYS.NMBR) return parseFloat(this.dato.getValor()) || 0
+        if (this.modoMoneda) return this.dato.getValor().replace(/[^\d.]/g, "")
         return this.dato.getValor()
     }
 
@@ -152,34 +158,40 @@ export class SolicitaDato extends Componente {
     }
 
     setModoMoneda(negativo = false) {
-        this.dato.setPropiedad("type", SYS.NMBR)
-        this.dato.setListener(SYS.KDWN, (e) => {
-            if (
-                e.key === "0" ||
-                e.key === "1" ||
-                e.key === "2" ||
-                e.key === "3" ||
-                e.key === "4" ||
-                e.key === "5" ||
-                e.key === "6" ||
-                e.key === "7" ||
-                e.key === "8" ||
-                e.key === "9" ||
-                e.key === "." ||
-                e.key === "Backspace" ||
-                e.key === "Delete" ||
-                e.key === "ArrowLeft" ||
-                e.key === "ArrowRight" ||
-                e.key === "ArrowUp" ||
-                e.key === "ArrowDown" ||
-                e.key === "Tab" ||
-                e.key === "Enter"
-            )
-                return
-            if (negativo && e.key === "-") return
-            e.preventDefault()
-        })
+        this.modoMoneda = true
 
+        this.dato
+            .setListener(SYS.KDWN, (e) => {
+                if (
+                    e.key === "0" ||
+                    e.key === "1" ||
+                    e.key === "2" ||
+                    e.key === "3" ||
+                    e.key === "4" ||
+                    e.key === "5" ||
+                    e.key === "6" ||
+                    e.key === "7" ||
+                    e.key === "8" ||
+                    e.key === "9" ||
+                    e.key === "." ||
+                    e.key === "Backspace" ||
+                    e.key === "Delete" ||
+                    e.key === "ArrowLeft" ||
+                    e.key === "ArrowRight" ||
+                    e.key === "ArrowUp" ||
+                    e.key === "ArrowDown" ||
+                    e.key === "Tab" ||
+                    e.key === "Enter"
+                )
+                    return
+                if (negativo && e.key === "-") return
+                e.preventDefault()
+            })
+            .setListener(SYS.KUP, (e) => campoMoneda(e.target))
+            .setListener(SYS.BLR, (e) => campoMoneda(e.target, true))
+            .setPropiedad("style", "text-align: right")
+
+        campoMoneda(this.dato.getComponente(), true)
         return this
     }
 

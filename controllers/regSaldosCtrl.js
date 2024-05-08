@@ -2,8 +2,6 @@ import Controlador from "./controlador.js"
 
 import { SYS } from "../src/constantes.js"
 
-import { mostrarError } from "../src/utils.js"
-
 export class RegSaldosCtrl extends Controlador {
     constructor(vista, modelo) {
         super(vista, modelo)
@@ -96,35 +94,6 @@ export class RegSaldosCtrl extends Controlador {
             this.limpiaCampos()
             this.acciones.guardar.habilitarBoton(false)
         })
-    }
-
-    formatoNumero = (n) => {
-        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    }
-
-    formatoMoneda = (input, blur = false) => {
-        var input_val = input.value
-        if (input_val === "") return
-        const original_len = input_val.length
-        let caret_pos = input.selectionStart
-        if (input_val.indexOf(".") >= 0) {
-            const decimal_pos = input_val.indexOf(".")
-            let left_side = input_val.substring(0, decimal_pos)
-            let right_side = input_val.substring(decimal_pos)
-            left_side = this.formatoNumero(left_side)
-            right_side = this.formatoNumero(right_side)
-            if (blur) right_side += "00"
-            right_side = right_side.substring(0, 2)
-            input_val = "$" + left_side + "." + right_side
-        } else {
-            input_val = this.formatoNumero(input_val)
-            input_val = "$" + input_val
-            if (blur) input_val += ".00"
-        }
-        input.value = input_val
-        var updated_len = input_val.length
-        caret_pos = updated_len - original_len + caret_pos
-        input.setSelectionRange(caret_pos, caret_pos)
     }
 
     monedaANumero(valor) {

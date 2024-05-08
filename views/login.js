@@ -19,22 +19,27 @@ export class Login extends Componente {
     }
 
     inicia() {
-        this.titulo = new Componente("label", { clase: "lblTitulo" })
-        this.titulo.setTexto("Inicio de sesión")
+        this.titulo = new Componente("label", { clase: "lblTitulo" }).setTexto("Inicio de sesión")
 
         this.imagen = new Componente("img", { clase: "logoLogin" })
-        this.imagen.setPropiedad("src", LOGO)
-        this.imagen.setPropiedad("alt", "Logo")
+            .setPropiedad("src", LOGO)
+            .setPropiedad("alt", "Logo")
 
-        this.usuario = new Componente("input", { clase: "inputLogin" })
-        this.usuario.setPropiedad("placeholder", "Usuario")
+        this.usuario = new Componente("input", { clase: "inputLogin" }).setPropiedad(
+            "placeholder",
+            "Usuario"
+        )
 
         this.password = new Componente("input", { clase: "inputLogin" })
-        this.password.setPropiedad("type", "password")
-        this.password.setPropiedad("placeholder", "Contraseña")
+            .setPropiedad("type", "password")
+            .setPropiedad("placeholder", "Contraseña")
 
-        this.btnLogin = new Componente("button", { clase: "btnLogin" })
-        this.btnLogin.setTexto("Iniciar sesión")
+        this.btnLogin = new Componente("button", { clase: "btnLogin" }).setTexto("Iniciar sesión")
+
+        this.gToken = new Componente("input", { clase: "inputLogin", id: "gToken" }).setPropiedad(
+            "type",
+            "hidden"
+        )
 
         this.setListener("submit", this.controlador.login)
 
@@ -43,7 +48,8 @@ export class Login extends Componente {
             this.titulo.mostrar(),
             this.usuario.mostrar(),
             this.password.mostrar(),
-            this.btnLogin.mostrar()
+            this.btnLogin.mostrar(),
+            this.gToken.mostrar()
         ])
         return this
     }

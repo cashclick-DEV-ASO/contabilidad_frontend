@@ -5,6 +5,7 @@ import { RegTrnBancosMdl as Modelo } from "../models/modelos.js"
 import {
     Periodo,
     SolicitaArchivo,
+    SolicitaDato,
     TablaDatos,
     ListaDesplegable,
     Botonera
@@ -48,7 +49,9 @@ export class RegTrnBancos extends Vista {
             .habilitarBoton(false)
             .setListener(this.controlador.guardar)
 
-        this.datos.tabla = new TablaDatos().setID("tabla")
+        this.datos.tabla = new TablaDatos()
+            .setID("tabla")
+            .setValidaModificacion(this.controlador.validaModificacion)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteFiltro = true
@@ -81,6 +84,38 @@ export class RegTrnBancos extends Vista {
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false
             this.datos.tabla.mostrarNoFila = true
+        }
+
+        this.datos.tabla.camposEspeciales = {
+            Fecha_Operación: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Operación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            Fecha_Valor: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Valor")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            Monto: () => {
+                return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
+            },
+            Tipo_Movimiento: () => {
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Tipo Movimiento")
+                    .setEstilo1()
+                    .setOpciones([
+                        { texto: "No Identificado", valor: "0" },
+                        { texto: "Cargo", valor: "1" },
+                        { texto: "Abono", valor: "2" }
+                    ])
+            }
         }
 
         this.controlador.cargaInicial()

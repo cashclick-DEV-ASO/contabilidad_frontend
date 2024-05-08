@@ -1,6 +1,7 @@
 import { MSJ_CONTENEDOR_CLS } from "../src/constantes.js"
 import Botonera from "./botonera.js"
 
+import { SYS } from "../src/constantes.js"
 import { Componente, ListaDesplegable, SolicitaDato } from "../components/componentes.js"
 
 /**
@@ -170,13 +171,19 @@ export class Editor extends Componente {
         return campos
     }
 
-    campoEspecial(campo, valor) {
+    campoEspecial(campo, valor = null) {
+        if (campo instanceof SolicitaDato && valor) {
+            if (campo.tipo === "date") campo.setValorFecha(valor)
+            else campo.setValor(valor)
+        }
+
         this.campos.push(campo)
         this.datos.addHijo(campo.mostrar())
 
-        if (campo instanceof ListaDesplegable) campo.setSeleccionByTexto(valor)
-        if (campo instanceof SolicitaDato) campo.setValor(valor)
-
+        if (campo instanceof ListaDesplegable && valor) {
+            campo.setSeleccionByTexto(valor)
+            if (campo.getValorSeleccionado() === SYS.DFLT) campo.setSeleccionByValor(valor)
+        }
         return this
     }
 }

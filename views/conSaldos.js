@@ -41,6 +41,7 @@ export class ConSaldos extends Vista {
             .setTxtEtiqueta("Fecha Inicial")
             .setValorFecha(new Date())
             .setPropiedad("max", new Date().toISOString().split("T")[0])
+            .setPropiedad("min", "2020-01-01")
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
@@ -50,6 +51,7 @@ export class ConSaldos extends Vista {
             .setTxtEtiqueta("Fecha Final")
             .setValorFecha(new Date())
             .setPropiedad("max", new Date().toISOString().split("T")[0])
+            .setPropiedad("min", "2020-01-01")
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 
@@ -71,7 +73,7 @@ export class ConSaldos extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -82,7 +84,7 @@ export class ConSaldos extends Vista {
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -97,6 +99,20 @@ export class ConSaldos extends Vista {
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false
             this.datos.tabla.mostrarNoFila = true
+        }
+
+        this.datos.tabla.camposEspeciales = {
+            fecha: () =>
+                new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0]),
+            saldo_inicial: () =>
+                new SolicitaDato().setTxtEtiqueta("Saldo Inicial").setEstilo1().setModoMoneda(),
+            saldo_final: () =>
+                new SolicitaDato().setTxtEtiqueta("Saldo Inicial").setEstilo1().setModoMoneda()
         }
 
         this.controlador.cargaInicial()

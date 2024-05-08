@@ -22,9 +22,9 @@ export class ConUsuariosMdl extends Modelo {
             query: `UPDATE usuario SET nombre1 = ?, nombre2 = ?, apellido1 = ?, apellido2 = ?, usuario = ?, id_perfil = ?, activo = ? WHERE id = ?`,
             parametros: [
                 datos.primer_nombre,
-                datos.segundo_nombre,
+                datos.segundo_nombre || null,
                 datos.primer_apellido,
-                datos.segundo_apellido,
+                datos.segundo_apellido || null,
                 datos.usuario,
                 datos.perfil,
                 datos.activo,

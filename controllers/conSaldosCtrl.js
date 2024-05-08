@@ -10,31 +10,9 @@ export class ConSaldosCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            fecha: (dato) => {
-                return new Date(dato).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                })
-            },
-            saldo_inicial: (dato) => {
-                const numero = parseFloat(dato)
-                if (isNaN(numero)) return dato
-
-                return numero.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            },
-            saldo_final: (dato) => {
-                const numero = parseFloat(dato)
-                if (isNaN(numero)) return dato
-
-                return numero.toLocaleString("es-MX", {
-                    style: "currency",
-                    currency: "MXN"
-                })
-            }
+            fecha: this.formatoFecha,
+            saldo_inicial: this.formatoMoneda,
+            saldo_final: this.formatoMoneda
         }
     }
 

@@ -1,4 +1,5 @@
 import Controlador from "./controlador.js"
+import { SYS } from "../src/constantes.js"
 
 export class RegTrnBancosCtrl extends Controlador {
     constructor(vista, modelo) {
@@ -271,6 +272,36 @@ export class RegTrnBancosCtrl extends Controlador {
 
     fechaMysql = (fecha) => {
         return fecha.toISOString().slice(0, 19).replace("T", " ")
+    }
+
+    validaModificacion = (datos) => {
+        return Object.keys(datos).some((dato) => {
+            if (dato === "Fecha_Operación" || dato === "Fecha_Valor") {
+                const fecha = new Date(datos[dato])
+                if (isNaN(fecha.getTime())) {
+                    this.msjError(`La ${dato.replace(/_/g, " ")} no es válida.`)
+                    return true
+                }
+                if (fecha < new Date("2020-01-01")) {
+                    this.msjError(`La ${dato.replace(/_/g, " ")} no puede ser menor al 01/01/2020.`)
+                    return true
+                }
+                if (fecha > new Date()) {
+                    this.msjError(
+                        `La ${dato.replace(/_/g, " ")} no puede ser mayor a la del día actual.`
+                    )
+                    return true
+                }
+            }
+            if (dato === "Monto") {
+                if (datos[dato] < 1) {
+                    this.msjError(`El campo ${dato} debe ser mayor a cero.`)
+                    return true
+                }
+            }
+            if (dato === "Tipo_Movimiento" && datos[dato] === SYS.DFLT)
+                return this.msjError("El tipo de movimiento no puede quedar en blanco.")
+        })
     }
 }
 

@@ -52,7 +52,7 @@ export class Controlador {
 
     tipoMovimiento = (dato) => {
         const tipos = ["No Identificado", "Cargo", "Abono"]
-        return tipos[dato]
+        return tipos[dato] || "No Identificado"
     }
 
     /**

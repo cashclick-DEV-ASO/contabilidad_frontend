@@ -48,12 +48,7 @@ export class RegSaldos extends Vista {
             .setTxtEtiqueta("Saldo Inicial")
             .setTxtPlaceholder("$1,000,000.00")
             .setEstilo4()
-            .setListener(SYS.BLR, () =>
-                this.controlador.formatoMoneda(this.acciones.inicial.dato.getComponente(), true)
-            )
-            .setListener(SYS.KUP, () =>
-                this.controlador.formatoMoneda(this.acciones.inicial.dato.getComponente())
-            )
+            .setModoMoneda()
             .setListener(SYS.IN, this.controlador.validaModificacion)
 
         this.acciones.final = new SolicitaDato()
@@ -61,12 +56,7 @@ export class RegSaldos extends Vista {
             .setTxtEtiqueta("Saldo Final")
             .setTxtPlaceholder("$1,000,000.00")
             .setEstilo4()
-            .setListener(SYS.BLR, () =>
-                this.controlador.formatoMoneda(this.acciones.final.dato.getComponente(), true)
-            )
-            .setListener(SYS.KUP, () =>
-                this.controlador.formatoMoneda(this.acciones.final.dato.getComponente())
-            )
+            .setModoMoneda()
             .setListener(SYS.IN, this.controlador.validaModificacion)
 
         this.acciones.guardar = new Botonera()

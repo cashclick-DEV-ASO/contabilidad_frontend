@@ -46,6 +46,7 @@ export class TablaDatos extends Componente {
             .setTxtEtiqueta(TABLA.TXT_LBL_FILTRO)
             .setEstilo2()
             .setTxtPhLleno("Cualquier columna")
+            .setTxtPhVacio("Sin opciones")
             .setBloquearPh(false)
             .setListener(SYS.CHNG, this.limpiarFiltro.bind(this))
 
@@ -366,16 +367,34 @@ export class TablaDatos extends Componente {
                         if (this.mostrarNoFila && campo === "No") return
                         const datoEjemplo = this.filas.length > 0 ? this.filas[0][indice] : ""
                         const tipo = this.tiposInput[this.tipoDato(datoEjemplo)]
+                        if (this.camposEspeciales[campo]) {
+                            editor.campoEspecial(this.camposEspeciales[campo]())
+                            return
+                        }
+
                         editor.addCampo(this.limpiarTitulo(campo), "", tipo)
                     })
 
                     editor.setAccionModificar((cerrar) => {
                         const msjInfo = new Controlador().msjProcesando("Agregando fila...")
                         const campos = editor.getCampos()
-                        const fila = campos.map((campo) => campo.getValor())
-                        if (this.validaModificacion && this.validaModificacion(fila)) return
-                        if (this.mostrarNoFila) fila.unshift(this.filas.length + 1)
-                        this.filas.push(fila)
+                        const datos = {}
+                        const newDatos = campos.map((campo) => {
+                            if (campo instanceof ListaDesplegable)
+                                return campo.getValorSeleccionado()
+                            return campo.getValor()
+                        })
+
+                        this.encabezados.forEach((campo, indice) => {
+                            if (this.mostrarNoFila && indice === 0) return
+                            let i = this.mostrarNoFila ? indice - 1 : indice
+                            datos[campo] = newDatos[i]
+                        })
+                        if (this.validaModificacion && this.validaModificacion(datos))
+                            return msjInfo.ocultar()
+
+                        if (this.mostrarNoFila) newDatos.unshift(this.filas.length + 1)
+                        this.filas.push(newDatos)
                         this.actualizaTabla({ updtFiltro: false })
                         msjInfo.ocultar()
                         new Controlador().msjExito("Fila agregada correctamente.")
@@ -494,7 +513,7 @@ export class TablaDatos extends Componente {
             const datos = this.filas[celda.parentElement.rowIndex - 1]
             const tipo = this.tiposInput[this.tipoDato(datos[indice])]
             if (this.camposEspeciales[campo]) {
-                editor.campoEspecial(this.camposEspeciales[campo], datos[indice])
+                editor.campoEspecial(this.camposEspeciales[campo](), datos[indice])
                 return
             }
 
@@ -521,16 +540,23 @@ export class TablaDatos extends Componente {
                     this.modifcaBaseDatos(datos)
                 } else {
                     const msjInfo = new Controlador().msjProcesando("Actualizando fila...")
-                    const oldFila = this.filas[celda.parentElement.rowIndex - 1]
-                    const newFila = campos.map((campo) => campo.getValor())
-                    if (this.validaModificacion && this.validaModificacion(newFila)) return
-
-                    oldFila.forEach((valor, indice) => {
-                        if (this.mostrarNoFila && indice === 0) return
-                        let i = this.mostrarNoFila ? indice - 1 : indice
-                        oldFila[indice] = newFila[i]
+                    const campos = editor.getCampos()
+                    const datos = {}
+                    const newDatos = campos.map((campo) => {
+                        if (campo instanceof ListaDesplegable) return campo.getValorSeleccionado()
+                        return campo.getValor()
                     })
 
+                    this.encabezados.forEach((campo, indice) => {
+                        if (this.mostrarNoFila && indice === 0) return
+                        let i = this.mostrarNoFila ? indice - 1 : indice
+                        datos[campo] = newDatos[i]
+                    })
+                    if (this.validaModificacion && this.validaModificacion(datos))
+                        return msjInfo.ocultar()
+
+                    if (this.mostrarNoFila) newDatos.unshift(celda.parentElement.rowIndex)
+                    this.filas[celda.parentElement.rowIndex - 1] = newDatos
                     this.actualizaTabla({ updtFiltro: false })
                     msjInfo.ocultar()
                     new Controlador().msjExito("Fila actualizada correctamente.")

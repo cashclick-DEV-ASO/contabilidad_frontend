@@ -30,8 +30,8 @@ export class ListaDesplegable extends Componente {
     configura() {
         this.vaciar()
 
+        this.lista.vaciar()
         this.configuraPlaceholder()
-
         this.lista.habilitar(!(this.opciones.length === 0))
 
         this.opciones.forEach((opcion) => {
