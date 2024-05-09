@@ -7,7 +7,7 @@ import {
     Editor,
     Mensaje
 } from "./componentes.js"
-
+// prueba
 import { SYS, TABLA } from "../src/constantes.js"
 import Controlador from "../controllers/controlador.js"
 
