@@ -20,24 +20,6 @@ export class ConNoConciliacionCtrl extends Controlador {
         }
     }
 
-    formatoModena = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
-    formatoFecha = (dato) => {
-        return new Date(dato).toLocaleDateString("es-MX", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        })
-    }
-
     buscar = () => {
         let msj = this.msjProcesando("Consultando transacciones NO conciliadas...")
         this.datos.tabla.limpiar()

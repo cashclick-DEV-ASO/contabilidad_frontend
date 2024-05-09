@@ -52,16 +52,38 @@ export class ConTrnMambuCtrl extends Controlador {
     }
 
     validaModificacion = (datos) => {
-        const encabezados = this.datos.tabla.getEncabezados()
-        return datos.some((dato, indice) => {
-            const i = this.datos.tabla.mostrarNoFila ? indice + 1 : indice
-            if (encabezados[i].toLowerCase() === "monto") {
-                if (dato < 1) {
-                    this.msjError("El monto debe ser mayor a cero.")
+        return Object.keys(datos).some((dato) => {
+            if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
+                const fecha = new Date(datos[dato])
+                if (isNaN(fecha.getTime())) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
+                    return true
+                }
+                if (fecha < new Date("2020-01-01")) {
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser menor a 01/01/2024.`
+                    )
+                    return true
+                }
+                if (fecha > new Date()) {
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser mayor a la fecha actual.`
+                    )
                     return true
                 }
             }
-            return false
+            if (dato.toLowerCase() === "monto") {
+                if (datos[dato] < 1) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "cliente" || dato.toLowerCase() === "credito") {
+                if (datos[dato] === "") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+            }
         })
     }
 }

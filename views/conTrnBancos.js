@@ -97,6 +97,38 @@ export class ConTrnBancos extends Vista {
             this.datos.tabla.mostrarNoFila = true
         }
 
+        this.datos.tabla.camposEspeciales = {
+            fecha_creacion: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Operación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            fecha_valor: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Valor")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            monto: () => {
+                return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
+            },
+            tipo: () => {
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Tipo Movimiento")
+                    .setEstilo1()
+                    .setOpciones([
+                        { texto: "No Identificado", valor: "0" },
+                        { texto: "Cargo", valor: "1" },
+                        { texto: "Abono", valor: "2" }
+                    ])
+            }
+        }
+
         this.controlador.cargaInicial()
 
         return this

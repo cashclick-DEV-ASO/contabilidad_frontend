@@ -15,16 +15,6 @@ export class RecalculoCapitalCtrl extends Controlador {
         }
     }
 
-    formatoMoneda = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
     consultar = async () => {
         if (this.datos.tabla.getFilas().length > 0) {
             this.datos.tabla.limpiar()

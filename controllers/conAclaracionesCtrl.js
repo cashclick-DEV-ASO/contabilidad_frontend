@@ -15,16 +15,6 @@ export class ConAclaracionesCtrl extends Controlador {
         }
     }
 
-    formatoMoneda = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
     cargaInicial = async () => {
         this.acciones.estatus.setOpciones([
             { texto: "Abierto", valor: 1 },

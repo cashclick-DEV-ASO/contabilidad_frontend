@@ -70,6 +70,57 @@ export class RegTrnDWHCtrl extends Controlador {
             if (cerrar) cerrar()
         })
     }
+
+    validaModificacion = (datos) => {
+        return Object.keys(datos).some((dato) => {
+            if (
+                dato.toLowerCase() === "fecha_inicio" ||
+                dato.toLowerCase() === "fecha_aprobacion"
+            ) {
+                const fecha = new Date(datos[dato])
+                if (isNaN(fecha.getTime())) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
+                    return true
+                }
+                if (fecha < new Date("2020-01-01")) {
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser menor a la fecha mínima.`
+                    )
+                    return true
+                }
+                if (fecha > new Date()) {
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser mayor a la fecha actual.`
+                    )
+                    return true
+                }
+            }
+            if (
+                dato.toLowerCase() === "capital" ||
+                dato.toLowerCase() === "interes" ||
+                dato.toLowerCase() === "iva" ||
+                dato.toLowerCase() === "total"
+            ) {
+                if (datos[dato] < 1) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
+                    return true
+                }
+            }
+            if (
+                dato.toLowerCase() === "id_cliente" ||
+                dato.toLowerCase() === "nombre" ||
+                dato.toLowerCase() === "rfc" ||
+                dato.toLowerCase() === "curp" ||
+                dato.toLowerCase() === "credito" ||
+                dato.toLowerCase() === "movimiento"
+            ) {
+                if (datos[dato] === "") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+            }
+        })
+    }
 }
 
 export default RegTrnDWHCtrl

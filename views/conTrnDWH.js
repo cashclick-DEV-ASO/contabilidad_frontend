@@ -64,7 +64,7 @@ export class ConTrnDWH extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -72,10 +72,10 @@ export class ConTrnDWH extends Vista {
 
         if (this.perfil == 3) {
             this.datos.tabla.permiteFiltro = true
-            this.datos.tabla.permiteEditar = false
+            this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -90,6 +90,56 @@ export class ConTrnDWH extends Vista {
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false
             this.datos.tabla.mostrarNoFila = true
+        }
+
+        this.datos.tabla.camposEspeciales = {
+            monto: () => {
+                return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
+            },
+            capital: () => {
+                return new SolicitaDato().setTxtEtiqueta("Capital").setEstilo1().setModoMoneda()
+            },
+            interes: () => {
+                return new SolicitaDato().setTxtEtiqueta("Interés").setEstilo1().setModoMoneda()
+            },
+            iva_interes: () => {
+                return new SolicitaDato().setTxtEtiqueta("IVA interés").setEstilo1().setModoMoneda()
+            },
+            penalizacion: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Penalización")
+                    .setEstilo1()
+                    .setModoMoneda()
+            },
+            iva_penalizacion: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("IVA penalización")
+                    .setEstilo1()
+                    .setModoMoneda()
+            },
+            fecha_creacion: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Creación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            fecha_valor: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Valor")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            tipo: () => {
+                return new ListaDesplegable().setTxtEtiqueta("Tipo").setOpciones([
+                    { valor: 0, texto: "No Identificado" },
+                    { valor: 1, texto: "Cargo" },
+                    { valor: 2, texto: "Abono" }
+                ])
+            }
         }
 
         this.controlador.cargaInicial()

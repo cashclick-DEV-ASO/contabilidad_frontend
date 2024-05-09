@@ -14,16 +14,6 @@ export class ConCtasBancariasCtrl extends Controlador {
         }
     }
 
-    formatoModena = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
     cargaInicial = () => {
         this.acciones.banco.setTemporalPH("Cargando bancos...")
         this.llenaListaBancos().then(() => this.acciones.banco.actulizaOpciones(this.bancos))

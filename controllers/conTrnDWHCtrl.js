@@ -12,12 +12,12 @@ export class ConTrnDWHCtrl extends Controlador {
         this.formatoTabla = {
             fecha_creacion: this.formatoFecha,
             fecha_valor: this.formatoFecha,
-            monto: this.formatoModena,
-            capital: this.formatoModena,
-            interes: this.formatoModena,
-            iva_interes: this.formatoModena,
-            penalizacion: this.formatoModena,
-            iva_penalizacion: this.formatoModena,
+            monto: this.formatoMoneda,
+            capital: this.formatoMoneda,
+            interes: this.formatoMoneda,
+            iva_interes: this.formatoMoneda,
+            penalizacion: this.formatoMoneda,
+            iva_penalizacion: this.formatoMoneda,
             tipo: (dato) => {
                 const tipos = ["No Identificado", "Cargo", "Abono"]
                 return tipos[dato]
@@ -29,27 +29,7 @@ export class ConTrnDWHCtrl extends Controlador {
         ]
     }
 
-    formatoModena = (dato) => {
-        const numero = parseFloat(dato)
-        if (isNaN(numero)) return dato
-
-        return numero.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-        })
-    }
-
-    formatoFecha = (dato) => {
-        return new Date(dato).toLocaleDateString("es-MX", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        })
-    }
-
-    cargaInicial = () => {
-        this.acciones.tipo.setOpciones(this.opciones)
-    }
+    cargaInicial = () => this.acciones.tipo.setOpciones(this.opciones)
 
     cambiaFechaI = () => {
         if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
@@ -97,39 +77,52 @@ export class ConTrnDWHCtrl extends Controlador {
 
     validaModificacion = (datos) => {
         return Object.keys(datos).some((dato) => {
-            if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
+            if (
+                dato.toLowerCase() === "fecha_inicio" ||
+                dato.toLowerCase() === "fecha_aprobacion"
+            ) {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {
-                    this.msjError("La fecha no es válida.")
+                    this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
                     return true
                 }
                 if (fecha < new Date("2020-01-01")) {
-                    this.msjError(`El campo ${dato} no puede ser menor a la fecha mínima.`)
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser menor a la fecha mínima.`
+                    )
                     return true
                 }
                 if (fecha > new Date()) {
-                    this.msjError(`El campo ${dato} no puede ser mayor a la fecha actual.`)
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser mayor a la fecha actual.`
+                    )
                     return true
                 }
             }
             if (
-                dato.toLowerCase() === "monto" ||
                 dato.toLowerCase() === "capital" ||
                 dato.toLowerCase() === "interes" ||
-                dato.toLowerCase() === "iva_interes"
+                dato.toLowerCase() === "iva" ||
+                dato.toLowerCase() === "total"
             ) {
                 if (datos[dato] < 1) {
-                    this.msjError(`El campo ${dato} debe ser mayor a cero.`)
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
                     return true
                 }
             }
-            if (dato.toLowerCase() === "tipo") {
-                if (datos[dato] != 1 && datos[dato] != 2) {
-                    this.msjError(`El campo ${dato} no es válido, debe ser 1 (cargo) o 2 (abono).`)
+            if (
+                dato.toLowerCase() === "id_cliente" ||
+                dato.toLowerCase() === "nombre" ||
+                dato.toLowerCase() === "rfc" ||
+                dato.toLowerCase() === "curp" ||
+                dato.toLowerCase() === "credito" ||
+                dato.toLowerCase() === "movimiento"
+            ) {
+                if (datos[dato] === "") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
                     return true
                 }
             }
-            return false
         })
     }
 }

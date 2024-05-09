@@ -126,6 +126,57 @@ export class RegTrnMambuCtrl extends Controlador {
             if (cerrar) cerrar()
         })
     }
+
+    validaModificacion = (datos) => {
+        const fechas = ["Fecha reporte", "Fecha de inicio del crédito", "Fecha de pago"]
+
+        const montos = [
+            "Monto Crédito",
+            "Importe Pago",
+            "Capital pagado",
+            "Interés pagado",
+            "Iva interés pagado",
+            "Interés moratorio pagado",
+            "Iva interés moratorio pagado",
+            "Cartera Vigente Total",
+            "Cartera VencidaTotal",
+            "Cartera VencidaTotal"
+        ]
+
+        return Object.keys(datos).some((dato) => {
+            if (fechas.includes(dato)) {
+                const fecha = new Date(datos[dato])
+                if (isNaN(fecha.getTime())) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
+                    return true
+                }
+                if (fecha < new Date("2020-01-01")) {
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser menor a 01/01/2024.`
+                    )
+                    return true
+                }
+                if (fecha > new Date()) {
+                    this.msjError(
+                        `El campo ${dato.replace("_", " ")} no puede ser mayor a la fecha actual.`
+                    )
+                    return true
+                }
+            }
+            if (montos.includes(dato)) {
+                if (datos[dato] < 1) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
+                    return true
+                }
+            }
+            if (dato === "ID cliente" || dato === "Nombre cliente" || dato === "ID crédito") {
+                if (datos[dato] === "") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+            }
+        })
+    }
 }
 
 export default RegTrnMambuCtrl

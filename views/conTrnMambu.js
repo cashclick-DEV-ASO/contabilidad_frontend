@@ -2,7 +2,7 @@ import Vista from "./vista.js"
 import { ConTrnMambuCtrl as Controlador } from "../controllers/controladores.js"
 import { ConTrnMambuMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, SolicitaDato, TablaDatos } from "../components/componentes.js"
+import { Botonera, ListaDesplegable, SolicitaDato, TablaDatos } from "../components/componentes.js"
 
 import { SYS } from "../src/constantes.js"
 import { leerCookie } from "../src/utils.js"
@@ -29,6 +29,8 @@ export class ConTrnMambu extends Vista {
             .setTxtEtiqueta("Fecha Inicial")
             .setValorFecha(new Date())
             .setEstilo2()
+            .setPropiedad("min", "2020-01-01")
+            .setPropiedad("max", new Date().toISOString().split("T")[0])
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
         this.acciones.fechaF = new SolicitaDato()
@@ -37,6 +39,8 @@ export class ConTrnMambu extends Vista {
             .setTxtEtiqueta("Fecha Final")
             .setValorFecha(new Date())
             .setEstilo2()
+            .setPropiedad("min", "2020-01-01")
+            .setPropiedad("max", new Date().toISOString().split("T")[0])
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 
         this.acciones.buscar = new Botonera()
@@ -60,7 +64,7 @@ export class ConTrnMambu extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -71,7 +75,7 @@ export class ConTrnMambu extends Vista {
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -86,6 +90,38 @@ export class ConTrnMambu extends Vista {
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false
             this.datos.tabla.mostrarNoFila = true
+        }
+
+        this.datos.tabla.camposEspeciales = {
+            fecha_creacion: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Creación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            fecha_valor: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Valor")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            monto: () => {
+                return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
+            },
+            tipo: () => {
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Tipo")
+                    .setEstilo1()
+                    .setOpciones([
+                        { valor: 0, texto: "No Identificado" },
+                        { valor: 1, texto: "Cargo" },
+                        { valor: 2, texto: "Abono" }
+                    ])
+            }
         }
 
         return this

@@ -2,7 +2,13 @@ import Vista from "./vista.js"
 import { RegTrnDWHCtrl as Controlador } from "../controllers/controladores.js"
 import { RegTrnDWHMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, Periodo, SolicitaArchivo, TablaDatos } from "../components/componentes.js"
+import {
+    Botonera,
+    Periodo,
+    SolicitaArchivo,
+    TablaDatos,
+    SolicitaDato
+} from "../components/componentes.js"
 import { leerCookie } from "../src/utils.js"
 
 const REG_TRN_DWH = {
@@ -38,12 +44,14 @@ export class RegTrnDWH extends Vista {
             .habilitarBoton(false)
             .setListener(this.controlador.guardar)
 
-        this.datos.tabla = new TablaDatos().setID("tabla")
+        this.datos.tabla = new TablaDatos()
+            .setID("tabla")
+            .setValidaModificacion(this.controlador.validaModificacion)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = true
-            this.datos.tabla.permiteExportar = true
+            this.datos.tabla.permiteExportar = false
             this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = true
@@ -72,6 +80,38 @@ export class RegTrnDWH extends Vista {
             this.datos.tabla.permiteModificar = false
             this.datos.tabla.mostrarNoFila = true
         }
+
+        this.datos.tabla.camposEspeciales = {
+            capital: () => {
+                return new SolicitaDato().setTxtEtiqueta("Capital").setEstilo1().setModoMoneda()
+            },
+            interes: () => {
+                return new SolicitaDato().setTxtEtiqueta("Interés").setEstilo1().setModoMoneda()
+            },
+            iva: () => {
+                return new SolicitaDato().setTxtEtiqueta("IVA").setEstilo1().setModoMoneda()
+            },
+            total: () => {
+                return new SolicitaDato().setTxtEtiqueta("Total").setEstilo1().setModoMoneda()
+            },
+            "fecha inicio": () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Inicio")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            "fecha aprobacion": () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Aprobación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            }
+        }
+
         return this
     }
 }
