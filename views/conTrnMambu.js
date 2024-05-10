@@ -25,22 +25,16 @@ export class ConTrnMambu extends Vista {
 
         this.acciones.fechaI = new SolicitaDato()
             .setID("fechaI")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Inicial")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setEstilo2()
-            .setPropiedad("min", "2020-01-01")
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
         this.acciones.fechaF = new SolicitaDato()
             .setID("fechaF")
-            .setTipo("date")
+            .setModoFecha()
             .setTxtEtiqueta("Fecha Final")
-            .setValorFecha(new Date())
             .setEstilo2()
-            .setPropiedad("min", "2020-01-01")
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 
         this.acciones.buscar = new Botonera()
@@ -64,7 +58,7 @@ export class ConTrnMambu extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -75,7 +69,7 @@ export class ConTrnMambu extends Vista {
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true

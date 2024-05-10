@@ -25,15 +25,14 @@ export class ConTrnDWH extends Vista {
 
         this.acciones.fechaI = new SolicitaDato(SYS.DT)
             .setID("fechaI")
-            .setModoFecha()
             .setTxtEtiqueta("Fecha Inicial")
+            .setModoFecha()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
         this.acciones.fechaF = new SolicitaDato(SYS.DT)
             .setID("fechaF")
-            .setModoFecha()
             .setTxtEtiqueta("Fecha Final")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 
         this.acciones.tipo = new ListaDesplegable()
@@ -64,7 +63,7 @@ export class ConTrnDWH extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -72,10 +71,10 @@ export class ConTrnDWH extends Vista {
 
         if (this.perfil == 3) {
             this.datos.tabla.permiteFiltro = true
-            this.datos.tabla.permiteEditar = true
+            this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true

@@ -28,20 +28,9 @@
 	align-items: center;
 }
 
-.liMenu:hover,
-.liSubMenu:hover {
-	color: var(--azul_claro);
-	cursor: pointer;
-}
-
 .liMenu .ulSubMenu {
 	border-radius: 0 0 15px 15px;
 	display: none;
-}
-
-.liMenu:hover > .ulSubMenu {
-	display: block;
-	animation: mostrar 0.5s forwards;
 }
 
 .ulSubMenu {
@@ -70,11 +59,23 @@
 	border-radius: 0 15px 15px 15px;
 }
 
-.liSubMenu:hover > .ulSubMenu {
+.liMenu.miHover,
+.liSubMenu.miHover {
+	color: var(--azul_claro);
+	cursor: pointer;
+}
+
+.liMenu.miHover > .ulSubMenu {
+	display: block;
 	animation: mostrar 0.5s forwards;
 }
 
-.liSubMenu:hover > .ulSubMenu {
+.liSubMenu.miHover > .ulSubMenu {
+	animation: mostrar 0.5s forwards;
+}
+
+
+.liSubMenu.miHover > .ulSubMenu {
 	display: block;
 	animation: mostrar 0.5s forwards;
 }

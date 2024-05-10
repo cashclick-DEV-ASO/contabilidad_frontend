@@ -57,7 +57,7 @@ export class RegTrnMambu extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -66,7 +66,7 @@ export class RegTrnMambu extends Vista {
         if (this.perfil == 3) {
             this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = true
-            this.datos.tabla.permiteExportar = true
+            this.datos.tabla.permiteExportar = false
             this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = false

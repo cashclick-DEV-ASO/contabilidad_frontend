@@ -83,8 +83,15 @@ export class RegTrnBancosMdl extends Modelo {
 
     async guardar(edoCta) {
         const datID = {
-            query: "INSERT INTO edo_cta (periodo, archivo, fecha_captura, id_cuenta) VALUES (?, ?, ?, ?)",
-            parametros: [edoCta.periodo, edoCta.archivo, edoCta.fecha_carga, edoCta.id_cuenta]
+            query: "INSERT INTO edo_cta (periodo, archivo, fecha_captura, id_cuenta, id_banco, id_layout) VALUES (?, ?, ?, ?, ?, ?)",
+            parametros: [
+                edoCta.periodo,
+                edoCta.archivo,
+                edoCta.fecha_carga,
+                edoCta.id_cuenta,
+                edoCta.id_banco,
+                edoCta.id_layout
+            ]
         }
 
         const id_edo_cta = await this.post("noConfig", datID)
@@ -105,14 +112,12 @@ export class RegTrnBancosMdl extends Modelo {
                 this.txtToFechaMysql(trn.fecha_valor),
                 trn.concepto,
                 trn.tipo,
-                this.monedaToFloat(trn.monto),
-                edoCta.id_layout,
-                trn.id_banco
+                this.monedaToFloat(trn.monto)
             ]
         })
 
         const datos = {
-            query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto, id_layout, id_banco) VALUES ?",
+            query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto) VALUES ?",
             parametros: [trnsToSend]
         }
 

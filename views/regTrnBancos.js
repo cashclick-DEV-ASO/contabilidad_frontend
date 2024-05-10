@@ -58,7 +58,7 @@ export class RegTrnBancos extends Vista {
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
@@ -115,6 +115,38 @@ export class RegTrnBancos extends Vista {
                         { texto: "Cargo", valor: "1" },
                         { texto: "Abono", valor: "2" }
                     ])
+            },
+            Fecha_Creación: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Creación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            Fecha_Pago: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Pago")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            "Fecha Captura": () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Captura")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            "Fecha Operación": () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Operación")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             }
         }
 

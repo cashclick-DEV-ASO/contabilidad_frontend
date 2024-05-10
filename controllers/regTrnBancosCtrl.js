@@ -173,8 +173,7 @@ export class RegTrnBancosCtrl extends Controlador {
                     fecha_valor: trn.fechavalor,
                     concepto: trn.idoperación,
                     tipo: trn.tipomovimiento === "Cargo" ? 1 : 2,
-                    monto: trn.monto,
-                    id_banco: this.banco.valor
+                    monto: trn.monto
                 }
             }),
             msj,
@@ -254,6 +253,7 @@ export class RegTrnBancosCtrl extends Controlador {
             fecha_carga: this.fechaMysql(new Date()),
             id_cuenta: this.banco.valor,
             id_layout: this.layout.valor,
+            id_banco: this.banco.valor,
             trns
         }
 
@@ -275,8 +275,17 @@ export class RegTrnBancosCtrl extends Controlador {
     }
 
     validaModificacion = (datos) => {
+        const fechas = [
+            "Fecha_Operación",
+            "Fecha_Valor",
+            "Fecha_Creación",
+            "Fecha_Pago",
+            "Fecha Captura",
+            "Fecha Operación"
+        ]
+
         return Object.keys(datos).some((dato) => {
-            if (dato === "Fecha_Operación" || dato === "Fecha_Valor") {
+            if (fechas.includes(dato)) {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {
                     this.msjError(`La ${dato.replace(/_/g, " ")} no es válida.`)

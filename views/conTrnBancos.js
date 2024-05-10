@@ -25,17 +25,15 @@ export class ConTrnBancos extends Vista {
 
         this.acciones.fechaI = new SolicitaDato()
             .setID("fechaI")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Inicial")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
         this.acciones.fechaF = new SolicitaDato()
             .setID("fechaF")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Final")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 

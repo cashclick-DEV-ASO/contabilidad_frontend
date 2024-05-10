@@ -51,9 +51,9 @@ export class RegTrnDWH extends Vista {
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = true
-            this.datos.tabla.permiteExportar = false
+            this.datos.tabla.permiteExportar = true
             this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = true
+            this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true

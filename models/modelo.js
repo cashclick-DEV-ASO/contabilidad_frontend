@@ -44,7 +44,7 @@ export class Modelo {
 
             if (!this.response.ok) throw new Error(`HTTP error! status: ${this.response.status}`)
         } catch (error) {
-            // if (this.response) this.resultado = await this.response.json()
+            if (this.response) this.resultado = await this.response.json()
 
             const mensaje = this.response
                 ? this.mensajesError[this.response.status]

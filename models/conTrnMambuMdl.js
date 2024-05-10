@@ -20,7 +20,7 @@ export class ConTrnMambuMdl extends Modelo {
         }
 
         const datosEnvio = {
-            query: `SELECT id, fecha_creacion, fecha_valor, cliente, credito, identificador_bancario, concepto, tipo, monto, informacion FROM transaccion_mambu WHERE ${filtros.join(
+            query: `SELECT id, periodo, fecha_creacion, fecha_valor, cliente, credito, identificador_bancario, concepto, tipo, monto, informacion FROM transaccion_mambu WHERE ${filtros.join(
                 " AND "
             )}`,
             parametros

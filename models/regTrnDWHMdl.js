@@ -5,7 +5,7 @@ export class RegTrnDWHMdl extends Modelo {
         super()
     }
 
-    async guardar(dwh) {
+    async guardar(dwh, periodo) {
         const trnsToSend = dwh.map((trn) => {
             return [
                 trn["fecha inicio"] ?? trn["fecha aprobacion"],
@@ -17,12 +17,13 @@ export class RegTrnDWHMdl extends Modelo {
                 this.monedaToFloat(trn.total),
                 this.monedaToFloat(trn.capital),
                 this.monedaToFloat(trn.interes),
-                this.monedaToFloat(trn.iva)
+                this.monedaToFloat(trn.iva),
+                periodo
             ]
         })
 
         const datos = {
-            query: "INSERT INTO transaccion_dwh (fecha_creacion, fecha_valor, cliente, credito, concepto, tipo, monto, capital, interes, iva_interes) VALUES ?",
+            query: "INSERT INTO transaccion_dwh (fecha_creacion, fecha_valor, cliente, credito, concepto, tipo, monto, capital, interes, iva_interes, periodo) VALUES ?",
             parametros: [trnsToSend]
         }
 

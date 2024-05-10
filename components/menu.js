@@ -32,16 +32,27 @@ export class Menu extends Componente {
 
             const li = document.createElement("li")
             li.classList.add(subMenu ? LI_SUBMENU : LI_MENU)
+            li.addEventListener("mouseover", () => li.classList.add("miHover"))
+            li.addEventListener("mouseout", () => li.classList.remove("miHover"))
             const span = document.createElement("span")
             span.textContent = titulo
             li.innerHTML = span.outerHTML
             ul.appendChild(li)
 
             if (typeof vista === "object") this.crearRutas(vista, true, li)
-            else li.addEventListener("click", () => this.cambiarVista(vista))
+            else
+                li.addEventListener("click", () => {
+                    this.quitarHover()
+                    this.cambiarVista(vista)
+                })
         })
 
         padre.appendChild(ul)
+    }
+
+    quitarHover() {
+        const lis = this.getComponente().querySelectorAll("li")
+        lis.forEach((li) => li.classList.remove("miHover"))
     }
 
     cambiarVista(vista) {

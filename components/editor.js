@@ -142,7 +142,7 @@ export class Editor extends Componente {
         }
         const dato = new SolicitaDato()
         dato.setTxtEtiqueta(titulo).setTipo(tipo)
-        if (tipo === "date") dato.setValorFecha(valor || new Date())
+        if (tipo === "date") dato.setValorFecha(valor || new Date().toISOString().split("T")[0])
         else dato.setValor(valor)
         this.campos.push(dato)
         this.datos.addHijo(dato.mostrar())
@@ -172,9 +172,10 @@ export class Editor extends Componente {
     }
 
     campoEspecial(campo, valor = null) {
-        if (campo instanceof SolicitaDato && valor) {
-            if (campo.tipo === "date") campo.setValorFecha(valor)
-            else campo.setValor(valor)
+        if (campo instanceof SolicitaDato) {
+            if (campo.tipo === "date")
+                campo.setValorFecha(valor || new Date().toISOString().split("T")[0])
+            else campo.setValor(valor || "")
         }
 
         this.campos.push(campo)

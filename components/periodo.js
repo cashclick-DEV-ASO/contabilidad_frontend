@@ -82,7 +82,7 @@ export class Periodo extends Componente {
     getPeriodo() {
         return {
             anio: this.txtAnioPeriodo.getValor(),
-            mes: this.txtMesPeriodo.getValor()
+            mes: this.txtMesPeriodo.getValor().toString().padStart(2, "0")
         }
     }
 

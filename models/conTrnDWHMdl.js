@@ -27,7 +27,7 @@ export class ConTrnDWHMdl extends Modelo {
         }
 
         const datosEnvio = {
-            query: `SELECT id, fecha_creacion, fecha_valor, cliente, credito, concepto, tipo, monto, capital, interes, iva_interes, penalizacion, iva_penalizacion FROM transaccion_dwh WHERE ${filtros.join(
+            query: `SELECT id, periodo, fecha_creacion, fecha_valor, cliente, credito, concepto, tipo, monto, capital, interes, iva_interes, penalizacion, iva_penalizacion FROM transaccion_dwh WHERE ${filtros.join(
                 " AND "
             )}`,
             parametros

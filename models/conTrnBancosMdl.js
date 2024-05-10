@@ -27,9 +27,23 @@ export class ConTrnBancosMdl extends Modelo {
         }
 
         const datosEnvio = {
-            query: `SELECT id, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto FROM transaccion_banco WHERE ${filtros.join(
-                " AND "
-            )}`,
+            query: `
+SELECT 
+    tb.id,
+    ec.periodo,
+    (SELECT b.nombre FROM banco b WHERE b.id = ec.id_banco) AS banco,
+    tb.informacion,
+    tb.fecha_creacion,
+    tb.fecha_valor,
+    tb.concepto,
+    tb.tipo,
+    tb.monto
+FROM
+    transaccion_banco tb
+RIGHT JOIN
+    edo_cta ec ON tb.id_edo_cta = ec.id
+WHERE
+    ${filtros.join(" AND ")}`,
             parametros
         }
 

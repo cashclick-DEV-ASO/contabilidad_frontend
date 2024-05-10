@@ -158,32 +158,32 @@ export class SolicitaDato extends Componente {
     }
 
     setModoMoneda(negativo = false) {
+        const validos = [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            ".",
+            "Backspace",
+            "Delete",
+            "ArrowLeft",
+            "ArrowRight",
+            "ArrowUp",
+            "ArrowDown",
+            "Tab",
+            "Enter"
+        ]
         this.modoMoneda = true
 
         this.dato
             .setListener(SYS.KDWN, (e) => {
-                if (
-                    e.key === "0" ||
-                    e.key === "1" ||
-                    e.key === "2" ||
-                    e.key === "3" ||
-                    e.key === "4" ||
-                    e.key === "5" ||
-                    e.key === "6" ||
-                    e.key === "7" ||
-                    e.key === "8" ||
-                    e.key === "9" ||
-                    e.key === "." ||
-                    e.key === "Backspace" ||
-                    e.key === "Delete" ||
-                    e.key === "ArrowLeft" ||
-                    e.key === "ArrowRight" ||
-                    e.key === "ArrowUp" ||
-                    e.key === "ArrowDown" ||
-                    e.key === "Tab" ||
-                    e.key === "Enter"
-                )
-                    return
+                if (validos.includes(e.key)) return
                 if (negativo && e.key === "-") return
                 e.preventDefault()
             })
@@ -191,15 +191,17 @@ export class SolicitaDato extends Componente {
             .setListener(SYS.BLR, (e) => campoMoneda(e.target, true))
             .setPropiedad("style", "text-align: right")
 
+        this.setTxtPlaceholder("$0.00")
         campoMoneda(this.dato.getComponente(), true)
         return this
     }
 
     setModoFecha() {
-        this.dato.setPropiedad("type", SYS.DT)
+        this.dato
+            .setPropiedad("min", "2020-01-01")
+            .setPropiedad("max", new Date().toISOString().split("T")[0])
+        this.setTipo(SYS.DT)
         this.setValorFecha(new Date().toISOString().split("T")[0])
-        this.dato.setPropiedad("min", "2020-01-01")
-        this.dato.setPropiedad("max", new Date().toISOString().split("T")[0])
         return this
     }
 }

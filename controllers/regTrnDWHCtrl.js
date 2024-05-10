@@ -57,8 +57,9 @@ export class RegTrnDWHCtrl extends Controlador {
         let msj = this.msjProcesando("Guardando transacciones...")
         const lectura = await this.acciones.archivo.getArchivo().text()
         const dwh = JSON.parse(lectura)
+        const periodo = this.acciones.periodo.getPeriodo()
 
-        this.modelo.guardar(dwh).then((resultado) => {
+        this.modelo.guardar(dwh, periodo.anio + "" + periodo.mes).then((resultado) => {
             msj.ocultar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 
