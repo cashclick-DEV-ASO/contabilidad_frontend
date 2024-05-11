@@ -232,17 +232,41 @@ export class Controlador {
         XLSX.writeFile(wb, `${filename}.xlsx`)
     }
 
+    insertaTransaccion = (datos) => {
+        this.msjContinuar("¿Está seguro de insertar la información capturada?", {
+            callbackSi: (ocultar) => {
+                ocultar()
+                let msj = this.msjProcesando("Procesando solicitud...")
+
+                this.modelo.insertaTransaccion(datos).then((res) => {
+                    msj.ocultar()
+
+                    if (!res.success) return this.mostrarError(res.mensaje)
+                    this.msjExito("Transacción insertada correctamente.", (cerrar) => {
+                        this.buscar()
+                        cerrar()
+                    })
+                })
+            }
+        })
+    }
+
     modificaTransaccion = (datos) => {
-        let msj = this.msjProcesando("Procesando solicitud...")
+        this.msjContinuar("¿Está seguro de modificar la información?", {
+            callbackSi: (ocultar) => {
+                ocultar()
+                let msj = this.msjProcesando("Procesando solicitud...")
 
-        this.modelo.modificaTransaccion(datos).then((res) => {
-            msj.ocultar()
+                this.modelo.modificaTransaccion(datos).then((res) => {
+                    msj.ocultar()
 
-            if (!res.success) return this.mostrarError(res.mensaje)
-            this.msjExito("Transacción modificada correctamente.", (cerrar) => {
-                this.buscar()
-                cerrar()
-            })
+                    if (!res.success) return this.mostrarError(res.mensaje)
+                    this.msjExito("Transacción modificada correctamente.", (cerrar) => {
+                        this.buscar()
+                        cerrar()
+                    })
+                })
+            }
         })
     }
 

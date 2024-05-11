@@ -13,7 +13,7 @@ export class RegTrnDWHMdl extends Modelo {
                 trn["id cliente"],
                 trn.credito,
                 trn.rfc,
-                trn.movimiento === "Dispersion" ? 1 : 2,
+                trn.movimiento === "Dispersion" ? 2 : 1,
                 this.monedaToFloat(trn.total),
                 this.monedaToFloat(trn.capital),
                 this.monedaToFloat(trn.interes),

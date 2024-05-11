@@ -28,18 +28,62 @@ export class RegTrnDWHCtrl extends Controlador {
     leerArchivo = async () => {
         const msj = this.msjProcesando("Leyendo archivo...")
         this.acciones.guardar.habilitarBoton(false)
+        this.datos.tabla.limpiar()
         const lectura = await this.acciones.archivo.getArchivo().text()
-        const datos = JSON.parse(lectura)
 
-        if (!datos) {
-            msj.ocultar()
-            return this.msjError("El archivo no tiene el formato esperado.")
+        try {
+            const datos = JSON.parse(lectura)
+            this.validaJSON(datos)
+
+            if (!datos) {
+                msj.ocultar()
+                return this.msjError("El archivo no tiene el formato esperado.")
+            }
+
+            this.datos.tabla.parseaJSON(datos, null, this.formatoTabla).actualizaTabla()
+            this.acciones.guardar.habilitarBoton(true)
+        } catch (error) {
+            mostrarError(error)
+            this.msjError("El archivo no tiene el formato esperado.")
         }
-
-        this.datos.tabla.parseaJSON(datos, null, this.formatoTabla).actualizaTabla()
-
-        this.acciones.guardar.habilitarBoton(true)
         msj.ocultar()
+    }
+
+    validaJSON = (datos) => {
+        if (!Array.isArray(datos)) throw new Error("El archivo no tiene el formato esperado.")
+        if (datos.length === 0) throw new Error("El archivo no tiene datos.")
+
+        const campos = [
+            "id cliente",
+            "nombre",
+            "rfc",
+            "curp",
+            "producto",
+            "credito",
+            "clabe dispersion",
+            "vez",
+            "fecha inicio",
+            "fecha aprobacion",
+            "plazo",
+            "frecuencia",
+            "capital",
+            "interes",
+            "iva",
+            "total",
+            "tasa",
+            "tasa iva",
+            "fecha vencimiento",
+            "canal",
+            "movimiento",
+            "notas"
+        ]
+
+        const dato = datos[0]
+        const camposArchivo = Object.keys(dato)
+        campos.forEach((campo) => {
+            if (!camposArchivo.includes(campo))
+                throw new Error("El archivo no tiene el formato esperado.")
+        })
     }
 
     guardar = async () => {
@@ -61,14 +105,14 @@ export class RegTrnDWHCtrl extends Controlador {
 
         this.modelo.guardar(dwh, periodo.anio + "" + periodo.mes).then((resultado) => {
             msj.ocultar()
+
+            if (cerrar) cerrar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 
             this.msjExito("La información se guardó correctamente.")
             this.acciones.guardar.habilitarBoton(false)
             this.acciones.archivo.limpiar().habilitaSelector(true)
             this.datos.tabla.limpiar()
-
-            if (cerrar) cerrar()
         })
     }
 

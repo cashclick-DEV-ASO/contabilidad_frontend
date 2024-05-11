@@ -70,6 +70,14 @@ export class RegTrnMambuCtrl extends Controlador {
             const nombreHoja = libro.SheetNames[0]
             const hoja = libro.Sheets[nombreHoja]
             const filas = XLSX.utils.sheet_to_json(hoja, { range: 1, defval: "" })
+
+            try {
+                this.validaJSON(filas)
+            } catch (error) {
+                msj.ocultar()
+                return this.msjError(error.message)
+            }
+
             filas.forEach((fila) => {
                 Object.keys(fila).forEach((titulo) => {
                     const dato = fila[titulo] || ""
@@ -89,6 +97,51 @@ export class RegTrnMambuCtrl extends Controlador {
         }
 
         reader.readAsArrayBuffer(archivo)
+    }
+
+    validaJSON = (datos) => {
+        if (!Array.isArray(datos)) throw new Error("El archivo no tiene el formato esperado.")
+        if (datos.length === 0) throw new Error("El archivo no tiene datos.")
+
+        const campos = [
+            "Fecha reporte",
+            "ID cliente",
+            "Nombre cliente",
+            "ID crédito",
+            "No. vez",
+            "Fecha de inicio del crédito",
+            "Tipo Producto",
+            "Plazo",
+            "Frecuencia Pagos",
+            "Monto Crédito",
+            "Tasa de Interés",
+            "No. pago",
+            "No. parcialidad",
+            "Fecha vencimiento del préstamo",
+            "Fecha programada de pago",
+            "Fecha de pago",
+            "Importe Pago",
+            "Capital pagado",
+            "Interés pagado",
+            "Iva interés pagado",
+            "Interés moratorio pagado",
+            "Iva interés moratorio pagado",
+            "Crédito Castigado",
+            "Cartera Vigente Total",
+            "Cartera VencidaTotal",
+            "Folio",
+            "Clave pago",
+            "Medio de pago",
+            "Código de Leyenda",
+            "Clave de Condonación"
+        ]
+
+        const dato = datos[0]
+        const camposArchivo = Object.keys(dato)
+        campos.forEach((campo) => {
+            if (!camposArchivo.includes(campo))
+                throw new Error("El archivo no tiene el formato esperado.")
+        })
     }
 
     numeroMes = (fecha) => {
@@ -116,14 +169,14 @@ export class RegTrnMambuCtrl extends Controlador {
 
         this.modelo.guardar(this.contenido, p).then((resultado) => {
             msj.ocultar()
+
+            if (cerrar) cerrar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 
             this.msjExito("La información se guardó correctamente.")
             this.acciones.guardar.habilitarBoton(false)
             this.acciones.archivo.limpiar().habilitaSelector(true)
             this.datos.tabla.limpiar()
-
-            if (cerrar) cerrar()
         })
     }
 

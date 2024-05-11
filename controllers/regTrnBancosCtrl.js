@@ -114,6 +114,9 @@ export class RegTrnBancosCtrl extends Controlador {
             return
         }
 
+        this.acciones.guardar.habilitarBoton(false)
+        this.datos.tabla.limpiar()
+
         const lecturaOK = await this.modelo.leerArchivo(
             this.acciones.selArchivo.ruta,
             this.banco.texto === "STP"
@@ -259,14 +262,14 @@ export class RegTrnBancosCtrl extends Controlador {
 
         this.modelo.guardar(final).then((resultado) => {
             msj.ocultar()
+
+            if (cerrar) cerrar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 
             this.msjExito("Se guardó la información correctamente.")
             this.acciones.selLayout.actulizaOpciones([])
             this.limpiaCampos({ lyt: true, bnk: true })
             this.acciones.guardar.habilitarBoton(false)
-
-            if (cerrar) cerrar()
         })
     }
 

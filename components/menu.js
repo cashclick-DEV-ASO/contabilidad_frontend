@@ -110,7 +110,8 @@ export class Menu extends Componente {
                 saldos: { registro: true, consulta: true },
                 bancos: { registro: true, consulta: true },
                 dwh: { registro: true, consulta: true },
-                mambu: { registro: true, consulta: true }
+                mambu: { registro: true, consulta: true },
+                virtuales: true
             },
             conciliacion: {
                 conciliar: true,
@@ -144,7 +145,8 @@ export class Menu extends Componente {
                 saldos: { registro: true, consulta: true },
                 bancos: { registro: true, consulta: true },
                 dwh: { registro: true, consulta: true },
-                mambu: { registro: true, consulta: true }
+                mambu: { registro: true, consulta: true },
+                virtuales: true
             },
             conciliacion: {
                 conciliar: true,

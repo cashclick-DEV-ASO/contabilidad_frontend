@@ -35,7 +35,7 @@ export class ConTrnMambuCtrl extends Controlador {
             fechaF: this.acciones.fechaF.getValor()
         }
 
-        this.modelo.buscarTransaccionesMambu(datos).then((res) => {
+        this.modelo.buscarTransacciones(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)
@@ -53,6 +53,16 @@ export class ConTrnMambuCtrl extends Controlador {
 
     validaModificacion = (datos) => {
         return Object.keys(datos).some((dato) => {
+            if (dato.toLowerCase() === "periodo") {
+                if (isNaN(datos[dato])) {
+                    this.msjError(`El campo periodo debe ser numérico.`)
+                    return true
+                }
+                if (datos[dato].toString().length !== 6) {
+                    this.msjError(`El campo periodo debe teber 6 caracteres numéricos (AAAAMM).`)
+                    return true
+                }
+            }
             if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {

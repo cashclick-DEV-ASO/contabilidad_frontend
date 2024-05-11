@@ -52,12 +52,11 @@ export class ConTrnMambu extends Vista {
             .setValidaModificacion(this.controlador.validaModificacion)
             .setModificaBaseDatos(this.controlador.modificaTransaccion)
             .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+            .setInsertaBaseDatos(this.controlador.insertaTransaccion)
 
         if (this.perfil == 1 || this.perfil == 2) {
-            this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
-            this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
@@ -65,10 +64,8 @@ export class ConTrnMambu extends Vista {
         }
 
         if (this.perfil == 3) {
-            this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = true
-            this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
@@ -76,10 +73,8 @@ export class ConTrnMambu extends Vista {
         }
 
         if (this.perfil == 4) {
-            this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = false
-            this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false

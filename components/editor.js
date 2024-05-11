@@ -152,19 +152,18 @@ export class Editor extends Componente {
     getCampos() {
         let campos = []
         let piezas = []
-        this.campos.forEach((campo) => {
+        let indice = undefined
+
+        this.campos.forEach((campo, i) => {
             if (campo.getClases().contains("pieza")) {
+                indice = indice === undefined ? i : indice
                 piezas.push(campo.getValor())
-            } else {
-                campos.push(campo)
-            }
+            } else campos.push(campo)
         })
 
         if (piezas.length > 0) {
-            campos.unshift({
-                getValor: () => {
-                    return piezas.join("||")
-                }
+            campos.splice(indice, 0, {
+                getValor: () => piezas.join("||")
             })
         }
 

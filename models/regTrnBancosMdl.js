@@ -77,11 +77,25 @@ export class RegTrnBancosMdl extends Modelo {
         }
 
         this.mensaje =
+            r.mensaje ||
             "No se cuenta con la configuración necesaria para ese layout.\nFavor de notificar al administrador."
         return false
     }
 
     async guardar(edoCta) {
+        const validacion = {
+            query: "SELECT * FROM edo_cta WHERE periodo = ? AND archivo = ?",
+            parametros: [edoCta.periodo, edoCta.archivo]
+        }
+
+        const existe = await this.post("noConfig", validacion)
+
+        if (existe.success && existe.datos.length > 0)
+            return {
+                success: false,
+                mensaje: `El archivo ${edoCta.archivo} ya ha sido cargado para el periodo ${edoCta.periodo}.`
+            }
+
         const datID = {
             query: "INSERT INTO edo_cta (periodo, archivo, fecha_captura, id_cuenta, id_banco, id_layout) VALUES (?, ?, ?, ?, ?, ?)",
             parametros: [

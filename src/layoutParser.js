@@ -119,9 +119,28 @@ export const delimitadoCONEKTA = (contenidoArchivo, layout) => {
         movimientos: [],
         lineaError: []
     }
+    let encabezadosArchivo = []
 
     lineas.forEach((texto, linea) => {
-        if (layout.encabezados && layout.encabezados == linea + 1) return
+        if (layout.encabezados && layout.encabezados == linea + 1) {
+            encabezadosArchivo = texto.split(layout.delimitador)
+            layout.columnas.forEach((columna) => {
+                if (!encabezadosArchivo.includes(columna.nombre)) {
+                    resultado.success = false
+                    resultado.mensaje = `No se encontró la columna ${columna.nombre} en el archivo seleccionado.`
+                    return resultado
+                }
+            })
+            return
+        }
+
+        if (linea > layout.encabezados && encabezadosArchivo.length === 0) {
+            resultado.success = false
+            resultado.mensaje =
+                "No se encontraron los encabezados del archivo en la línea esperada."
+            return resultado
+        }
+
         const c = texto.split(layout.delimitador)
         if (c.length === 0) return
 
@@ -151,6 +170,12 @@ export const delimitadoCONEKTA = (contenidoArchivo, layout) => {
         resultado.movimientos.push(movimiento)
     })
 
+    if (encabezadosArchivo.length === 0) {
+        resultado.success = false
+        resultado.mensaje = "No se encontraron los encabezados del archivo en la línea esperada."
+        return resultado
+    }
+
     resultado.success = true
     resultado.mensaje = "El archivo se leyó correctamente."
     return resultado
@@ -178,18 +203,24 @@ export const excelSTP = (contenidoArchivo, layout) => {
         range: layout.encabezados ? layout.encabezados - 1 : 0
     })
 
-    filas.forEach((fila) => {
-        const movimiento = {}
-        layout.columnas.forEach((columna) => {
-            const { nombre, tipo } = columna
-            movimiento[nombre] = convertidorSTP(fila[nombre], tipo)
+    try {
+        filas.forEach((fila) => {
+            const movimiento = {}
+            layout.columnas.forEach((columna) => {
+                const { nombre, tipo } = columna
+                movimiento[nombre] = convertidorSTP(fila[nombre], tipo)
+            })
+
+            resultado.movimientos.push(movimiento)
         })
 
-        resultado.movimientos.push(movimiento)
-    })
+        resultado.success = true
+        resultado.mensaje = "El archivo se leyó correctamente."
+    } catch (error) {
+        resultado.success = false
+        resultado.mensaje = "El archivo no tiene el formato esperado."
+    }
 
-    resultado.success = true
-    resultado.mensaje = "El archivo se leyó correctamente."
     return resultado
 }
 

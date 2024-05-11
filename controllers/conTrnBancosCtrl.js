@@ -52,7 +52,7 @@ export class ConTrnBancosCtrl extends Controlador {
             banco: this.banco
         }
 
-        this.modelo.buscarTransaccionesBancos(datos).then((res) => {
+        this.modelo.buscarTransacciones(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)
@@ -67,6 +67,16 @@ export class ConTrnBancosCtrl extends Controlador {
 
     validaModificacion = (datos) => {
         return Object.keys(datos).some((dato) => {
+            if (dato.toLowerCase() === "periodo") {
+                if (isNaN(datos[dato])) {
+                    this.msjError(`El campo periodo debe ser numérico.`)
+                    return true
+                }
+                if (datos[dato].toString().length !== 6) {
+                    this.msjError(`El campo periodo debe teber 6 caracteres numéricos (AAAAMM).`)
+                    return true
+                }
+            }
             if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {
@@ -87,18 +97,19 @@ export class ConTrnBancosCtrl extends Controlador {
                 }
             }
             if (dato.toLowerCase() === "monto") {
+                if (isNaN(datos[dato])) {
+                    this.msjError(`El campo monto debe ser numérico.`)
+                    return true
+                }
                 if (datos[dato] < 1) {
-                    this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
+                    this.msjError(`El campo monto debe ser mayor a cero.`)
                     return true
                 }
             }
             if (dato.toLowerCase() === "tipo") {
-                if (datos[dato] != 1 && datos[dato] != 2) {
+                if (datos[dato] === SYS.DFLT) {
                     this.msjError(
-                        `El campo ${dato.replace(
-                            "_",
-                            " "
-                        )} no es válido, debe ser 1 (cargo) o 2 (abono).`
+                        `El campo Tipo Movimiento no es válido, se debe seleccionar una opción.`
                     )
                     return true
                 }

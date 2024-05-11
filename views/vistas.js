@@ -33,6 +33,7 @@ import ConTrnDWH from "./conTrnDWH.js"
 import Variables from "./variables.js"
 import RegUsuarios from "./regUsuarios.js"
 import ConUsuarios from "./conUsuarios.js"
+import ConTrnVirtual from "./conTrnVirtual.js"
 
 class OOPS extends Componente {
     constructor() {
@@ -86,7 +87,8 @@ const VISTAS = {
     Variables,
     ConTrnDWH,
     RegUsuarios,
-    ConUsuarios
+    ConUsuarios,
+    ConTrnVirtual
 }
 
 export default VISTAS

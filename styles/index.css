@@ -44,6 +44,7 @@
 @import url("./variables.css");
 @import url("./regUsuarios.css");
 @import url("./conUsuarios.css");
+@import url("./conTrnVirtual.css");
 
 .contenedor {
 	width: 100%;

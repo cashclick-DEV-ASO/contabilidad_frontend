@@ -7,30 +7,94 @@ export class ConTrnDWHMdl extends Modelo {
         super()
     }
 
-    async buscarTransaccionesDWH(datos) {
+    async buscarTransacciones(datos) {
         const filtros = []
         const parametros = []
+        const filtrosV = ["origen = 'DWH'"]
+        const parametrosV = []
 
         if (datos.fechaI) {
-            filtros.push("fecha_creacion >= ?")
+            filtros.push("fecha_valor >= ?")
             parametros.push(datos.fechaI)
+            filtrosV.push("fecha_valor >= ?")
+            parametrosV.push(datos.fechaI)
         }
 
         if (datos.fechaF) {
-            filtros.push("fecha_creacion <= ?")
+            filtros.push("fecha_valor <= ?")
             parametros.push(datos.fechaF)
+            filtrosV.push("fecha_valor <= ?")
+            parametrosV.push(datos.fechaF)
         }
 
-        if (datos.tipo && datos.tipo.valor !== SYS.DFLT) {
-            filtros.push("tipo = ?")
-            parametros.push(datos.tipo.valor)
+        if (datos.banco && datos.banco.valor !== SYS.DFLT) {
+            filtros.push("id_banco = ?")
+            parametros.push(datos.banco.valor)
+            filtrosV.push("id = ?")
+            parametrosV.push("0")
         }
 
         const datosEnvio = {
-            query: `SELECT id, periodo, fecha_creacion, fecha_valor, cliente, credito, concepto, tipo, monto, capital, interes, iva_interes, penalizacion, iva_penalizacion FROM transaccion_dwh WHERE ${filtros.join(
-                " AND "
-            )}`,
-            parametros
+            query: `
+            SELECT
+                id,
+                periodo,
+                fecha_creacion,
+                fecha_valor,
+                cliente,
+                credito,
+                concepto,
+                tipo,
+                monto,
+                capital,
+                interes,
+                iva_interes,
+                penalizacion,
+                iva_penalizacion
+            FROM
+                transaccion_dwh
+            WHERE
+                ${filtros.join(" AND ")}
+            UNION ALL
+            SELECT
+                tv.id,
+                tv.periodo,
+                tv.fecha_registro,
+                tv.fecha_valor,
+                SUBSTRING_INDEX(tv.informacion, '||', 1),
+                SUBSTRING_INDEX(tv.informacion, '||', -1),
+                NULL,
+                tv.tipo,
+                tv.monto,
+                0,
+                0,
+                0,
+                0,
+                0
+            FROM
+                transaccion_virtual tv
+            WHERE
+                ${filtrosV.join(" AND ")}
+                `,
+            parametros: parametros.concat(parametrosV)
+        }
+
+        return await this.post("noConfig", datosEnvio)
+    }
+
+    async insertaTransaccion(datos) {
+        const informacion = datos.cliente + "||" + datos.credito
+
+        const datosEnvio = {
+            query: "INSERT INTO transaccion_virtual (periodo, origen, tipo, monto, fecha_valor, informacion) VALUES (?, ?, ?, ?, ?, ?)",
+            parametros: [
+                datos.periodo,
+                "DWH",
+                datos.tipo,
+                datos.monto,
+                this.fechaMySQL(datos.fecha_valor),
+                informacion
+            ]
         }
 
         return await this.post("noConfig", datosEnvio)

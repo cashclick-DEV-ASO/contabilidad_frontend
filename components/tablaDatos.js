@@ -19,11 +19,11 @@ export class TablaDatos extends Componente {
         this.filasTmp = []
         this.formatoEspecial = null
         this.permiteFiltro = true
-        this.permiteEditar = true
-        this.permiteExportar = true
         this.permiteOrdenar = true
+        this.permiteExportar = true
         this.permiteAgregar = true
         this.permiteEliminar = true
+        this.permiteEditar = true
         this.permiteModificar = true
         this.mostrarNoFila = true
         this.tiposInput = {
@@ -173,7 +173,7 @@ export class TablaDatos extends Componente {
                             dato
                         )
 
-                        cld.setClase(this.tipoDato(c))
+                        cld.setClase(this.tipoDato(dato))
 
                         if (this.permiteEditar) cld.setListener(SYS.DCLK, this.editar)
                         return cld.getComponente()
@@ -376,28 +376,46 @@ export class TablaDatos extends Componente {
                     })
 
                     editor.setAccionModificar((cerrar) => {
-                        const msjInfo = new Controlador().msjProcesando("Agregando fila...")
                         const campos = editor.getCampos()
-                        const datos = {}
-                        const newDatos = campos.map((campo) => {
-                            if (campo instanceof ListaDesplegable)
-                                return campo.getValorSeleccionado()
-                            return campo.getValor()
-                        })
 
-                        this.encabezados.forEach((campo, indice) => {
-                            if (this.mostrarNoFila && indice === 0) return
-                            let i = this.mostrarNoFila ? indice - 1 : indice
-                            datos[campo] = newDatos[i]
-                        })
-                        if (this.validaModificacion && this.validaModificacion(datos))
-                            return msjInfo.ocultar()
+                        if (this.insertaBaseDatos) {
+                            const datos = {}
+                            const newDatos = campos.map((campo) => {
+                                if (campo instanceof ListaDesplegable)
+                                    return campo.getValorSeleccionado()
+                                return campo.getValor()
+                            })
 
-                        if (this.mostrarNoFila) newDatos.unshift(this.filas.length + 1)
-                        this.filas.push(newDatos)
-                        this.actualizaTabla({ updtFiltro: false })
-                        msjInfo.ocultar()
-                        new Controlador().msjExito("Fila agregada correctamente.")
+                            this.encabezados.forEach((campo, indice) => {
+                                if (this.mostrarNoFila && indice === 0) return
+                                let i = this.mostrarNoFila ? indice - 1 : indice
+                                datos[campo] = newDatos[i]
+                            })
+                            if (this.validaModificacion && this.validaModificacion(datos)) return
+                            this.insertaBaseDatos(datos)
+                        } else {
+                            const msjInfo = new Controlador().msjProcesando("Agregando fila...")
+                            const datos = {}
+                            const newDatos = campos.map((campo) => {
+                                if (campo instanceof ListaDesplegable)
+                                    return campo.getValorSeleccionado()
+                                return campo.getValor()
+                            })
+
+                            this.encabezados.forEach((campo, indice) => {
+                                if (this.mostrarNoFila && indice === 0) return
+                                let i = this.mostrarNoFila ? indice - 1 : indice
+                                datos[campo] = newDatos[i]
+                            })
+                            if (this.validaModificacion && this.validaModificacion(datos))
+                                return msjInfo.ocultar()
+
+                            if (this.mostrarNoFila) newDatos.unshift(this.filas.length + 1)
+                            this.filas.push(newDatos)
+                            this.actualizaTabla({ updtFiltro: false })
+                            msjInfo.ocultar()
+                            new Controlador().msjExito("Fila agregada correctamente.")
+                        }
                         cerrar()
                     })
 
@@ -481,10 +499,22 @@ export class TablaDatos extends Componente {
             if (aClase === SYS.MNY && bClase === SYS.MNY)
                 return (this.monedaANumero(aValor) - this.monedaANumero(bValor)) * direccion
 
-            if (aClase === SYS.NMBR && bClase === SYS.NMBR) return (aValor - bValor) * direccion
+            if (aClase === SYS.NMBR && bClase === SYS.NMBR) {
+                if (this.esMoneda(aValor) && this.esMoneda(bValor))
+                    return (this.monedaANumero(aValor) - this.monedaANumero(bValor)) * direccion
 
-            if (aClase === SYS.DT && bClase === SYS.DT)
-                return (new Date(aValor) - new Date(bValor)) * direccion
+                return (aValor - bValor) * direccion
+            }
+
+            if (aClase === SYS.DT && bClase === SYS.DT && aValor && bValor) {
+                const [diaA, mesA, anioA] = aValor.split("/")
+                const fechaA = new Date(`${anioA}-${mesA - 1}-${diaA}`)
+
+                const [diaB, mesB, anioB] = bValor.split("/")
+                const fechaB = new Date(`${anioB}-${mesB - 1}-${diaB}`)
+
+                return (new Date(fechaA) - new Date(fechaB)) * direccion
+            }
 
             return aValor.localeCompare(bValor) * direccion
         }
@@ -580,6 +610,11 @@ export class TablaDatos extends Componente {
             })
 
         editor.mostrar()
+    }
+
+    setInsertaBaseDatos(fnc) {
+        this.insertaBaseDatos = fnc
+        return this
     }
 
     setModificaBaseDatos(fnc) {
