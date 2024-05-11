@@ -8,7 +8,7 @@ export class ConTrnBancosMdl extends Modelo {
     }
 
     async buscarTransacciones(datos) {
-        const filtros = []
+        const filtros = ["visible = 1"]
         const parametros = []
         const filtrosV = ["origen = 'Banco'"]
         const parametrosV = []
@@ -112,7 +112,7 @@ export class ConTrnBancosMdl extends Modelo {
 
     async eliminaTransaccion(datos) {
         const datosEnvio = {
-            query: "DELETE FROM transaccion_banco WHERE id = ?",
+            query: "UPDATE transaccion_banco SET visible = 0 WHERE id = ?",
             parametros: [datos.id]
         }
 

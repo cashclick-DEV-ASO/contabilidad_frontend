@@ -8,7 +8,7 @@ export class ConTrnDWHMdl extends Modelo {
     }
 
     async buscarTransacciones(datos) {
-        const filtros = []
+        const filtros = ["visible = 1"]
         const parametros = []
         const filtrosV = ["origen = 'DWH'"]
         const parametrosV = []
@@ -125,7 +125,7 @@ export class ConTrnDWHMdl extends Modelo {
 
     async eliminaTransaccion(datos) {
         const datosEnvio = {
-            query: "DELETE FROM transaccion_dwh WHERE id = ?",
+            query: "UPDATE transaccion_dwh SET visible = 0 WHERE id = ?",
             parametros: [datos.id]
         }
 

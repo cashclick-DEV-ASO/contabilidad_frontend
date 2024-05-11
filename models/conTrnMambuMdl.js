@@ -6,7 +6,7 @@ export class ConTrnMambuMdl extends Modelo {
     }
 
     async buscarTransacciones(datos) {
-        const filtros = []
+        const filtros = ["visible = 1"]
         const parametros = []
         const filtrosV = ["origen = 'Mambu'"]
         const parametrosV = []
@@ -109,7 +109,7 @@ export class ConTrnMambuMdl extends Modelo {
 
     async eliminaTransaccion(datos) {
         const datosEnvio = {
-            query: "DELETE FROM transaccion_mambu WHERE id = ?",
+            query: "UPDATE transaccion_mambu SET visible = 0 WHERE id = ?",
             parametros: [datos.id]
         }
 
