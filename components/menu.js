@@ -131,7 +131,7 @@ export class Menu extends Componente {
             administracion: {
                 cuentasBancarias: { registro: true, consulta: true },
                 cuentasContables: { registro: true, consulta: true },
-                plantillas: { layout: true, Etiquetas: true },
+                layouts: true,
                 usuarios: { registro: true, consulta: true }
             },
             logout: true
@@ -166,7 +166,7 @@ export class Menu extends Componente {
             administracion: {
                 cuentasBancarias: { registro: true, consulta: true },
                 cuentasContables: { registro: true, consulta: true },
-                plantillas: { registro: false, consulta: false },
+                layouts: false,
                 usuarios: { registro: false, consulta: true }
             },
             logout: true
@@ -200,7 +200,7 @@ export class Menu extends Componente {
             administracion: {
                 cuentasBancarias: { registro: false, consulta: false },
                 cuentasContables: { registro: false, consulta: false },
-                plantillas: { registro: false, consulta: false },
+                layouts: false,
                 usuarios: { registro: false, consulta: false }
             },
             logout: true

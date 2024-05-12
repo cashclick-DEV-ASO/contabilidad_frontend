@@ -1,12 +1,14 @@
 import Controlador from "./controlador.js"
 
+import { SYS } from "../src/constantes.js"
+
 export class ConTrnMambuCtrl extends Controlador {
     constructor(vista, modelo) {
         super(vista, modelo)
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            fecha_creacion: this.formatoFecha,
+            fecha_creación: this.formatoFecha,
             fecha_valor: this.formatoFecha,
             monto: this.formatoMoneda,
             tipo: (dato) => {
@@ -59,11 +61,15 @@ export class ConTrnMambuCtrl extends Controlador {
                     return true
                 }
                 if (datos[dato].toString().length !== 6) {
-                    this.msjError(`El campo periodo debe teber 6 caracteres numéricos (AAAAMM).`)
+                    this.msjError(`El campo periodo debe tener 6 caracteres numéricos (AAAAMM).`)
+                    return true
+                }
+                if (datos[dato].toString().substring(4) > 12) {
+                    this.msjError(`El campo periodo debe tener un mes válido.`)
                     return true
                 }
             }
-            if (dato.toLowerCase() === "fecha_creacion" || dato.toLowerCase() === "fecha_valor") {
+            if (dato.toLowerCase() === "fecha_creación" || dato.toLowerCase() === "fecha_valor") {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {
                     this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
@@ -88,9 +94,31 @@ export class ConTrnMambuCtrl extends Controlador {
                     return true
                 }
             }
-            if (dato.toLowerCase() === "cliente" || dato.toLowerCase() === "credito") {
+            if (dato.toLowerCase() === "cliente") {
                 if (datos[dato] === "") {
                     this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "crédito") {
+                if (datos[dato] === "") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+                if (datos[dato].length !== 9) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe tener 9 caracteres.`)
+                    return true
+                }
+                if (datos[dato].substring(0, 3) !== "100") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe comenzar con 100.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "tipo") {
+                if (datos[dato] === SYS.DFLT) {
+                    this.msjError(
+                        `El campo Tipo Movimiento no es válido, se debe seleccionar una opción.`
+                    )
                     return true
                 }
             }

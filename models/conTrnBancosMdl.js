@@ -40,8 +40,8 @@ export class ConTrnBancosMdl extends Modelo {
                 tb.id,
                 ec.periodo,
                 (SELECT b.nombre FROM banco b WHERE b.id = ec.id_banco) AS banco,
-                tb.informacion,
-                tb.fecha_creacion,
+                tb.informacion AS información,
+                tb.fecha_creacion AS fecha_creación,
                 tb.fecha_valor,
                 tb.concepto,
                 tb.tipo,
@@ -57,10 +57,10 @@ export class ConTrnBancosMdl extends Modelo {
                 tv.id,
                 tv.periodo,
                 'Virtual' AS banco,
-                NULL,
+                tv.informacion,
                 tv.fecha_registro,
                 tv.fecha_valor,
-                NULL,
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 4), '||', -1),
                 tv.tipo,
                 tv.monto
             FROM
@@ -75,7 +75,7 @@ export class ConTrnBancosMdl extends Modelo {
     }
 
     async insertaTransaccion(datos) {
-        const informacion = datos.banco + "||" + datos.informacion + "||" + datos.concepto
+        const informacion = datos.banco + "||" + datos.información + "||" + datos.concepto
 
         const datosEnvio = {
             query: "INSERT INTO transaccion_virtual (periodo, origen, tipo, monto, fecha_valor, informacion) VALUES (?, ?, ?, ?, ?, ?)",
@@ -93,16 +93,27 @@ export class ConTrnBancosMdl extends Modelo {
     }
 
     async modificaTransaccion(datos) {
-        const datosEnvio = {
-            query: `UPDATE transaccion_banco SET informacion = ?, fecha_creacion = ?, fecha_valor = ?, concepto = ?, tipo = ?, monto = ? WHERE id = ?`,
+        const datosEnvio = {}
 
-            parametros: [
+        if (datos.banco != "0") {
+            datosEnvio.query = `UPDATE transaccion_banco SET informacion = ?, fecha_creacion = ?, fecha_valor = ?, concepto = ?, tipo = ?, monto = ? WHERE id = ?`
+            datosEnvio.parametros = [
                 datos.informacion,
-                this.fechaMySQL(datos.fecha_creacion),
+                this.fechaMySQL(datos.fecha_creación),
                 this.fechaMySQL(datos.fecha_valor),
                 datos.concepto,
                 datos.tipo,
                 datos.monto,
+                datos.id
+            ]
+        } else {
+            datosEnvio.query = `UPDATE transaccion_virtual SET periodo = ?, tipo = ?, monto = ?, fecha_valor = ?, informacion = ? WHERE id = ?`
+            datosEnvio.parametros = [
+                datos.periodo,
+                datos.tipo,
+                datos.monto,
+                this.fechaMySQL(datos.fecha_valor),
+                datos.información + "||" + datos.concepto,
                 datos.id
             ]
         }
@@ -111,9 +122,14 @@ export class ConTrnBancosMdl extends Modelo {
     }
 
     async eliminaTransaccion(datos) {
-        const datosEnvio = {
-            query: "UPDATE transaccion_banco SET visible = 0 WHERE id = ?",
-            parametros: [datos.id]
+        const datosEnvio = {}
+
+        if (datos.banco != "Virtual") {
+            datosEnvio.query = "UPDATE transaccion_banco SET visible = 0 WHERE id = ?"
+            datosEnvio.parametros = [datos.id]
+        } else {
+            datosEnvio.query = "DELETE FROM transaccion_virtual WHERE id = ?"
+            datosEnvio.parametros = [datos.id]
         }
 
         return await this.post("noConfig", datosEnvio)

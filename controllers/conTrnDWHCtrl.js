@@ -10,14 +10,14 @@ export class ConTrnDWHCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            fecha_creacion: this.formatoFecha,
+            fecha_creación: this.formatoFecha,
             fecha_valor: this.formatoFecha,
             monto: this.formatoMoneda,
             capital: this.formatoMoneda,
-            interes: this.formatoMoneda,
-            iva_interes: this.formatoMoneda,
-            penalizacion: this.formatoMoneda,
-            iva_penalizacion: this.formatoMoneda,
+            interés: this.formatoMoneda,
+            iva_interés: this.formatoMoneda,
+            penalización: this.formatoMoneda,
+            iva_penalización: this.formatoMoneda,
             tipo: (dato) => {
                 const tipos = ["No Identificado", "Cargo", "Abono"]
                 return tipos[dato]
@@ -75,7 +75,36 @@ export class ConTrnDWHCtrl extends Controlador {
         })
     }
 
+    sumarMonto = (e) => {
+        let monto = 0
+        document.querySelectorAll(".suma").forEach((campo) => {
+            const valor = parseFloat(campo.value.replace(/[^\d.]/g, "")) || 0
+            monto += valor
+            if (e.target === campo && (campo.id === "int" || campo.id === "pen")) {
+                document.querySelector(`#iva_${campo.id}`).value = valor * 0.16
+                document.querySelector(`#iva_${campo.id}`).dispatchEvent(new Event("blur"))
+            }
+        })
+        document.querySelector(".total").value = monto
+        document.querySelector(".total").dispatchEvent(new Event("blur"))
+    }
+
     validaModificacion = (datos) => {
+        const s =
+            parseFloat(datos["capital"]) ||
+            0 + parseFloat(datos["interés"]) ||
+            0 + parseFloat(datos["iva_interés"]) ||
+            0 + parseFloat(datos["penalización"]) ||
+            0 + parseFloat(datos["iva_penalización"]) ||
+            0
+        const t = parseFloat(datos["monto"]) || 0
+        if (s !== t) {
+            this.msjError(
+                `La suma de los campos Capital, Interés, IVA Interés, Penalización e IVA Penalización debe ser igual al campo Monto.`
+            )
+            return true
+        }
+
         return Object.keys(datos).some((dato) => {
             if (dato.toLowerCase() === "periodo") {
                 if (isNaN(datos[dato])) {
@@ -83,14 +112,18 @@ export class ConTrnDWHCtrl extends Controlador {
                     return true
                 }
                 if (datos[dato].toString().length !== 6) {
-                    this.msjError(`El campo periodo debe teber 6 caracteres numéricos (AAAAMM).`)
+                    this.msjError(`El campo periodo debe tener 6 caracteres numéricos (AAAAMM).`)
+                    return true
+                }
+                if (
+                    datos[dato].toString().substring(4) > 12 ||
+                    datos[dato].toString().substring(4) < 1
+                ) {
+                    this.msjError(`El campo periodo debe tener un mes válido.`)
                     return true
                 }
             }
-            if (
-                dato.toLowerCase() === "fecha_inicio" ||
-                dato.toLowerCase() === "fecha_aprobacion"
-            ) {
+            if (dato.toLowerCase() === "fecha_creación" || dato.toLowerCase() === "fecha_valor") {
                 const fecha = new Date(datos[dato])
                 if (isNaN(fecha.getTime())) {
                     this.msjError(`El campo ${dato.replace("_", " ")} no es una fecha válida.`)
@@ -110,28 +143,41 @@ export class ConTrnDWHCtrl extends Controlador {
                 }
             }
             if (
+                dato.toLowerCase() === "monto" ||
                 dato.toLowerCase() === "capital" ||
-                dato.toLowerCase() === "interes" ||
-                dato.toLowerCase() === "iva" ||
-                dato.toLowerCase() === "total"
+                dato.toLowerCase() === "interés" ||
+                dato.toLowerCase() === "iva_interés"
             ) {
                 if (datos[dato] < 1) {
                     this.msjError(`El campo ${dato.replace("_", " ")} debe ser mayor a cero.`)
                     return true
                 }
             }
-            if (
-                dato.toLowerCase() === "id_cliente" ||
-                dato.toLowerCase() === "nombre" ||
-                dato.toLowerCase() === "rfc" ||
-                dato.toLowerCase() === "curp" ||
-                dato.toLowerCase() === "credito" ||
-                dato.toLowerCase() === "movimiento" ||
-                dato.toLowerCase() === "cliente" ||
-                dato.toLowerCase() === "credito"
-            ) {
+            if (dato.toLowerCase() === "cliente") {
                 if (datos[dato] === "") {
                     this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "crédito") {
+                if (datos[dato] === "") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} no puede estar vacío.`)
+                    return true
+                }
+                if (datos[dato].toString().length !== 9) {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe tener 9 caracteres.`)
+                    return true
+                }
+                if (datos[dato].toString().substring(0, 3) !== "100") {
+                    this.msjError(`El campo ${dato.replace("_", " ")} debe comenzar con 100.`)
+                    return true
+                }
+            }
+            if (dato.toLowerCase() === "tipo") {
+                if (datos[dato] === SYS.DFLT) {
+                    this.msjError(
+                        `El campo Tipo Movimiento no es válido, se debe seleccionar una opción.`
+                    )
                     return true
                 }
             }

@@ -10,6 +10,7 @@ export class ListaDesplegable extends Componente {
         this.txtPhLleno = phLleno
         this.mostrarPh = mostrarPh
         this.bloqueaPh = false
+        this.habilitado = undefined
 
         this.opciones = []
 
@@ -32,7 +33,9 @@ export class ListaDesplegable extends Componente {
 
         this.lista.vaciar()
         this.configuraPlaceholder()
-        this.lista.habilitar(!(this.opciones.length === 0))
+        this.lista.habilitar(
+            this.habilitado === undefined ? !(this.opciones.length === 0) : this.habilitado
+        )
 
         this.opciones.forEach((opcion) => {
             this.lista.addHijo(this.setOpcion(opcion).mostrar())
@@ -141,6 +144,7 @@ export class ListaDesplegable extends Componente {
     }
 
     setSeleccionByValor(valor) {
+        if (!valor) valor = this.default
         this.lista.getComponente().value = valor
         return this
     }
@@ -161,5 +165,10 @@ export class ListaDesplegable extends Componente {
 
     dfltSelecciondo() {
         return this.lista.getComponente().value === this.default
+    }
+
+    setBloquear(bloquear) {
+        this.habilitado = !bloquear
+        return this
     }
 }

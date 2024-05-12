@@ -39,18 +39,19 @@ export class ConTrnDWHMdl extends Modelo {
             SELECT
                 id,
                 periodo,
-                fecha_creacion,
+                'DWH' AS banco,
+                fecha_creacion AS fecha_creación,
                 fecha_valor,
                 cliente,
-                credito,
+                credito AS crédito,
                 concepto,
                 tipo,
                 monto,
                 capital,
-                interes,
-                iva_interes,
-                penalizacion,
-                iva_penalizacion
+                interes AS interés,
+                iva_interes AS iva_interés,
+                penalizacion AS penalización,
+                iva_penalizacion AS iva_penalización
             FROM
                 transaccion_dwh
             WHERE
@@ -59,18 +60,19 @@ export class ConTrnDWHMdl extends Modelo {
             SELECT
                 tv.id,
                 tv.periodo,
+                'Virtual' AS banco,
                 tv.fecha_registro,
                 tv.fecha_valor,
-                SUBSTRING_INDEX(tv.informacion, '||', 1),
-                SUBSTRING_INDEX(tv.informacion, '||', -1),
-                NULL,
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 1), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 2), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 3), '||', -1),
                 tv.tipo,
                 tv.monto,
-                0,
-                0,
-                0,
-                0,
-                0
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 4), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 5), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 6), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 7), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 8), '||', -1)
             FROM
                 transaccion_virtual tv
             WHERE
@@ -83,7 +85,22 @@ export class ConTrnDWHMdl extends Modelo {
     }
 
     async insertaTransaccion(datos) {
-        const informacion = datos.cliente + "||" + datos.credito
+        const informacion =
+            datos.cliente +
+            "||" +
+            datos.crédito +
+            "||" +
+            datos.concepto +
+            "||" +
+            datos.capital +
+            "||" +
+            datos.interés +
+            "||" +
+            datos.iva_interés +
+            "||" +
+            datos.penalización +
+            "||" +
+            datos.iva_penalización
 
         const datosEnvio = {
             query: "INSERT INTO transaccion_virtual (periodo, origen, tipo, monto, fecha_valor, informacion) VALUES (?, ?, ?, ?, ?, ?)",
@@ -101,21 +118,50 @@ export class ConTrnDWHMdl extends Modelo {
     }
 
     async modificaTransaccion(datos) {
-        const datosEnvio = {
-            query: `UPDATE transaccion_dwh SET fecha_creacion=?, fecha_valor=?, cliente=?, credito=?, concepto=?, tipo=?, monto=?, capital=?, interes=?, iva_interes=?, penalizacion=?, iva_penalizacion=? WHERE id=?`,
-            parametros: [
-                this.fechaMySQL(datos.fecha_creacion),
+        const datosEnvio = {}
+
+        if (datos.banco != "0") {
+            datosEnvio.query = `UPDATE transaccion_dwh SET fecha_creacion=?, fecha_valor=?, cliente=?, credito=?, concepto=?, tipo=?, monto=?, capital=?, interes=?, iva_interes=?, penalizacion=?, iva_penalizacion=? WHERE id=?`
+            datosEnvio.parametros = [
+                this.fechaMySQL(datos.fecha_creación),
                 this.fechaMySQL(datos.fecha_valor),
                 datos.cliente,
-                datos.credito,
+                datos.crédito,
                 datos.concepto,
                 datos.tipo,
                 datos.monto,
                 datos.capital,
-                datos.interes,
-                datos.iva_interes,
-                datos.penalizacion,
-                datos.iva_penalizacion,
+                datos.interés,
+                datos.iva_interés,
+                datos.penalización,
+                datos.iva_penalización,
+                datos.id
+            ]
+        } else {
+            const informacion =
+                datos.cliente +
+                "||" +
+                datos.crédito +
+                "||" +
+                datos.concepto +
+                "||" +
+                datos.capital +
+                "||" +
+                datos.interés +
+                "||" +
+                datos.iva_interés +
+                "||" +
+                datos.penalización +
+                "||" +
+                datos.iva_penalización
+
+            datosEnvio.query = `UPDATE transaccion_virtual SET periodo = ?, tipo = ?, monto = ?, fecha_valor = ?, informacion = ? WHERE id = ?`
+            datosEnvio.parametros = [
+                datos.periodo,
+                datos.tipo,
+                datos.monto,
+                this.fechaMySQL(datos.fecha_valor),
+                informacion,
                 datos.id
             ]
         }
@@ -124,9 +170,14 @@ export class ConTrnDWHMdl extends Modelo {
     }
 
     async eliminaTransaccion(datos) {
-        const datosEnvio = {
-            query: "UPDATE transaccion_dwh SET visible = 0 WHERE id = ?",
-            parametros: [datos.id]
+        const datosEnvio = {}
+
+        if (datos.banco != "Virtual") {
+            datosEnvio.query = "UPDATE transaccion_dwh SET visible = 0 WHERE id = ?"
+            datosEnvio.parametros = [datos.id]
+        } else {
+            datosEnvio.query = "DELETE FROM transaccion_virtual WHERE id = ?"
+            datosEnvio.parametros = [datos.id]
         }
 
         return await this.post("noConfig", datosEnvio)

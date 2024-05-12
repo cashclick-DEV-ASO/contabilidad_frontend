@@ -30,7 +30,7 @@ export class RegTrnMambu extends Vista {
     inicia() {
         this.titulo.setTexto(REG_TRN_MAMBU.TITULO)
 
-        this.acciones.selPeriodo = new Periodo().setID("periodo")
+        this.acciones.selPeriodo = new Periodo().setID("periodo").setEstilo3()
 
         this.acciones.archivo = new SolicitaArchivo()
             .accionAbrir(this.controlador.leerArchivo)

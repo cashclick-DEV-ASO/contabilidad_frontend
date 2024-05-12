@@ -7,11 +7,23 @@ export class ConCtasBancariasMdl extends Modelo {
     }
 
     async buscar(params) {
-        const query = `SELECT cb.id id_c, b.id id_b, cb.cta no_cuenta, b.nombre banco, cb.comentarios FROM cuenta_bancaria cb JOIN banco b ON cb.id_banco = b.id`
-        if (params !== SYS.DFLT) query += " WHERE id_banco = ?"
-
         const datos = {
-            query,
+            query: `
+            SELECT
+                cb.id id_c,
+                b.id id_b,
+                cb.fecha_registro,
+                (SELECT MIN(fecha) FROM saldo_contable WHERE id_cta_bancaria = cb.id) fecha_apertura,
+                cb.cta no_cuenta,
+                b.nombre banco,
+                cb.comentarios
+            FROM
+                cuenta_bancaria cb
+                JOIN banco b ON cb.id_banco = b.id
+            WHERE
+                cb.activa = 1
+                ${params !== SYS.DFLT ? "AND cb.id_banco = ?" : ""}
+            `,
             parametros: params !== SYS.DFLT ? [params] : []
         }
 
@@ -29,7 +41,7 @@ export class ConCtasBancariasMdl extends Modelo {
 
     async eliminaTransaccion(datos) {
         const datosEnvio = {
-            query: "DELETE FROM cuenta_bancaria WHERE id = ?",
+            query: "UPDATE cuenta_bancaria SET activa = 0 WHERE id = ?",
             parametros: [datos.id_c]
         }
 

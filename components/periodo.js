@@ -90,6 +90,12 @@ export class Periodo extends Componente {
         this.titulo.setTexto(titulo)
         return this
     }
+
+    setEstilo3() {
+        this.txtAnioPeriodo.setEstilo1()
+        this.txtMesPeriodo.setEstilo1()
+        return this
+    }
 }
 
 export default Periodo

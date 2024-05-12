@@ -88,30 +88,57 @@ export class ConTrnDWH extends Vista {
 
         this.datos.tabla.camposEspeciales = {
             monto: () => {
-                return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Monto")
+                    .setClaseDato("total")
+                    .setEstilo1()
+                    .setModoMoneda()
             },
             capital: () => {
-                return new SolicitaDato().setTxtEtiqueta("Capital").setEstilo1().setModoMoneda()
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Capital")
+                    .setClaseDato("suma")
+                    .setEstilo1()
+                    .setModoMoneda()
+                    .setListener(SYS.IN, this.controlador.sumarMonto)
             },
-            interes: () => {
-                return new SolicitaDato().setTxtEtiqueta("Interés").setEstilo1().setModoMoneda()
+            interés: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Interés")
+                    .setClaseDato("suma")
+                    .setIDDato("int")
+                    .setEstilo1()
+                    .setModoMoneda()
+                    .setListener(SYS.IN, this.controlador.sumarMonto)
             },
-            iva_interes: () => {
-                return new SolicitaDato().setTxtEtiqueta("IVA interés").setEstilo1().setModoMoneda()
+            iva_interés: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("IVA interés")
+                    .setClaseDato("suma")
+                    .setIDDato("iva_int")
+                    .setEstilo1()
+                    .setModoMoneda()
+                    .setListener(SYS.IN, this.controlador.sumarMonto)
             },
-            penalizacion: () => {
+            penalización: () => {
                 return new SolicitaDato()
                     .setTxtEtiqueta("Penalización")
+                    .setClaseDato("suma")
+                    .setIDDato("pen")
                     .setEstilo1()
                     .setModoMoneda()
+                    .setListener(SYS.IN, this.controlador.sumarMonto)
             },
-            iva_penalizacion: () => {
+            iva_penalización: () => {
                 return new SolicitaDato()
                     .setTxtEtiqueta("IVA penalización")
+                    .setClaseDato("suma")
+                    .setIDDato("iva_pen")
                     .setEstilo1()
                     .setModoMoneda()
+                    .setListener(SYS.IN, this.controlador.sumarMonto)
             },
-            fecha_creacion: () => {
+            fecha_creación: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Creación")
@@ -133,6 +160,16 @@ export class ConTrnDWH extends Vista {
                     { valor: 1, texto: "Cargo" },
                     { valor: 2, texto: "Abono" }
                 ])
+            },
+            banco: (agregar = false) => {
+                let a = [{ texto: "Virtual", valor: "0" }]
+                if (!agregar) a.push({ texto: "DWH", valor: "1" })
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Banco")
+                    .setEstilo1()
+                    .setOpciones(a)
+                    .setBloquear(true)
+                    .setMostrarPh(false)
             }
         }
 

@@ -82,7 +82,7 @@ export class ConTrnMambu extends Vista {
         }
 
         this.datos.tabla.camposEspeciales = {
-            fecha_creacion: () => {
+            fecha_creación: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Creación")
@@ -110,6 +110,16 @@ export class ConTrnMambu extends Vista {
                         { valor: 1, texto: "Cargo" },
                         { valor: 2, texto: "Abono" }
                     ])
+            },
+            banco: (agregar = false) => {
+                let a = [{ texto: "Virtual", valor: "0" }]
+                if (!agregar) a.push({ texto: "Mambu", valor: "1" })
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Banco")
+                    .setEstilo1()
+                    .setOpciones(a)
+                    .setBloquear(true)
+                    .setMostrarPh(false)
             }
         }
 

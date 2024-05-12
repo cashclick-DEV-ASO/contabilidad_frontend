@@ -12,11 +12,8 @@ export class ConciliarCtrl extends Controlador {
         this.transacciones = []
         this.formatoTabla = {
             fecha_valor: this.formatoFecha,
-            monto: this.formatoModena,
-            tipo: (dato) => {
-                const tipos = ["No Identificado", "Cargo", "Abono"]
-                return tipos[dato]
-            }
+            monto: this.formatoMoneda,
+            tipo: this.formatoTipo
         }
     }
 

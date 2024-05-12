@@ -12,24 +12,45 @@ export class ConSaldosMdl extends Modelo {
         const parametros = []
 
         if (datos.fechaI) {
-            filtros.push("fecha >= ?")
-            parametros.push(datos.fechaI)
+            filtros.push("sc.fecha >= ?")
+            parametros.push(this.fechaMySQL(datos.fechaI))
         }
 
         if (datos.fechaF) {
-            filtros.push("fecha <= ?")
-            parametros.push(datos.fechaF)
+            filtros.push("sc.fecha <= ?")
+            parametros.push(this.fechaMySQL(datos.fechaF))
+        }
+
+        if (datos.banco !== SYS.DFLT) {
+            filtros.push("cb.id_banco = ?")
+            parametros.push(datos.banco)
         }
 
         if (datos.cuenta !== SYS.DFLT) {
-            filtros.push("id_cta_contable = ?")
+            filtros.push("sc.id_cta_bancaria = ?")
             parametros.push(datos.cuenta)
         }
 
         const datosEnvio = {
-            query: `SELECT id, fecha, saldo_inicial, saldo_final FROM saldo_contable WHERE ${filtros.join(
-                " AND "
-            )}`,
+            query: `
+            SELECT
+                sc.id,
+                b.nombre AS banco,
+                cb.cta,
+                sc.fecha,
+                sc.saldo_inicial,
+                sc.saldo_final
+            FROM
+                saldo_contable sc
+            JOIN
+                cuenta_bancaria cb ON sc.id_cta_bancaria = cb.id
+            JOIN
+                banco b ON cb.id_banco = b.id
+            WHERE
+                ${filtros.join(" AND ")}
+            ORDER BY
+                fecha DESC
+            `,
             parametros
         }
 

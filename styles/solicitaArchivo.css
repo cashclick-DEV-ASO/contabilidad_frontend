@@ -8,7 +8,7 @@
 		"selector boton";
 	position: relative;
 	text-align: center;
-	align-content: center;
+	/* align-content: center; */
 	align-items: center;
 	justify-items: center;
 }

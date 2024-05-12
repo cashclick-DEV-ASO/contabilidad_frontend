@@ -24,12 +24,17 @@ export class RegTrnBancos extends Vista {
     inicia() {
         this.titulo.setTexto("Registro de Transacciones Bancarias")
 
-        this.acciones.selPeriodo = new Periodo().setID("periodo")
+        this.acciones.selPeriodo = new Periodo().setID("periodo").setEstilo3()
 
         this.acciones.selBanco = new ListaDesplegable()
             .setTxtEtiqueta("Banco")
             .setID("banco")
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
+
+        this.acciones.cuenta = new ListaDesplegable()
+            .setTxtEtiqueta("Cuenta")
+            .setID("cuenta")
+            .setListener(SYS.CHNG, this.controlador.cambioCuenta)
 
         this.acciones.selLayout = new ListaDesplegable()
             .setTxtEtiqueta("Layout")

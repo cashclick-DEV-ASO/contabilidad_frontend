@@ -42,7 +42,7 @@ export class RegTrnBancosMdl extends Modelo {
         }
     }
 
-    async aplicaLayout(banco, lyt, contenidoArchivo) {
+    async aplicaLayout(banco, cta, lyt, contenidoArchivo) {
         this.resultado = null
 
         if (!contenidoArchivo) {
@@ -59,11 +59,11 @@ export class RegTrnBancosMdl extends Modelo {
 
         let r = { success: false }
         if (banco.texto === "BBVA" && tipo === "fijo")
-            r = anchoBBVA(contenidoArchivo, JSON.parse(layout))
+            r = anchoBBVA(contenidoArchivo, JSON.parse(layout), cta.texto)
         if (banco.texto === "Conekta" && tipo === "delimitado")
             r = delimitadoCONEKTA(contenidoArchivo, JSON.parse(layout))
         if (banco.texto === "STP" && tipo === "excel")
-            r = excelSTP(contenidoArchivo, JSON.parse(layout))
+            r = excelSTP(contenidoArchivo, JSON.parse(layout), cta.texto)
 
         if (r.success) {
             this.mensaje = r.mensaje
@@ -84,7 +84,7 @@ export class RegTrnBancosMdl extends Modelo {
 
     async guardar(edoCta) {
         const validacion = {
-            query: "SELECT * FROM edo_cta WHERE periodo = ? AND archivo = ?",
+            query: "SELECT * FROM edo_cta WHERE archivo = ? AND id_cuenta = ?",
             parametros: [edoCta.periodo, edoCta.archivo]
         }
 

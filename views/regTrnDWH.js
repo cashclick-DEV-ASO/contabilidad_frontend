@@ -27,7 +27,7 @@ export class RegTrnDWH extends Vista {
     inicia() {
         this.titulo.setTexto(REG_TRN_DWH.TITULO)
 
-        this.acciones.periodo = new Periodo().setID("periodo")
+        this.acciones.periodo = new Periodo().setID("periodo").setEstilo3()
 
         this.acciones.archivo = new SolicitaArchivo()
             .accionAbrir(this.controlador.leerArchivo)

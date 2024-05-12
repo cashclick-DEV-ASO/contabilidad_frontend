@@ -50,7 +50,7 @@ export class RegTrnBancosCtrl extends Controlador {
     }
 
     cambioBanco = async () => {
-        this.limpiaCampos()
+        this.limpiaCampos({ lyt: true, cta: true })
         this.acciones.selLayout.actulizaOpciones().setTemporalPH("Cargando layout...").mostrar()
 
         this.banco = this.bancos.find(
@@ -63,6 +63,22 @@ export class RegTrnBancosCtrl extends Controlador {
             this.acciones.selLayout.actulizaOpciones([])
             return
         }
+
+        this.llenaListaCtasContables(this.banco.valor).then(() => {
+            if (this.ctasContables.length === 0)
+                return this.msjError("No hay cuentas registradas para el banco seleccionado.")
+
+            this.acciones.cuenta.actulizaOpciones(this.ctasContables)
+        })
+    }
+
+    cambioCuenta = () => {
+        this.limpiaCampos({ lyt: true })
+        this.acciones.selLayout.actulizaOpciones().setTemporalPH("Cargando layout...").mostrar()
+
+        this.cuenta = this.ctasContables.find(
+            (cta) => cta.valor === Number(this.acciones.cuenta.getValorSeleccionado())
+        )
 
         this.llenaListaLayouts(this.banco.valor).then(() => {
             if (this.layouts.length === 0) {
@@ -77,7 +93,7 @@ export class RegTrnBancosCtrl extends Controlador {
     }
 
     cambioLayout = () => {
-        this.limpiaCampos({ lyt: false })
+        this.limpiaCampos()
 
         this.layout = this.layouts.find(
             (layout) => layout.valor === Number(this.acciones.selLayout.getValorSeleccionado())
@@ -97,8 +113,9 @@ export class RegTrnBancosCtrl extends Controlador {
         this.acciones.selArchivo.setMensaje("Oprime el botón para seleccionar un archivo.")
     }
 
-    limpiaCampos = ({ lyt = true, bnk = false } = {}) => {
+    limpiaCampos = ({ lyt = false, cta = false, bnk = false } = {}) => {
         bnk && this.acciones.selBanco.reinicia()
+        cta && this.acciones.cuenta.reinicia()
         lyt && this.acciones.selLayout.reinicia()
         this.acciones.selArchivo.limpiar()
         this.datos.tabla.limpiar()
@@ -123,7 +140,7 @@ export class RegTrnBancosCtrl extends Controlador {
         )
 
         if (lecturaOK) {
-            await this.modelo.aplicaLayout(this.banco, this.layout, lecturaOK)
+            await this.modelo.aplicaLayout(this.banco, this.cuenta, this.layout, lecturaOK)
 
             if (this.modelo.resultado) {
                 const { informacion, movimientos } = this.modelo.resultado
@@ -254,7 +271,7 @@ export class RegTrnBancosCtrl extends Controlador {
             periodo: periodo.anio + "" + periodo.mes,
             archivo: this.acciones.selArchivo.ruta.name,
             fecha_carga: this.fechaMysql(new Date()),
-            id_cuenta: this.banco.valor,
+            id_cuenta: this.cuenta.valor,
             id_layout: this.layout.valor,
             id_banco: this.banco.valor,
             trns
@@ -268,7 +285,7 @@ export class RegTrnBancosCtrl extends Controlador {
 
             this.msjExito("Se guardó la información correctamente.")
             this.acciones.selLayout.actulizaOpciones([])
-            this.limpiaCampos({ lyt: true, bnk: true })
+            this.limpiaCampos({ lyt: true, cta: true, bnk: true })
             this.acciones.guardar.habilitarBoton(false)
         })
     }

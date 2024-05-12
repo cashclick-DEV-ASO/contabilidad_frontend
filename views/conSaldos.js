@@ -26,14 +26,17 @@ export class ConSaldos extends Vista {
         this.acciones.banco = new ListaDesplegable()
             .setTxtEtiqueta("Banco")
             .setID("banco")
+            .setTxtPhLleno("Todos")
+            .setBloquearPh(false)
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambioBanco)
 
         this.acciones.cuenta = new ListaDesplegable()
             .setTxtEtiqueta("Cuenta")
             .setID("cuenta")
+            .setTxtPhLleno("Todas")
+            .setBloquearPh(false)
             .setEstilo2()
-            .setListener(SYS.CHNG, this.controlador.cambioCuenta)
 
         this.acciones.fechaI = new SolicitaDato()
             .setID("fechaI")
@@ -60,19 +63,20 @@ export class ConSaldos extends Vista {
             .setIDContenedor("buscar")
             .setTexto("Buscar")
             .setListener(this.controlador.buscar)
-            .habilitarBoton(false)
 
         this.datos.tabla = new TablaDatos()
             .setID("tabla")
+            .setListenerExportar(
+                this.controlador.exportaExcel.bind(this.controlador),
+                "Saldos Contables"
+            )
             .setValidaModificacion(this.controlador.validaModificacion)
             .setModificaBaseDatos(this.controlador.modificaTransaccion)
             .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
 
         if (this.perfil == 1 || this.perfil == 2) {
-            this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = true
             this.datos.tabla.permiteExportar = true
-            this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = true
             this.datos.tabla.permiteModificar = true
@@ -80,21 +84,17 @@ export class ConSaldos extends Vista {
         }
 
         if (this.perfil == 3) {
-            this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = true
-            this.datos.tabla.permiteOrdenar = true
-            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteAgregar = true
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = true
             this.datos.tabla.mostrarNoFila = true
         }
 
         if (this.perfil == 4) {
-            this.datos.tabla.permiteFiltro = true
             this.datos.tabla.permiteEditar = false
             this.datos.tabla.permiteExportar = false
-            this.datos.tabla.permiteOrdenar = true
             this.datos.tabla.permiteAgregar = false
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false
@@ -112,7 +112,7 @@ export class ConSaldos extends Vista {
             saldo_inicial: () =>
                 new SolicitaDato().setTxtEtiqueta("Saldo Inicial").setEstilo1().setModoMoneda(),
             saldo_final: () =>
-                new SolicitaDato().setTxtEtiqueta("Saldo Inicial").setEstilo1().setModoMoneda()
+                new SolicitaDato().setTxtEtiqueta("Saldo Final").setEstilo1().setModoMoneda()
         }
 
         this.controlador.cargaInicial()

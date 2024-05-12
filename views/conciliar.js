@@ -52,12 +52,34 @@ export class Conciliar extends Vista {
             .habilitarBoton(false)
             .setListener(this.controlador.guardar)
 
-        this.datos.tabla = new TablaDatos()
-            .setID("tabla")
-            .setListenerExportar(this.controlador.exportaExcel.bind(this.controlador))
-        this.datos.tabla.permiteFiltro = true
-        this.datos.tabla.permiteExportar = true
-        this.datos.tabla.permiteEditar = true
+        this.datos.tabla = new TablaDatos().setID("tabla")
+
+        if (this.perfil == 1 || this.perfil == 2) {
+            this.datos.tabla.permiteEditar = false
+            this.datos.tabla.permiteExportar = false
+            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteEliminar = false
+            this.datos.tabla.permiteModificar = false
+            this.datos.tabla.mostrarNoFila = true
+        }
+
+        if (this.perfil == 3) {
+            this.datos.tabla.permiteEditar = false
+            this.datos.tabla.permiteExportar = false
+            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteEliminar = false
+            this.datos.tabla.permiteModificar = false
+            this.datos.tabla.mostrarNoFila = true
+        }
+
+        if (this.perfil == 4) {
+            this.datos.tabla.permiteEditar = false
+            this.datos.tabla.permiteExportar = false
+            this.datos.tabla.permiteAgregar = false
+            this.datos.tabla.permiteEliminar = false
+            this.datos.tabla.permiteModificar = false
+            this.datos.tabla.mostrarNoFila = true
+        }
 
         return this
     }

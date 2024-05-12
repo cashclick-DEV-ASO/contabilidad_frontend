@@ -242,7 +242,7 @@ export class Controlador {
                     msj.ocultar()
 
                     if (!res.success) return this.mostrarError(res.mensaje)
-                    this.msjExito("Transacción insertada correctamente.", (cerrar) => {
+                    this.msjExito("Información insertada correctamente.", (cerrar) => {
                         this.buscar()
                         cerrar()
                     })
@@ -261,7 +261,7 @@ export class Controlador {
                     msj.ocultar()
 
                     if (!res.success) return this.mostrarError(res.mensaje)
-                    this.msjExito("Transacción modificada correctamente.", (cerrar) => {
+                    this.msjExito("Información modificada correctamente.", (cerrar) => {
                         this.buscar()
                         cerrar()
                     })
@@ -280,7 +280,7 @@ export class Controlador {
                     msj.ocultar()
 
                     if (!res.success) return this.mostrarError(res.mensaje)
-                    this.msjExito("Transacción eliminada correctamente.", (cerrar) => {
+                    this.msjExito("Información eliminada correctamente.", (cerrar) => {
                         this.buscar()
                         cerrar()
                     })

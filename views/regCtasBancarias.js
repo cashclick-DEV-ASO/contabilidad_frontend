@@ -50,11 +50,9 @@ export class RegCtasBancarias extends Vista {
         this.acciones.fecha = new SolicitaDato()
             .setTipo(SYS.DT)
             .setID("fecha")
-            .setTxtEtiqueta("Fecha")
-            .setValorFecha(new Date().toISOString().split("T")[0])
+            .setModoFecha()
+            .setTxtEtiqueta("Fecha Apertura")
             .setEstilo4()
-            .setPropiedad("min", "2020-01-01")
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
             .habilitarInput(false)
             .setListener(SYS.CHNG, this.controlador.validarFecha)
 

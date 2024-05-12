@@ -1,8 +1,8 @@
 .RegTrnBancos > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 2fr 0.5fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr 2fr 0.5fr;
 	grid-template-rows: max-content;
-	grid-template-areas: "periodo banco layout archivo guardar";
+	grid-template-areas: "periodo banco cuenta layout archivo guardar";
 	justify-items: center;
 	align-items: center;
 }
@@ -15,6 +15,10 @@
 	grid-area: banco;
 }
 
+.RegTrnBancos > #contenedorAcciones > #cuenta {
+	grid-area: cuenta;
+}
+
 .RegTrnBancos > #contenedorAcciones > #layout {
 	grid-area: layout;
 }
@@ -25,4 +29,5 @@
 
 .RegTrnBancos > #contenedorAcciones > #guardar {
 	grid-area: guardar;
+	align-self: start;
 }

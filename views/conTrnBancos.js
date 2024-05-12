@@ -91,7 +91,7 @@ export class ConTrnBancos extends Vista {
         }
 
         this.datos.tabla.camposEspeciales = {
-            fecha_creacion: () => {
+            fecha_creación: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Operación")
@@ -119,6 +119,15 @@ export class ConTrnBancos extends Vista {
                         { texto: "Cargo", valor: "1" },
                         { texto: "Abono", valor: "2" }
                     ])
+            },
+            banco: (agregar = false) => {
+                let a = agregar ? [] : this.controlador.bancos
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Banco")
+                    .setEstilo1()
+                    .setOpciones([...a, { texto: "Virtual", valor: "0" }])
+                    .setBloquear(true)
+                    .setMostrarPh(false)
             }
         }
 

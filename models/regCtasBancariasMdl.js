@@ -28,7 +28,7 @@ export class RegCtasBancariasMdl extends Modelo {
         paramsSaldo.push(res.datos[0].insertId)
         const datosSaldo = {
             query: `INSERT INTO saldo_contable
-            (fecha, saldo_inicial, saldo_final, id_cta_contable)
+            (fecha, saldo_inicial, saldo_final, id_cta_bancaria)
             VALUES(?, ?, ?, ?)`,
             parametros: paramsSaldo
         }

@@ -27,14 +27,14 @@ export class ConSaldosCtrl extends Controlador {
         if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
             this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
 
-        this.limpiaCampos({ cta: false, btn: false })
+        this.limpiaCampos({ cta: false })
     }
 
     cambiaFechaF = () => {
         if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
             this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
 
-        this.limpiaCampos({ cta: false, btn: false })
+        this.limpiaCampos({ cta: false })
     }
 
     cambioBanco = () => {
@@ -44,25 +44,21 @@ export class ConSaldosCtrl extends Controlador {
             (banco) => banco.valor === Number(this.acciones.banco.getValorSeleccionado())
         )
 
-        if (this.banco === undefined)
-            return this.msjError("No se encontró información del banco seleccionado.")
+        if (this.banco === undefined) {
+            return this.acciones.cuenta.actulizaOpciones([])
+        } else {
+            this.llenaListaCtasContables(this.banco.valor).then(() => {
+                if (this.ctasContables.length === 0)
+                    return this.msjError("No hay cuentas registradas para el banco seleccionado.")
 
-        this.llenaListaCtasContables(this.banco.valor).then(() => {
-            if (this.ctasContables.length === 0)
-                return this.msjError("No hay cuentas registradas para el banco seleccionado.")
-
-            this.acciones.cuenta.actulizaOpciones(this.ctasContables)
-        })
+                this.acciones.cuenta.actulizaOpciones(this.ctasContables)
+            })
+        }
     }
 
-    cambioCuenta = () => {
-        this.acciones.buscar.habilitarBoton(true)
-    }
-
-    limpiaCampos = ({ cta = true, btn = true } = {}) => {
+    limpiaCampos = ({ cta = true } = {}) => {
         cta && this.acciones.cuenta.reinicia("")
         this.datos.tabla.limpiar()
-        btn && this.acciones.buscar.habilitarBoton(false)
     }
 
     buscar = () => {
@@ -70,10 +66,11 @@ export class ConSaldosCtrl extends Controlador {
         const datos = {
             fechaI: this.acciones.fechaI.getValor(),
             fechaF: this.acciones.fechaF.getValor(),
+            banco: this.acciones.banco.getValorSeleccionado(),
             cuenta: this.acciones.cuenta.getValorSeleccionado()
         }
 
-        if (!this.verificarDatos(datos)) return
+        if (!this.verificarDatos(datos)) return msj.ocultar()
 
         this.modelo.consultaSaldoCuenta(datos).then((resultado) => {
             msj.ocultar()
@@ -112,8 +109,8 @@ export class ConSaldosCtrl extends Controlador {
             return false
         }
 
-        if (fechaF > fechaHoy) {
-            this.msjError("La fecha final no puede ser mayor a la del día actual.")
+        if (fechaF < fechaI) {
+            this.msjError("La fecha final no puede ser menor a la fecha inicial.")
             return false
         }
 

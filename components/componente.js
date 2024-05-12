@@ -106,12 +106,12 @@ export class Componente {
      * @returns {Componente} Componente
      */
     setListener(evento, callback) {
-        this.#componente.addEventListener(evento, callback)
+        this.#componente.addEventListener(evento, (event) => callback(event))
         return this
     }
 
     removeListener(evento, callback) {
-        this.#componente.removeEventListener(evento, callback)
+        this.#componente.removeEventListener(evento)
         return this
     }
 

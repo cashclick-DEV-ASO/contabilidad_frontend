@@ -1,8 +1,7 @@
 .contenedorListaDesplegable {
 	width: max-content;
-	height: 100%;
+	/* height: 100%; */
 	display: grid;
-	align-items: center;
 }
 
 .contenedorListaDesplegable > * {
@@ -13,7 +12,6 @@
 	grid-template-areas:
 		"titulo"
 		"lista";
-	justify-items: center;
 	justify-items: center;
 	align-items: center;
 }

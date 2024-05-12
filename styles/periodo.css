@@ -24,6 +24,12 @@
 		"Mes";
 }
 
+.contenedorPeriodo.alto2 {
+	grid-template-areas:
+		"titulo titulo"
+		"anio mes";
+}
+
 .tituloPeriodo {
 	grid-area: titulo;
 	font-weight: bold;

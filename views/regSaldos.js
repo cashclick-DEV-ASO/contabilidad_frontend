@@ -41,7 +41,7 @@ export class RegSaldos extends Vista {
             .setPropiedad("min", "2020-01-01")
             .setValorFecha(new Date())
             .setEstilo4()
-            .setListener(SYS.CHNG, this.controlador.validaModificacion)
+            .setListener(SYS.CHNG, this.controlador.cambioFecha)
 
         this.acciones.inicial = new SolicitaDato()
             .setID("saldoI")

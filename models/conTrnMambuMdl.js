@@ -30,15 +30,16 @@ export class ConTrnMambuMdl extends Modelo {
             SELECT
                 id,
                 periodo,
-                fecha_creacion,
+                'Mambu' AS banco,
+                fecha_creacion AS fecha_creación,
                 fecha_valor,
                 cliente,
-                credito,
+                credito AS crédito,
                 identificador_bancario,
                 concepto,
                 tipo,
                 monto,
-                informacion
+                informacion AS información
             FROM
                 transaccion_mambu
             WHERE
@@ -47,15 +48,16 @@ export class ConTrnMambuMdl extends Modelo {
             SELECT
                 tv.id,
                 tv.periodo,
+                'Virtual' AS banco,
                 tv.fecha_registro,
                 tv.fecha_valor,
-                SUBSTRING_INDEX(tv.informacion, '||', 1),
-                SUBSTRING_INDEX(tv.informacion, '||', -1),
-                NULL,
-                NULL,
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 1), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 2), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 3), '||', -1),
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 4), '||', -1),
                 tv.tipo,
                 tv.monto,
-                NULL
+                SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 5), '||', -1)
             FROM
                 transaccion_virtual tv
             WHERE
@@ -68,7 +70,14 @@ export class ConTrnMambuMdl extends Modelo {
     }
 
     async insertaTransaccion(datos) {
-        const informacion = datos.cliente + "||" + datos.credito
+        const informacion =
+            datos.cliente +
+            "||" +
+            datos.credito +
+            "||" +
+            datos.identificador_bancario +
+            "||" +
+            datos.concepto
 
         const datosEnvio = {
             query: "INSERT INTO transaccion_virtual (periodo, origen, tipo, monto, fecha_valor, informacion) VALUES (?, ?, ?, ?, ?, ?)",
@@ -86,20 +95,40 @@ export class ConTrnMambuMdl extends Modelo {
     }
 
     async modificaTransaccion(datos) {
-        const datosEnvio = {
-            query: `UPDATE transaccion_mambu
+        const datosEnvio = {}
+
+        if (datos.banco != "0") {
+            datosEnvio.query = `UPDATE transaccion_mambu
                     SET fecha_creacion=?, fecha_valor=?, cliente=?, credito=?, identificador_bancario=?, concepto=?, tipo=?, monto=?, informacion=?
-                    WHERE id=?;`,
-            parametros: [
-                this.fechaMySQL(datos.fecha_creacion),
+                    WHERE id=?`
+            datosEnvio.parametr = [
+                this.fechaMySQL(datos.fecha_creación),
                 this.fechaMySQL(datos.fecha_valor),
                 datos.cliente,
-                datos.credito,
+                datos.cédito,
                 datos.identificador_bancario,
                 datos.concepto,
                 datos.tipo,
                 datos.monto,
-                datos.informacion,
+                datos.información,
+                datos.id
+            ]
+        } else {
+            const informacion =
+                datos.cliente +
+                "||" +
+                datos.cédito +
+                "||" +
+                datos.identificador_bancario +
+                "||" +
+                datos.concepto
+            datosEnvio.query = `UPDATE transaccion_virtual SET periodo = ?, tipo = ?, monto = ?, fecha_valor = ?, informacion = ? WHERE id = ?`
+            datosEnvio.parametros = [
+                datos.periodo,
+                datos.tipo,
+                datos.monto,
+                this.fechaMySQL(datos.fecha_valor),
+                informacion,
                 datos.id
             ]
         }
@@ -108,9 +137,14 @@ export class ConTrnMambuMdl extends Modelo {
     }
 
     async eliminaTransaccion(datos) {
-        const datosEnvio = {
-            query: "UPDATE transaccion_mambu SET visible = 0 WHERE id = ?",
-            parametros: [datos.id]
+        const datosEnvio = {}
+
+        if (datos.banco != "Virtual") {
+            datosEnvio.query = "UPDATE transaccion_mambu SET visible = 0 WHERE id = ?"
+            datosEnvio.parametros = [datos.id]
+        } else {
+            datosEnvio.query = "DELETE FROM transaccion_virtual WHERE id = ?"
+            datosEnvio.parametros = [datos.id]
         }
 
         return await this.post("noConfig", datosEnvio)

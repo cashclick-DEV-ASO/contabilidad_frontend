@@ -368,7 +368,7 @@ export class TablaDatos extends Componente {
                         const datoEjemplo = this.filas.length > 0 ? this.filas[0][indice] : ""
                         const tipo = this.tiposInput[this.tipoDato(datoEjemplo)]
                         if (this.camposEspeciales[campo]) {
-                            editor.campoEspecial(this.camposEspeciales[campo]())
+                            editor.campoEspecial(this.camposEspeciales[campo](true))
                             return
                         }
 

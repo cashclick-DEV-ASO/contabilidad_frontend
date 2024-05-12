@@ -1,4 +1,4 @@
-export const anchoBBVA = (texto, layout) => {
+export const anchoBBVA = (texto, layout, cta) => {
     const lineas = texto.split("\n")
     const resultado = {
         success: false,
@@ -22,10 +22,16 @@ export const anchoBBVA = (texto, layout) => {
     let unificado = []
 
     lineas.forEach((texto, linea) => {
+        if (resultado.lineaError.length > 0) return
         const idRegistro = getIdentificador(texto, 0, 1)
 
         if (idRegistro === idRegInfo) {
             resultado.informacion.apertura = extraeCampos(texto, camposInfo)
+            if (resultado.informacion.apertura.No_Cta != cta) {
+                resultado.success = false
+                resultado.mensaje = `El archivo no corresponde a la cuenta ${cta}.`
+                resultado.lineaError.push([linea, texto])
+            }
             unificado = []
             return
         }
@@ -50,11 +56,13 @@ export const anchoBBVA = (texto, layout) => {
             }
         }
 
-        resultado.success = false
-        resultado.mensaje =
-            "El archivo tiene registros no contemplados en el layout.\nSe recomienda hacer una revisión manual."
-        resultado.lineaError.push([linea, texto])
+        // resultado.success = false
+        // resultado.mensaje =
+        //     "El archivo tiene registros no contemplados en el layout.\nSe recomienda hacer una revisión manual."
+        // resultado.lineaError.push([linea, texto])
     })
+
+    if (resultado.lineaError.length > 0) return resultado
 
     resultado.success = true
     resultado.mensaje = "El archivo se leyó correctamente."
@@ -190,7 +198,7 @@ const convertidorCONEKTA = (valor, tipo) => {
     return valor ? valor.trim() : ""
 }
 
-export const excelSTP = (contenidoArchivo, layout) => {
+export const excelSTP = (contenidoArchivo, layout, cta) => {
     const resultado = {
         success: false,
         mensaje: "",
@@ -202,6 +210,12 @@ export const excelSTP = (contenidoArchivo, layout) => {
     const filas = XLSX.utils.sheet_to_json(contenidoArchivo, {
         range: layout.encabezados ? layout.encabezados - 1 : 0
     })
+
+    if (filas[0]["Cuenta Liquidadora"] != cta) {
+        resultado.success = false
+        resultado.mensaje = `El archivo no corresponde a la cuenta ${cta}.`
+        return resultado
+    }
 
     try {
         filas.forEach((fila) => {
