@@ -232,10 +232,10 @@ export class Controlador {
         XLSX.writeFile(wb, `${filename}.xlsx`)
     }
 
-    insertar = (datos) => {
+    insertar = (datos, cerrarEditor) => {
         this.msjContinuar("¿Está seguro de insertar la información capturada?", {
             callbackSi: (ocultar) => {
-                ocultar()
+                if (ocultar) ocultar()
                 let msj = this.msjProcesando("Procesando solicitud...")
 
                 this.modelo.insertar(datos).then((res) => {
@@ -247,14 +247,18 @@ export class Controlador {
                         cerrar()
                     })
                 })
+                if (cerrarEditor) cerrarEditor()
+            },
+            callbackNo: (ocultar) => {
+                if (ocultar) ocultar()
             }
         })
     }
 
-    modificar = (datos) => {
+    modificar = (datos, cerrarEditor) => {
         this.msjContinuar("¿Está seguro de modificar la información?", {
             callbackSi: (ocultar) => {
-                ocultar()
+                if (ocultar) ocultar()
                 let msj = this.msjProcesando("Procesando solicitud...")
 
                 this.modelo.modificar(datos).then((res) => {
@@ -266,14 +270,18 @@ export class Controlador {
                         cerrar()
                     })
                 })
+                if (cerrarEditor) cerrarEditor()
+            },
+            callbackNo: (ocultar) => {
+                if (ocultar) ocultar()
             }
         })
     }
 
-    eliminar = (datos) => {
+    eliminar = (datos, cerrarEditor) => {
         this.msjContinuar("¿Está seguro de eliminar la información seleccionada?", {
             callbackSi: (ocultar) => {
-                ocultar()
+                if (ocultar) ocultar()
                 let msj = this.msjProcesando("Procesando solicitud...")
 
                 this.modelo.eliminar(datos).then((res) => {
@@ -285,6 +293,10 @@ export class Controlador {
                         cerrar()
                     })
                 })
+                if (cerrarEditor) cerrarEditor()
+            },
+            callbackNo: (ocultar) => {
+                if (ocultar) ocultar()
             }
         })
     }

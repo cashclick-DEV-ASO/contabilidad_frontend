@@ -415,7 +415,7 @@ export class TablaDatos extends Componente {
                                 datos[campo] = newDatos[i]
                             })
                             if (this.validaModificacion && this.validaModificacion(datos)) return
-                            this.insertaBaseDatos(datos)
+                            this.insertaBaseDatos(datos, cerrar)
                         } else {
                             const msjInfo = new Controlador().msjProcesando("Agregando fila...")
                             const datos = {}
@@ -438,8 +438,8 @@ export class TablaDatos extends Componente {
                             this.actualizaTabla({ updtFiltro: false })
                             msjInfo.ocultar()
                             new Controlador().msjExito("Fila agregada correctamente.")
+                            if (cerrar) cerrar()
                         }
-                        cerrar()
                     })
 
                     editor.mostrar()
@@ -601,7 +601,7 @@ export class TablaDatos extends Componente {
                         if (datos.hasOwnProperty(campo)) datos[campo] = newDatos[i]
                     })
                     if (this.validaModificacion && this.validaModificacion(datos)) return
-                    this.modifcaBaseDatos(datos)
+                    this.modifcaBaseDatos(datos, cerrar)
                 } else {
                     const msjInfo = new Controlador().msjProcesando("Actualizando fila...")
                     const campos = editor.getCampos()
@@ -624,23 +624,23 @@ export class TablaDatos extends Componente {
                     this.actualizaTabla({ updtFiltro: false })
                     msjInfo.ocultar()
                     new Controlador().msjExito("Fila actualizada correctamente.")
+                    if (cerrar) cerrar()
                 }
-                cerrar()
             })
 
         if (this.permiteEliminar)
             editor.setAccionEliminar((cerrar) => {
                 if (this.eliminaBaseDatos) {
                     const datos = this.datosOriginales[celda.parentElement.rowIndex - 1]
-                    this.eliminaBaseDatos(datos)
+                    this.eliminaBaseDatos(datos, cerrar)
                 } else {
                     const msjInfo = new Controlador().msjProcesando("Eliminando fila...")
                     this.filas.splice(celda.parentElement.rowIndex - 1, 1)
                     this.actualizaTabla({ updtFiltro: false })
                     msjInfo.ocultar()
                     new Controlador().msjExito("Fila eliminada correctamente.")
+                    if (cerrar) cerrar()
                 }
-                cerrar()
             })
 
         editor.mostrar()

@@ -81,12 +81,12 @@ export class ConTrnDWHCtrl extends Controlador {
 
     validaModificacion = (datos) => {
         const s =
-            parseFloat(datos["capital"]) ||
-            0 + parseFloat(datos["interés"]) ||
-            0 + parseFloat(datos["iva_interés"]) ||
-            0 + parseFloat(datos["penalización"]) ||
-            0 + parseFloat(datos["iva_penalización"]) ||
-            0
+            (parseFloat(datos["capital"]) || 0) +
+            (parseFloat(datos["interés"]) || 0) +
+            (parseFloat(datos["iva_interés"]) || 0) +
+            (parseFloat(datos["penalización"]) || 0) +
+            (parseFloat(datos["iva_penalización"]) || 0)
+
         const t = parseFloat(datos["monto"]) || 0
         if (s !== t) {
             this.msjError(
