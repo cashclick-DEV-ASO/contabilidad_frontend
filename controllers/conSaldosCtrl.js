@@ -10,9 +10,9 @@ export class ConSaldosCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            fecha_valor: this.formatoFecha,
-            monto: this.formatoMoneda,
-            tipo: this.tipoMovimiento
+            fecha: this.formatoFecha,
+            saldo_inicial: this.formatoMoneda,
+            saldo_final: this.formatoMoneda
         }
     }
 
