@@ -91,38 +91,44 @@ export class ConciliarMdl extends Modelo {
     }
 
     async guardar(datos) {
+        const qryPlantilla =
+            "UPDATE TABLA SET correspondencia = ':CORRESPONDENCIA', resultado = :RESULTADO WHERE id = :ID"
         const qrys = {
-            Banco: "UPDATE transaccion_banco SET correspondencia = ?, resultado = ? WHERE id = ?",
-            DWH: "UPDATE transaccion_dwh SET correspondencia = ?, resultado = ? WHERE id = ?",
-            Mambu: "UPDATE transaccion_mambu SET correspondencia = ?, resultado = ? WHERE id = ?",
-            Virtual:
-                "UPDATE transaccion_virtual SET correspondencia = ?, resultado = ? WHERE id = ?"
+            Banco: qryPlantilla.replace("TABLA", "transaccion_banco"),
+            DWH: qryPlantilla.replace("TABLA", "transaccion_dwh"),
+            Mambu: qryPlantilla.replace("TABLA", "transaccion_mambu"),
+            Virtual: qryPlantilla.replace("TABLA", "transaccion_virtual")
         }
         qrys.BBVA = qrys.Banco
         qrys.STP = qrys.Banco
         qrys.Conekta = qrys.Banco
 
+        let qryGrl = ""
+
         for (let index = 0; index < datos.length; index++) {
             const dato = datos[index]
-            let r = null
 
             if (!qrys[dato.origen])
                 return {
                     success: false,
-                    mensaje: "No fue posible identificar el origen de una transacción."
+                    mensaje:
+                        "No fue posible identificar guardar los cambios porque una transacción seleccionada tiene un origen desconocido."
                 }
 
-            r = await this.post("noConfig", {
-                query: qrys[dato.origen],
-                parametros: [dato.correspondencia, dato.resultado, dato.id]
-            })
-
-            if (r && !r.success)
-                return {
-                    success: false,
-                    mensaje: "Error al guardar las transacciones."
-                }
+            qryGrl +=
+                qrys[dato.origen]
+                    .replace(":CORRESPONDENCIA", dato.correspondencia)
+                    .replace(":RESULTADO", dato.resultado)
+                    .replace(":ID", dato.id) + ";"
         }
+
+        const r = await this.post("noConfig", { query: qryGrl, parametros: ["MODO_MULTIPLE"] })
+
+        if (r && !r.success)
+            return {
+                success: false,
+                mensaje: "Error al guardar las transacciones."
+            }
 
         return {
             success: true,

@@ -20,7 +20,7 @@ export class RecalculoInteresCtrl extends Controlador {
 
     consultar = async () => {
         return this.msjError(
-            "No se encontró información de dispersión de créditos en el rango de periodos seleccionados."
+            "No se encontraron créditos que cumplan con los criterios de búsqueda."
         )
     }
 }
