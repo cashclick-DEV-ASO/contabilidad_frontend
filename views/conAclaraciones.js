@@ -34,6 +34,7 @@ export class ConAclaraciones extends Vista {
         this.datos.tabla.permiteFiltro = true
         this.datos.tabla.permiteExportar = true
         this.datos.tabla.permiteEditar = true
+        this.datos.tabla.permiteAgregar = false
 
         this.controlador.cargaInicial()
 

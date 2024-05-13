@@ -97,8 +97,12 @@ export class SolicitaDato extends Componente {
 
         // if (valor instanceof Date) this.fechaInicio = valor.toISOString().split("T")[0]
         // else
-        if (fechaRegexes.some((regex) => regex.test(valor))) this.fechaInicio = new Date(valor)
-        else this.fechaInicio = valor
+        if (fechaRegexes.some((regex) => regex.test(valor))) {
+            if (valor.includes("/")) {
+                const [dia, mes, anio] = valor.split("/")
+                this.fechaInicio = new Date(anio, mes - 1, dia)
+            } else this.fechaInicio = new Date(valor)
+        } else this.fechaInicio = valor
 
         return this
     }
@@ -199,9 +203,18 @@ export class SolicitaDato extends Componente {
     setModoFecha() {
         this.dato
             .setPropiedad("min", "2020-01-01")
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
+            .setPropiedad(
+                "max",
+                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                    .toISOString()
+                    .split("T")[0]
+            )
         this.setTipo(SYS.DT)
-        this.setValorFecha(new Date().toISOString().split("T")[0])
+        this.setValorFecha(
+            new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                .toISOString()
+                .split("T")[0]
+        )
         return this
     }
 }

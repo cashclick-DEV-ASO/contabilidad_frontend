@@ -55,9 +55,9 @@ export class ConTrnDWH extends Vista {
                 "Transacciones DWH"
             )
             .setValidaModificacion(this.controlador.validaModificacion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
-            .setInsertaBaseDatos(this.controlador.insertaTransaccion)
+            .setModificaBaseDatos(this.controlador.modificar)
+            .setEliminaBaseDatos(this.controlador.eliminar)
+            .setInsertaBaseDatos(this.controlador.insertar)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteEditar = true
@@ -142,17 +142,15 @@ export class ConTrnDWH extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Creación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             fecha_valor: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Valor")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             tipo: () => {
                 return new ListaDesplegable().setTxtEtiqueta("Tipo").setOpciones([

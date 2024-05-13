@@ -12,17 +12,24 @@ export class RegAclaracionesCtrl extends Controlador {
     }
 
     buscar = async () => {
-        this.datos.nota.setValor("")
+        this.modelo.consultar(this.acciones.credito.getValor()).then((r) => {
+            if (r.error) return this.msjError(r.error)
 
-        if (this.acciones.credito.getValor() === "100007378") {
+            if (r.datos.length === 0) {
+                this.msjError("No se encontraron datos para el crédito ingresado.")
+                return
+            }
+
+            this.datos.noCred.setValor(r.datos[0].noCredito)
+            this.datos.noClnt.setValor(r.datos[0].noCliente)
+            this.datos.capital.setValor(r.datos[0].capital)
+            this.datos.interes.setValor(r.datos[0].interes)
+            this.datos.fechaInicio.setValor(r.datos[0].fecha)
+            this.datos.ultimoPago.setValor(r.datos[0].ultimo_pago)
+
             this.datos.nota.habilitarInput(true)
             this.acciones.guardar.habilitarBoton(true)
-            return
-        }
-
-        this.datos.nota.habilitarInput(false)
-        this.acciones.guardar.habilitarBoton(false)
-        this.msjError("No se encontró información para el crédito solicitado.")
+        })
     }
 
     guardar = async () => {
@@ -30,10 +37,14 @@ export class RegAclaracionesCtrl extends Controlador {
 
         if (nota === "") return this.msjError("La nota de aclaración no puede estar vacía.")
 
-        this.datos.nota.setValor("")
-        this.datos.nota.habilitarInput(false)
-        this.acciones.guardar.habilitarBoton(false)
-        this.msjExito("La nota de aclaración se guardó correctamente.")
+        this.modelo.guardar({ credito: this.datos.noCred.getValor(), nota }).then((r) => {
+            if (r.error) return this.msjError(r.error)
+
+            this.datos.nota.setValor("")
+            this.datos.nota.habilitarInput(false)
+            this.acciones.guardar.habilitarBoton(false)
+            this.msjExito("La nota de aclaración se guardó correctamente.")
+        })
     }
 
     validaModificacion = () => {

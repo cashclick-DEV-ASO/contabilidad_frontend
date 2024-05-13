@@ -50,9 +50,9 @@ export class ConTrnMambu extends Vista {
                 "Transacciones Mambu"
             )
             .setValidaModificacion(this.controlador.validaModificacion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
-            .setInsertaBaseDatos(this.controlador.insertaTransaccion)
+            .setModificaBaseDatos(this.controlador.modificar)
+            .setEliminaBaseDatos(this.controlador.eliminar)
+            .setInsertaBaseDatos(this.controlador.insertar)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteEditar = true
@@ -84,19 +84,12 @@ export class ConTrnMambu extends Vista {
         this.datos.tabla.camposEspeciales = {
             fecha_creación: () => {
                 return new SolicitaDato()
-                    .setTipo("date")
                     .setTxtEtiqueta("Fecha Creación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             fecha_valor: () => {
-                return new SolicitaDato()
-                    .setTipo("date")
-                    .setTxtEtiqueta("Fecha Valor")
-                    .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+                return new SolicitaDato().setTxtEtiqueta("Fecha Valor").setModoFecha().setEstilo1()
             },
             monto: () => {
                 return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()

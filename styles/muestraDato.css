@@ -18,10 +18,26 @@
 	justify-items: center;
 }
 
+.contenedorSolicitaDato.alto2 {
+	grid-template-rows: 1fr 1fr;
+	grid-template-areas:
+		"titulo"
+		"dato";
+	justify-content: center;
+	align-items: center;
+}
+
 .contenedorMuestraDato.ancho {
 	grid-template-columns: max-content 1fr max-content;
 	grid-template-areas: "titulo dato boton";
 	justify-content: center;
+}
+
+.contenedorSolicitaDato.ancho2 {
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas: "titulo dato";
+	justify-content: center;
+	align-items: center;
 }
 
 .contenedorMuestraDato > .lblDato {

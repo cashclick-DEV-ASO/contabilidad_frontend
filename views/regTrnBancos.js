@@ -90,17 +90,15 @@ export class RegTrnBancos extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Operación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             Fecha_Valor: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Valor")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             Monto: () => {
                 return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
@@ -119,33 +117,29 @@ export class RegTrnBancos extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Creación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             Fecha_Pago: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Pago")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             "Fecha Captura": () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Captura")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             "Fecha Operación": () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Operación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             }
         }
 

@@ -1,20 +1,24 @@
-.ConConciliacion > #contenedorAcciones {
+.ConNoConciliacion > #contenedorAcciones {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: max-content;
-	grid-template-areas: "fechaI fechaF buscar";
+	grid-template-areas: "fechaI fechaF buscar conciliar";
 	justify-items: center;
 	align-items: center;
 }
 
-.ConConciliacion > #contenedorAcciones > #fechaI {
+.ConNoConciliacion > #contenedorAcciones > #fechaI {
 	grid-area: fechaI;
 }
 
-.ConConciliacion > #contenedorAcciones > #fechaF {
+.ConNoConciliacion > #contenedorAcciones > #fechaF {
 	grid-area: fechaF;
 }
 
-.ConConciliacion > #contenedorAcciones > #buscar {
+.ConNoConciliacion > #contenedorAcciones > #buscar {
 	grid-area: buscar;
+}
+
+.ConNoConciliacion > #contenedorAcciones > #conciliar {
+	grid-area: conciliar;
 }

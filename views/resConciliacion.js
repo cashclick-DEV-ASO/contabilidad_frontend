@@ -16,8 +16,15 @@ export class ResConciliacion extends Vista {
     inicia() {
         this.titulo.setTexto("Resumen de Conciliación")
 
-        this.acciones.periodoI = new Periodo().setID("periodoI").setTitulo("Periodo Inicial")
-        this.acciones.periodoF = new Periodo().setID("periodoF").setTitulo("Periodo Final")
+        this.acciones.periodoI = new Periodo()
+            .setID("periodoI")
+            .setTitulo("Periodo Inicial")
+            .setListener(this.controlador.cambiaPeriodo)
+
+        this.acciones.periodoF = new Periodo()
+            .setID("periodoF")
+            .setTitulo("Periodo Final")
+            .setListener(this.controlador.cambiaPeriodo)
 
         this.acciones.consultar = new Botonera()
             .addBoton("btnConsultar")
@@ -25,31 +32,97 @@ export class ResConciliacion extends Vista {
             .setTexto("Consultar")
             .setListener(this.controlador.consultar)
 
-        this.datos.tituloTrn = new Componente(SYS.LBL, {
+        this.datos.tb_titulo = new Componente(SYS.LBL, {
             clase: "tituloRes",
             id: "tituloTrns"
-        }).setTexto("Transacciones")
-        this.datos.noTrn = new MuestraDato().setID("noTrn").setTxtEtiqueta("Totales:")
-        this.datos.noTrnOK = new MuestraDato().setID("noTrnOK").setTxtEtiqueta("OK:")
-        this.datos.noTrnNoOK = new MuestraDato().setID("noTrnNoOK").setTxtEtiqueta("No OK:")
+        }).setTexto("Transacciones Bancos")
 
-        this.datos.tituloAbonos = new Componente(SYS.LBL, {
+        this.datos.tb_noTrn = new MuestraDato()
+            .setID("tb_noTrn")
+            .setTxtEtiqueta("Totales:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tb_noTrnOK = new MuestraDato()
+            .setID("tb_noTrnOK")
+            .setTxtEtiqueta("OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tb_noTrnNoOK = new MuestraDato()
+            .setID("tb_noTrnNoOK")
+            .setTxtEtiqueta("No OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.td_titulo = new Componente(SYS.LBL, {
             clase: "tituloRes",
-            id: "tituloAbonos"
-        }).setTexto("Abonos")
-        this.datos.noAbonos = new MuestraDato().setID("noAbonos").setTxtEtiqueta("Totales:")
-        this.datos.noAbonosOK = new MuestraDato().setID("noAbonosOK").setTxtEtiqueta("OK:")
-        this.datos.noAbonosNoOK = new MuestraDato().setID("noAbonosNoOK").setTxtEtiqueta("No OK:")
+            id: "tituloTrns"
+        }).setTexto("Transacciones DWH")
 
-        this.datos.tituloCargos = new Componente(SYS.LBL, {
+        this.datos.td_noTrn = new MuestraDato()
+            .setID("td_noTrn")
+            .setTxtEtiqueta("Totales:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.td_noTrnOK = new MuestraDato()
+            .setID("td_noTrnOK")
+            .setTxtEtiqueta("OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.td_noTrnNoOK = new MuestraDato()
+            .setID("td_noTrnNoOK")
+            .setTxtEtiqueta("No OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tm_titulo = new Componente(SYS.LBL, {
             clase: "tituloRes",
-            id: "tituloCargos"
-        }).setTexto("Cargos")
-        this.datos.noCargos = new MuestraDato().setID("noCargos").setTxtEtiqueta("Totales:")
-        this.datos.noCargosOK = new MuestraDato().setID("noCargosOK").setTxtEtiqueta("OK:")
-        this.datos.noCargosNoOK = new MuestraDato().setID("noCargosNoOK").setTxtEtiqueta("No OK:")
+            id: "tituloTrns"
+        }).setTexto("Transacciones Mambu")
 
-        this.controlador.cargaInicial()
+        this.datos.tm_noTrn = new MuestraDato()
+            .setID("tm_noTrn")
+            .setTxtEtiqueta("Totales:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tm_noTrnOK = new MuestraDato()
+            .setID("tm_noTrnOK")
+            .setTxtEtiqueta("OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tm_noTrnNoOK = new MuestraDato()
+            .setID("tm_noTrnNoOK")
+            .setTxtEtiqueta("No OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tl_titulo = new Componente(SYS.LBL, {
+            clase: "tituloRes",
+            id: "tituloTrns"
+        }).setTexto("Transacciones Total")
+
+        this.datos.tl_noTrn = new MuestraDato()
+            .setID("tl_noTrn")
+            .setTxtEtiqueta("Totales:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tl_noTrnOK = new MuestraDato()
+            .setID("tl_noTrnOK")
+            .setTxtEtiqueta("OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
+
+        this.datos.tl_noTrnNoOK = new MuestraDato()
+            .setID("tl_noTrnNoOK")
+            .setTxtEtiqueta("No OK:")
+            .setEstilo4()
+            .setTxtDato(this.controlador.plantillaInicial)
 
         return this
     }

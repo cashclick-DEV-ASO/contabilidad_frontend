@@ -92,17 +92,15 @@ export class RegTrnDWH extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Inicio")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             "fecha aprobacion": () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Aprobación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             }
         }
 

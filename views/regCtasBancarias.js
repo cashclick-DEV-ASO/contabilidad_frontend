@@ -60,7 +60,6 @@ export class RegCtasBancarias extends Vista {
             .setID("comentarios")
             .setTxtEtiqueta("Comentarios")
             .setTxtPlaceholder("Comentarios")
-            .setEstilo1()
             .habilitarInput(false)
             .setTxtPlaceholder("Comentarios")
 

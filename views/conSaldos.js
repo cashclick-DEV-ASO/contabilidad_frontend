@@ -40,21 +40,15 @@ export class ConSaldos extends Vista {
 
         this.acciones.fechaI = new SolicitaDato()
             .setID("fechaI")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Inicial")
-            .setValorFecha(new Date())
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
-            .setPropiedad("min", "2020-01-01")
+            .setModoFecha()
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
         this.acciones.fechaF = new SolicitaDato()
             .setID("fechaF")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Final")
-            .setValorFecha(new Date())
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
-            .setPropiedad("min", "2020-01-01")
+            .setModoFecha()
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 
@@ -71,8 +65,8 @@ export class ConSaldos extends Vista {
                 "Saldos Contables"
             )
             .setValidaModificacion(this.controlador.validaModificacion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+            .setModificaBaseDatos(this.controlador.modificar)
+            .setEliminaBaseDatos(this.controlador.eliminar)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteEditar = true
@@ -102,17 +96,22 @@ export class ConSaldos extends Vista {
         }
 
         this.datos.tabla.camposEspeciales = {
-            fecha: () =>
-                new SolicitaDato()
+            fecha: () => {
+                return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0]),
-            saldo_inicial: () =>
-                new SolicitaDato().setTxtEtiqueta("Saldo Inicial").setEstilo1().setModoMoneda(),
-            saldo_final: () =>
-                new SolicitaDato().setTxtEtiqueta("Saldo Final").setEstilo1().setModoMoneda()
+            },
+            saldo_inicial: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Saldo Inicial")
+                    .setEstilo1()
+                    .setModoMoneda()
+            },
+            saldo_final: () => {
+                return new SolicitaDato().setTxtEtiqueta("Saldo Final").setEstilo1().setModoMoneda()
+            }
         }
 
         this.controlador.cargaInicial()

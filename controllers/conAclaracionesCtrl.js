@@ -10,8 +10,7 @@ export class ConAclaracionesCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            monto_prestamo: this.formatoMoneda,
-            parcialidad: this.formatoMoneda
+            fecha_valor: this.formatoFecha
         }
     }
 
@@ -23,38 +22,20 @@ export class ConAclaracionesCtrl extends Controlador {
     }
 
     buscar = async () => {
-        if (this.datos.tabla.getFilas().length > 0) {
-            this.datos.tabla.limpiar()
-            this.msjError("No se encontraron registros.")
-            return
-        }
+        let msj = this.msjProcesando("Consultando aclaraciones...")
+        this.datos.tabla.limpiar()
 
-        this.datos.tabla
-            .parseaJSON([
-                {
-                    id_credito: 1005235,
-                    monto_prestamo: 100000,
-                    interes: 80000,
-                    parcialidad: 10540,
-                    fecha_inicio: "25/05/2021",
-                    fecha_ultimo_pago: "07/08/2021",
-                    fecha_inicio_seguimiento: "10/08/2021",
-                    estatus: "Cerrado",
-                    notas: "10/08/2021 - El cliente solicita reembolso del cargo automático por haber pagado un día antes.<br><br>12/08/2021 - Se valida con el area de cobranza y se autoriza el reembolso.<br><br>20/08/2021 - Se realiza el reembolso y se cierra el caso.\n"
-                },
-                {
-                    id_credito: 1005242,
-                    monto_prestamo: 8000,
-                    interes: 5000,
-                    parcialidad: 800,
-                    fecha_inicio: "05/07/2022",
-                    fecha_ultimo_pago: "",
-                    fecha_inicio_seguimiento: "10/08/2021",
-                    estatus: "Abierto",
-                    notas: "10/08/2021 - El cliente indica que solicito la cancelación del crédito, se pasa el caso a contraloria para su autorización."
-                }
-            ])
-            .actualizaTabla()
+        this.modelo.buscar().then((res) => {
+            msj.ocultar()
+
+            if (!res.success) return this.msjError(resultado.mensaje)
+            if (res.datos.length === 0)
+                return this.msjAdvertencia(
+                    "No se encontraron aclaraciones para los criterios seleccionados."
+                )
+
+            this.datos.tabla.parseaJSON(res.datos, null, this.formatoTabla, ["id"]).actualizaTabla()
+        })
     }
 }
 

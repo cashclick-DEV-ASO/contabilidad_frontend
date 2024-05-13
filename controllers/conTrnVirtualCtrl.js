@@ -16,16 +16,6 @@ export class ConTrnVirtualCtrl extends Controlador {
         }
     }
 
-    cambiaFechaI = () => {
-        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-    }
-
-    cambiaFechaF = () => {
-        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-    }
-
     buscar = () => {
         let msj = this.msjProcesando("Consultando transacciones...")
         this.datos.tabla.limpiar()
@@ -35,7 +25,7 @@ export class ConTrnVirtualCtrl extends Controlador {
             fechaF: this.acciones.fechaF.getValor()
         }
 
-        this.modelo.buscarTransacciones(datos).then((res) => {
+        this.modelo.buscar(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)

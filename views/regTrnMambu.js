@@ -84,17 +84,15 @@ export class RegTrnMambu extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha reporte")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             "Fecha de inicio del crédito": () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha de inicio del crédito")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             "Monto Crédito": () => {
                 return new SolicitaDato()
@@ -106,23 +104,22 @@ export class RegTrnMambu extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha vencimiento del préstamo")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
             },
             "Fecha programada de pago": () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha programada de pago")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
             },
             "Fecha de pago": () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha de pago")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             "Importe Pago": () => {
                 return new SolicitaDato()

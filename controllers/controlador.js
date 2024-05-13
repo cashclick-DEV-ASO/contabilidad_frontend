@@ -232,13 +232,13 @@ export class Controlador {
         XLSX.writeFile(wb, `${filename}.xlsx`)
     }
 
-    insertaTransaccion = (datos) => {
+    insertar = (datos) => {
         this.msjContinuar("¿Está seguro de insertar la información capturada?", {
             callbackSi: (ocultar) => {
                 ocultar()
                 let msj = this.msjProcesando("Procesando solicitud...")
 
-                this.modelo.insertaTransaccion(datos).then((res) => {
+                this.modelo.insertar(datos).then((res) => {
                     msj.ocultar()
 
                     if (!res.success) return this.mostrarError(res.mensaje)
@@ -251,13 +251,13 @@ export class Controlador {
         })
     }
 
-    modificaTransaccion = (datos) => {
+    modificar = (datos) => {
         this.msjContinuar("¿Está seguro de modificar la información?", {
             callbackSi: (ocultar) => {
                 ocultar()
                 let msj = this.msjProcesando("Procesando solicitud...")
 
-                this.modelo.modificaTransaccion(datos).then((res) => {
+                this.modelo.modificar(datos).then((res) => {
                     msj.ocultar()
 
                     if (!res.success) return this.mostrarError(res.mensaje)
@@ -270,13 +270,13 @@ export class Controlador {
         })
     }
 
-    eliminaTransaccion = (datos) => {
+    eliminar = (datos) => {
         this.msjContinuar("¿Está seguro de eliminar la información seleccionada?", {
             callbackSi: (ocultar) => {
                 ocultar()
                 let msj = this.msjProcesando("Procesando solicitud...")
 
-                this.modelo.eliminaTransaccion(datos).then((res) => {
+                this.modelo.eliminar(datos).then((res) => {
                     msj.ocultar()
 
                     if (!res.success) return this.mostrarError(res.mensaje)
@@ -287,6 +287,20 @@ export class Controlador {
                 })
             }
         })
+    }
+
+    cambiaFechaI = () => {
+        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
+            this.acciones.fechaF.setValor(
+                this.acciones.fechaI.getValor().toISOString().split("T")[0]
+            )
+    }
+
+    cambiaFechaF = () => {
+        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
+            this.acciones.fechaI.setValor(
+                this.acciones.fechaF.getValor().toISOString().split("T")[0]
+            )
     }
 }
 

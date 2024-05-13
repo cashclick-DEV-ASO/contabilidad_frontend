@@ -38,8 +38,8 @@ export class ConCtasBancarias extends Vista {
                 this.controlador.exportaExcel.bind(this.controlador),
                 "Cuentas Bancarias"
             )
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
+            .setEliminaBaseDatos(this.controlador.eliminar)
+            .setModificaBaseDatos(this.controlador.modificar)
 
         this.datos.tabla.mostrarNoFila = false
 
@@ -78,18 +78,16 @@ export class ConCtasBancarias extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha registro")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
                     .habilitarInput(false)
             },
             fecha_apertura: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha apertura")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
                     .habilitarInput(false)
             }
         }

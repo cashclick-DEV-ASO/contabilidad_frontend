@@ -7,7 +7,7 @@ export class ConTrnBancosMdl extends Modelo {
         super()
     }
 
-    async buscarTransacciones(datos) {
+    async buscar(datos) {
         const filtros = ["visible = 1"]
         const parametros = []
         const filtrosV = ["origen = 'Banco'"]
@@ -47,7 +47,15 @@ export class ConTrnBancosMdl extends Modelo {
                 tb.fecha_valor,
                 tb.concepto,
                 tb.tipo,
-                tb.monto
+                tb.monto,
+                CASE
+                    WHEN tb.resultado = 0 THEN 'No conciliado'
+                    ELSE 'Conciliado'
+                END AS resultado,
+                CASE
+                    WHEN tb.visible = 1 THEN 'Visible'
+                    ELSE 'Inactivo'
+                END AS estado
             FROM
                 transaccion_banco tb
             RIGHT JOIN
@@ -66,7 +74,12 @@ export class ConTrnBancosMdl extends Modelo {
                 tv.fecha_valor,
                 SUBSTRING_INDEX(SUBSTRING_INDEX(tv.informacion, '||', 4), '||', -1),
                 tv.tipo,
-                tv.monto
+                tv.monto,
+                CASE
+                    WHEN tv.resultado = 0 THEN 'No conciliado'
+                    ELSE 'Conciliado'
+                END AS resultado,
+                'Visible' AS estado
             FROM
                 transaccion_virtual tv
             WHERE
@@ -78,7 +91,7 @@ export class ConTrnBancosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async insertaTransaccion(datos) {
+    async insertar(datos) {
         const informacion = datos.banco + "||" + datos.información + "||" + datos.concepto
 
         const datosEnvio = {
@@ -96,13 +109,13 @@ export class ConTrnBancosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {}
 
         if (datos.banco != "0") {
             datosEnvio.query = `UPDATE transaccion_banco SET informacion = ?, fecha_creacion = ?, fecha_valor = ?, concepto = ?, tipo = ?, monto = ? WHERE id = ?`
             datosEnvio.parametros = [
-                datos.informacion,
+                datos.información,
                 this.fechaMySQL(datos.fecha_creación),
                 this.fechaMySQL(datos.fecha_valor),
                 datos.concepto,
@@ -125,7 +138,7 @@ export class ConTrnBancosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {}
 
         if (datos.banco != "Virtual") {

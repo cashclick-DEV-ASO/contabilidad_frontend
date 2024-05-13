@@ -45,13 +45,9 @@ export class ConTrnVirtual extends Vista {
 
         this.datos.tabla = new TablaDatos()
             .setID("tabla")
-            .setListenerExportar(
-                this.controlador.exportaExcel.bind(this.controlador),
-                "Transacciones Mambu"
-            )
-            .setValidaModificacion(this.controlador.validaModificacion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+            .setListenerExportar(this.controlador.exportaExcel, "Transacciones Mambu")
+            .setModificaBaseDatos(this.controlador.modificar)
+            .setEliminaBaseDatos(this.controlador.eliminar)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteEditar = true
@@ -85,17 +81,15 @@ export class ConTrnVirtual extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Creación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             fecha_valor: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Valor")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             monto: () => {
                 return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()

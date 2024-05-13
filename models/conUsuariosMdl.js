@@ -17,7 +17,7 @@ export class ConUsuariosMdl extends Modelo {
         return await this.post("noConfig", datos)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {
             query: `UPDATE usuario SET nombre1 = ?, nombre2 = ?, apellido1 = ?, apellido2 = ?, usuario = ?, id_perfil = ?, activo = ? WHERE id = ?`,
             parametros: [
@@ -35,7 +35,7 @@ export class ConUsuariosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {
             query: "DELETE FROM usuario WHERE id = ?",
             parametros: [datos.id]

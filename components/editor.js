@@ -142,7 +142,16 @@ export class Editor extends Componente {
         }
         const dato = new SolicitaDato()
         dato.setTxtEtiqueta(titulo).setTipo(tipo)
-        if (tipo === "date") dato.setValorFecha(valor || new Date().toISOString().split("T")[0])
+        if (tipo === "date")
+            dato.setValorFecha(
+                valor ||
+                    new Date().toLocaleDateString("es-MX", {
+                        timeZone: "America/Mexico_City",
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit"
+                    })
+            )
         else dato.setValor(valor)
         this.campos.push(dato)
         this.datos.addHijo(dato.mostrar())
@@ -173,7 +182,15 @@ export class Editor extends Componente {
     campoEspecial(campo, valor = null) {
         if (campo instanceof SolicitaDato) {
             if (campo.tipo === "date")
-                campo.setValorFecha(valor || new Date().toISOString().split("T")[0])
+                campo.setValorFecha(
+                    valor ||
+                        new Date().toLocaleDateString("es-MX", {
+                            timeZone: "America/Mexico_City",
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit"
+                        })
+                )
             else campo.setValor(valor || "")
         }
 

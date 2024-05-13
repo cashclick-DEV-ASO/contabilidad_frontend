@@ -7,7 +7,7 @@ export class ConSaldosMdl extends Modelo {
         super()
     }
 
-    async consultaSaldoCuenta(datos) {
+    async buscar(datos) {
         const filtros = []
         const parametros = []
 
@@ -57,7 +57,7 @@ export class ConSaldosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {
             query: `UPDATE saldo_contable SET fecha = ?, saldo_inicial = ?, saldo_final = ? WHERE id = ?`,
 
@@ -72,7 +72,7 @@ export class ConSaldosMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {
             query: "DELETE FROM saldo_contable WHERE id = ?",
             parametros: [datos.id]

@@ -12,7 +12,7 @@ export class ConCtasBancariasCtrl extends Controlador {
         this.formatoTabla = {
             fecha_registro: this.formatoFecha,
             fecha_apertura: this.formatoFecha,
-            saldo: this.formatoModena
+            saldo: this.formatoMoneda
         }
     }
 

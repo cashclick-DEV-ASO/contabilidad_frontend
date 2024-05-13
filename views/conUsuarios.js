@@ -27,8 +27,8 @@ export class RegUsuarios extends Vista {
         this.datos.tabla = new TablaDatos()
             .setID("tabla")
             .setValidaModificacion(this.controlador.validaModificacion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
+            .setModificaBaseDatos(this.controlador.modificar)
+            .setEliminaBaseDatos(this.controlador.eliminar)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteFiltro = true

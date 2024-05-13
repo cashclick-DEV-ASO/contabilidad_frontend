@@ -5,7 +5,7 @@ export class ConTrnMambuMdl extends Modelo {
         super()
     }
 
-    async buscarTransacciones(datos) {
+    async buscar(datos) {
         const filtros = ["visible = 1"]
         const parametros = []
         const filtrosV = ["origen = 'Mambu'"]
@@ -69,7 +69,7 @@ export class ConTrnMambuMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async insertaTransaccion(datos) {
+    async insertar(datos) {
         const informacion =
             datos.cliente +
             "||" +
@@ -94,7 +94,7 @@ export class ConTrnMambuMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {}
 
         if (datos.banco != "0") {
@@ -136,7 +136,7 @@ export class ConTrnMambuMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {}
 
         if (datos.banco != "Virtual") {

@@ -53,7 +53,7 @@ export class Layout extends Vista {
             .setIDContenedor(LAYOUT.ID_CONTENEDOR_BTN_GUARDAR)
             .addBoton(LAYOUT.ID_BTN_GUARDAR)
             .setTexto(LAYOUT.TXT_BTN_GUARDAR)
-            .setListener(this.controlador.guardarCambios)
+            .setListener(this.controlador.guardar)
             .habilitarBoton(false)
             .addBoton(LAYOUT.ID_BTN_ELIMINAR)
             .setTexto(LAYOUT.TXT_BTN_ELIMINAR, LAYOUT.ID_BTN_ELIMINAR)

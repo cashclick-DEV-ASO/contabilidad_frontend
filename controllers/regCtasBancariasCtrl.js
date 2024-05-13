@@ -30,7 +30,7 @@ export class RegCtasBancariasCtrl extends Controlador {
             return this.msjError("Los números de cuenta no coinciden.")
         if (this.acciones.saldo.getValor() === "") return this.msjError("Ingrese el saldo inicial.")
 
-        const res = await this.modelo.guardarCuenta(
+        const res = await this.modelo.guardar(
             [
                 this.acciones.cuenta.getValor(),
                 this.acciones.banco.getValorSeleccionado(),

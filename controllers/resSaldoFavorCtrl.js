@@ -17,41 +17,13 @@ export class ResSaldoFavorCtrl extends Controlador {
     }
 
     consultar = async () => {
+        this.msjError("No se encontró información para los periodos seleccionados.")
         if (this.datos.tabla.getFilas().length > 0) {
             this.datos.tabla.limpiar()
-            this.msjError("No se encontró información para los periodos seleccionados.")
             return
         }
 
-        this.datos.tabla
-            .parseaJSON(
-                [
-                    {
-                        id_cliente: 423423,
-                        id_credito: 1005235,
-                        monto_prestamo: 100000,
-                        monto_pagado: 100230,
-                        saldo_a_favor: 230
-                    },
-                    {
-                        id_cliente: 423867,
-                        id_credito: 1005687,
-                        monto_prestamo: 5000,
-                        monto_pagado: 5145.23,
-                        saldo_a_favor: 145.23
-                    },
-                    {
-                        id_cliente: 425692,
-                        id_credito: 1005688,
-                        monto_prestamo: 10000,
-                        monto_pagado: 10052,
-                        saldo_a_favor: 52
-                    }
-                ],
-                null,
-                this.formatoTabla
-            )
-            .actualizaTabla()
+        this.datos.tabla.parseaJSON([], null, this.formatoTabla).actualizaTabla()
     }
 }
 

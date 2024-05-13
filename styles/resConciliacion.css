@@ -20,22 +20,21 @@
 }
 
 .ResConciliacion > #contenedorDatos {
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-items: center;
-	height: 50%;
 	align-items: center;
+    justify-content: center;
 }
 
 .ResConciliacion  > #contenedorDatos > .tituloRes {
-	font-size: 1.5em;
+	font-size: 20px;
 	font-weight: bold;
+	padding-top: 15px;
 }
 
-.ResConciliacion > #contenedorDatos > .contenedorMuestraDato > .lblDato {
-	text-align: right;
-}
 
 .ResConciliacion > #contenedorDatos > .contenedorMuestraDato > .txtDato {
-	width: 300px;
+	width: 400px;
 }

@@ -13,6 +13,7 @@ export class Periodo extends Componente {
     constructor() {
         super(SYS.SCTN, { clase: PERIODO.CONTENEDOR })
         this.periodoActual = getPeridoActual()
+        this.listenerExtra = null
 
         return this.inicia()
     }
@@ -38,6 +39,8 @@ export class Periodo extends Componente {
 
                 if (this.txtAnioPeriodo.getValor() % 1 !== 0)
                     this.txtAnioPeriodo.setValor(parseInt(this.txtAnioPeriodo.getValor()))
+
+                if (this.listenerExtra) this.listenerExtra()
             })
 
         this.txtMesPeriodo = new SolicitaDato()
@@ -61,6 +64,8 @@ export class Periodo extends Componente {
                     this.txtMesPeriodo.getValor() > this.periodoActual.mes
                 )
                     this.txtMesPeriodo.setValor(this.periodoActual.mes)
+
+                if (this.listenerExtra) this.listenerExtra()
             })
 
         return this
@@ -86,6 +91,26 @@ export class Periodo extends Componente {
         }
     }
 
+    getPeriodoTexto() {
+        return `${this.txtAnioPeriodo.getValor()}${this.txtMesPeriodo
+            .getValor()
+            .toString()
+            .padStart(2, "0")}`
+    }
+
+    setPeriodo(periodo) {
+        if (typeof periodo === SYS.STRNG) {
+            periodo = {
+                anio: parseInt(periodo.substring(0, 4)),
+                mes: parseInt(periodo.substring(5, 7))
+            }
+        }
+
+        this.txtAnioPeriodo.setValor(periodo.anio)
+        this.txtMesPeriodo.setValor(periodo.mes)
+        return this
+    }
+
     setTitulo(titulo) {
         this.titulo.setTexto(titulo)
         return this
@@ -94,6 +119,11 @@ export class Periodo extends Componente {
     setEstilo3() {
         this.txtAnioPeriodo.setEstilo1()
         this.txtMesPeriodo.setEstilo1()
+        return this
+    }
+
+    setListener(listener) {
+        this.listenerExtra = listener
         return this
     }
 }

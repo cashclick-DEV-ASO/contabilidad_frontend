@@ -7,7 +7,7 @@ export class ConTrnDWHMdl extends Modelo {
         super()
     }
 
-    async buscarTransacciones(datos) {
+    async buscar(datos) {
         const filtros = ["visible = 1"]
         const parametros = []
         const filtrosV = ["origen = 'DWH'"]
@@ -84,7 +84,7 @@ export class ConTrnDWHMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async insertaTransaccion(datos) {
+    async insertar(datos) {
         const informacion =
             datos.cliente +
             "||" +
@@ -117,7 +117,7 @@ export class ConTrnDWHMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {}
 
         if (datos.banco != "0") {
@@ -169,7 +169,7 @@ export class ConTrnDWHMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {}
 
         if (datos.banco != "Virtual") {

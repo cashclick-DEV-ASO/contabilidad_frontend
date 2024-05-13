@@ -5,7 +5,7 @@ export class RegSaldosMdl extends Modelo {
         super()
     }
 
-    async registraSaldo(saldo) {
+    async guardar(saldo) {
         const validacion = {
             query: `
             SELECT

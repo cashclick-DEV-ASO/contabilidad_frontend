@@ -5,7 +5,7 @@ export class RegCtasBancariasMdl extends Modelo {
         super()
     }
 
-    async guardarCuenta(paramsCuenta, paramsSaldo) {
+    async guardar(paramsCuenta, paramsSaldo) {
         const qryValidaCuenta = `SELECT COUNT(*) AS conteo FROM cuenta_bancaria WHERE cta = ? AND id_banco = ?`
         const resValidaCuenta = await this.post("noConfig", {
             query: qryValidaCuenta,

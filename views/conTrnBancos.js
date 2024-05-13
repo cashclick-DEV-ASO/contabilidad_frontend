@@ -59,9 +59,9 @@ export class ConTrnBancos extends Vista {
                 "Transacciones Bancarias"
             )
             .setValidaModificacion(this.controlador.validaModificacion)
-            .setModificaBaseDatos(this.controlador.modificaTransaccion)
-            .setEliminaBaseDatos(this.controlador.eliminaTransaccion)
-            .setInsertaBaseDatos(this.controlador.insertaTransaccion)
+            .setModificaBaseDatos(this.controlador.modificar)
+            .setEliminaBaseDatos(this.controlador.eliminar)
+            .setInsertaBaseDatos(this.controlador.insertar)
 
         if (this.perfil == 1 || this.perfil == 2) {
             this.datos.tabla.permiteEditar = true
@@ -95,17 +95,15 @@ export class ConTrnBancos extends Vista {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Operación")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             fecha_valor: () => {
                 return new SolicitaDato()
                     .setTipo("date")
                     .setTxtEtiqueta("Fecha Valor")
+                    .setModoFecha()
                     .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
             },
             monto: () => {
                 return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
@@ -131,15 +129,25 @@ export class ConTrnBancos extends Vista {
             },
             archivo: () => {
                 return new SolicitaDato()
-                    .setTipo("text")
                     .setTxtEtiqueta("Archivo")
                     .setEstilo1()
                     .habilitarInput(false)
             },
             cuenta: () => {
                 return new SolicitaDato()
-                    .setTipo("text")
                     .setTxtEtiqueta("Cuenta")
+                    .setEstilo1()
+                    .habilitarInput(false)
+            },
+            resultado: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Resultado")
+                    .setEstilo1()
+                    .habilitarInput(false)
+            },
+            estado: () => {
+                return new SolicitaDato()
+                    .setTxtEtiqueta("Estado")
                     .setEstilo1()
                     .habilitarInput(false)
             }

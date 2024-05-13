@@ -36,6 +36,12 @@ export class TablaDatos extends Componente {
         this.datosOriginales = []
         this.tituloExcel = null
         this.camposEspeciales = {}
+        this.txtTtlAgregar = null
+        this.txtModAgregar = null
+        this.txtTtlEditar = null
+        this.txtModEditar = null
+        this.txtEliEditar = null
+        this.accionesEspeciales = []
         return this.inicia()
     }
 
@@ -76,6 +82,11 @@ export class TablaDatos extends Componente {
         if (this.botones.getNumeroBotones() > 0) {
             if (this.permiteExportar) this.botones.habilitarBoton(false, TABLA.BTN_EXPORTAR)
             if (this.permiteAgregar) this.botones.habilitarBoton(false, TABLA.BTN_AGREGAR)
+            if (this.accionesEspeciales.length > 0) {
+                this.accionesEspeciales.forEach((accion) => {
+                    this.botones.habilitarBoton(false, accion.id)
+                })
+            }
         }
 
         this.controles.addHijos([
@@ -118,7 +129,7 @@ export class TablaDatos extends Componente {
         this.filas = datos.map((f) =>
             this.encabezados.map((k) => f[k]).filter((k) => !columnasOcultas.includes(k))
         )
-
+        this.valorFiltro.reinicia()
         return this
     }
 
@@ -169,9 +180,14 @@ export class TablaDatos extends Componente {
                         if (this.formatoEspecial && this.formatoEspecial[this.encabezados[j]])
                             dato = this.formatoEspecial[this.encabezados[j]](c)
 
-                        const cld = new Componente(SYS.TD, { clase: TABLA.TBL_CELDA }).setTexto(
-                            dato
-                        )
+                        const cld = new Componente(SYS.TD, { clase: TABLA.TBL_CELDA })
+                        if (dato instanceof Componente) {
+                            cld.setPropiedad(
+                                "style",
+                                "display: flex; justify-content: center; align-items: center;"
+                            )
+                            cld.addHijo(dato.mostrar())
+                        } else cld.setTexto(dato)
 
                         cld.setClase(this.tipoDato(dato))
 
@@ -185,7 +201,6 @@ export class TablaDatos extends Componente {
         )
 
         this.tabla.addHijos([tblEncabezdos.getComponente(), tblCuerpo.getComponente()])
-
         return this
     }
 
@@ -211,7 +226,7 @@ export class TablaDatos extends Componente {
         this.tabla.removeComponente()
         if (this.filas.length == 0) {
             this.tablaSinDatos()
-            this.valorFiltro.habilitarInput(false)
+            this.valorFiltro.habilitarInput(this.datosOriginales.length > 0)
             if (this.botones.getNumeroBotones() > 0) {
                 if (this.permiteExportar) this.botones.habilitarBoton(false, TABLA.BTN_EXPORTAR)
                 if (this.permiteAgregar) this.botones.habilitarBoton(false, TABLA.BTN_AGREGAR)
@@ -251,6 +266,12 @@ export class TablaDatos extends Componente {
         return this.filas[indice]
     }
 
+    getFilaOriginal(indice) {
+        const f = this.filas[indice]
+        if (this.mostrarNoFila) return this.datosOriginales.find((d) => d.No === f[0])
+        return this.datosOriginales.find((d) => d === f)
+    }
+
     filtrar() {
         if (this.filasTmp.length === 0) this.filasTmp = this.filas
 
@@ -264,8 +285,9 @@ export class TablaDatos extends Componente {
             if (col === SYS.DFLT) {
                 this.filas = this.filasTmp.filter((f) => {
                     return f.some((c) => {
+                        if (!c) return false
                         if (isNaN(c)) return c.toLowerCase().includes(filtro.toLowerCase())
-                        return c == filtro
+                        return c.toString().includes(filtro)
                     })
                 })
             } else {
@@ -279,6 +301,7 @@ export class TablaDatos extends Componente {
         }
 
         this.actualizaTabla({ updtFiltro: false })
+        if (this.actualizaResumen) this.actualizaResumen()
         return this
     }
 
@@ -360,8 +383,8 @@ export class TablaDatos extends Componente {
                 .setListener(() => {
                     const editor = new Editor()
                     editor.inicia().configura()
-                    editor.txtTtl = "Datos Nueva Fila"
-                    editor.txtModificar = "Agregar Fila"
+                    editor.txtTtl = this.txtTtlAgregar || "Datos Nueva Fila"
+                    editor.txtModificar = this.txtModAgregar || "Agregar Fila"
 
                     this.encabezados.forEach((campo, indice) => {
                         if (this.mostrarNoFila && campo === "No") return
@@ -421,6 +444,14 @@ export class TablaDatos extends Componente {
 
                     editor.mostrar()
                 }, TABLA.BTN_AGREGAR)
+        }
+
+        if (this.accionesEspeciales.length > 0) {
+            this.accionesEspeciales.forEach((accion) => {
+                btns.addBoton(accion.id)
+                    .setTexto(accion.texto, accion.id)
+                    .setListener(accion.accion, accion.id)
+            })
         }
 
         return btns
@@ -536,6 +567,9 @@ export class TablaDatos extends Componente {
     editar = (evento) => {
         const celda = evento.target
         const editor = new Editor()
+        editor.txtTtl = this.txtTtlEditar || "Modificación de datos"
+        editor.txtModificar = this.txtModEditar || "Modificar"
+        editor.txtEliminar = this.txtEliEditar || "Eliminar"
         editor.inicia().configura()
 
         this.encabezados.forEach((campo, indice) => {
@@ -735,6 +769,23 @@ export class TablaDatos extends Componente {
 
     setValidaModificacion(fnc) {
         this.validaModificacion = fnc
+        return this
+    }
+
+    setAccionEspecial(id, texto, accion) {
+        this.accionesEspeciales.push({ id, texto, accion })
+        return this
+    }
+
+    setAccionesEspeciales(acciones) {
+        acciones.forEach((accion) => {
+            this.setAccionEspecial(accion.id, accion.texto, accion.accion)
+        })
+        return this
+    }
+
+    setActualizaResumen = (fnc) => {
+        this.actualizaResumen = fnc
         return this
     }
 }

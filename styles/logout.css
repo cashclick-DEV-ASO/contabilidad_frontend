@@ -18,5 +18,9 @@
 }
 
 #logout > #accion > h1 {
-	font-size: 2.5vh;
+	font-size: 25px;
+}
+
+#logout > #accion > h3 {
+	font-size: 15px;
 }

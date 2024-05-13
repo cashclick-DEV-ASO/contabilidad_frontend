@@ -35,11 +35,8 @@ export class RegSaldos extends Vista {
 
         this.acciones.fecha = new SolicitaDato()
             .setID("fecha")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha")
-            .setPropiedad("max", new Date().toISOString().split("T")[0])
-            .setPropiedad("min", "2020-01-01")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setEstilo4()
             .setListener(SYS.CHNG, this.controlador.cambioFecha)
 

@@ -5,7 +5,7 @@ export class ConTrnVirtualMdl extends Modelo {
         super()
     }
 
-    async buscarTransacciones(datos) {
+    async buscar(datos) {
         const filtros = []
         const parametros = []
 
@@ -41,7 +41,7 @@ export class ConTrnVirtualMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {
             query: `UPDATE transaccion_virtual
                     SET periodo=?, origen=?, informacion=?, tipo=?, monto=?, fecha_registro=?, fecha_valor=?
@@ -61,7 +61,7 @@ export class ConTrnVirtualMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {
             query: "DELETE FROM transaccion_virtual WHERE id = ?",
             parametros: [datos.id]

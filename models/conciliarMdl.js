@@ -5,7 +5,7 @@ export class ConciliarMdl extends Modelo {
         super()
     }
 
-    async buscarTransacciones(datos) {
+    async buscar(datos) {
         const filtros = []
         const parametros = []
 
@@ -90,39 +90,30 @@ export class ConciliarMdl extends Modelo {
         return await this.post("noConfig", datosConciliacion)
     }
 
-    async guardarConciliado(datos) {
-        const qryBancos =
-            "UPDATE transaccion_banco SET correspondencia = ?, resultado = ? WHERE id = ?"
-        const qryDWH = "UPDATE transaccion_dwh SET correspondencia = ?, resultado = ? WHERE id = ?"
-        const qryMambu =
-            "UPDATE transaccion_mambu SET correspondencia = ?, resultado = ? WHERE id = ?"
-        const qryVirtual =
-            "UPDATE transaccion_virtual SET correspondencia = ?, resultado = ? WHERE id = ?"
+    async guardar(datos) {
+        const qrys = {
+            Banco: "UPDATE transaccion_banco SET correspondencia = ?, resultado = ? WHERE id = ?",
+            DWH: "UPDATE transaccion_dwh SET correspondencia = ?, resultado = ? WHERE id = ?",
+            Mambu: "UPDATE transaccion_mambu SET correspondencia = ?, resultado = ? WHERE id = ?",
+            Virtual:
+                "UPDATE transaccion_virtual SET correspondencia = ?, resultado = ? WHERE id = ?"
+        }
+        qrys.BBVA = qrys.Banco
+        qrys.STP = qrys.Banco
+        qrys.Conekta = qrys.Banco
 
         for (let index = 0; index < datos.length; index++) {
             const dato = datos[index]
             let r = null
-            let query = ""
 
-            if (
-                dato.origen === "Banco" ||
-                dato.origen === "BBVA" ||
-                dato.origen === "STP" ||
-                dato.origen === "Conekta"
-            )
-                query = qryBancos
-            if (dato.origen === "DWH") query = qryDWH
-            if (dato.origen === "Mambu") query = qryMambu
-            if (dato.origen === "Virtual") query = qryVirtual
-
-            if (!query)
+            if (!qrys[dato.origen])
                 return {
                     success: false,
                     mensaje: "No fue posible identificar el origen de una transacción."
                 }
 
             r = await this.post("noConfig", {
-                query,
+                query: qrys[dato.origen],
                 parametros: [dato.correspondencia, dato.resultado, dato.id]
             })
 

@@ -27,7 +27,6 @@ export class RegAclaraciones extends Vista {
             .addBoton("btnBuscar")
             .setIDContenedor("buscar")
             .setTexto("Buscar")
-            .habilitarBoton(false)
             .setListener(this.controlador.buscar)
 
         this.acciones.guardar = new Botonera()
@@ -37,27 +36,55 @@ export class RegAclaraciones extends Vista {
             .habilitarBoton(false)
             .setListener(this.controlador.guardar)
 
-        this.datos.noClnt = new MuestraDato().setTxtEtiqueta("No. de Cliente:")
-
-        this.datos.noCred = new MuestraDato().setTxtEtiqueta("No. de Crédito:")
-
-        this.datos.montoCredito = new MuestraDato().setTxtEtiqueta("Monto del Crédito:")
-
-        this.datos.interes = new MuestraDato().setTxtEtiqueta("Interés:")
-
-        this.datos.estatus = new MuestraDato().setTxtEtiqueta("Estatus:")
-
-        this.datos.fechaInicio = new MuestraDato().setTxtEtiqueta("Fecha de Inicio:")
-
-        this.datos.fechaUltimoPago = new MuestraDato().setTxtEtiqueta("Fecha del Último Pago:")
-
-        this.datos.diasAtraso = new MuestraDato().setTxtEtiqueta("Días de Atraso:")
-
-        this.datos.nota = new SolicitaDato()
-            .setTxtEtiqueta("Nota de Aclaración")
-            .setTxtPlaceholder("Escribe detalles de seguimiento")
-            .setEstilo1()
+        this.datos.noClnt = new SolicitaDato()
+            .setTxtEtiqueta("No. de Cliente:")
+            .setEstilo4()
+            .setClase("dt")
+            .setTxtPlaceholder("")
             .habilitarInput(false)
+
+        this.datos.noCred = new SolicitaDato()
+            .setTxtEtiqueta("No. de Crédito:")
+            .setEstilo4()
+            .setClase("dt")
+            .setTxtPlaceholder("")
+            .habilitarInput(false)
+
+        this.datos.capital = new SolicitaDato()
+            .setTxtEtiqueta("Monto del Crédito:")
+            .setEstilo4()
+            .setClase("dt")
+            .setTxtPlaceholder("")
+            .setModoMoneda()
+            .habilitarInput(false)
+
+        this.datos.interes = new SolicitaDato()
+            .setTxtEtiqueta("Interés:")
+            .setEstilo4()
+            .setClase("dt")
+            .setTxtPlaceholder("")
+            .setModoMoneda()
+            .habilitarInput(false)
+
+        this.datos.fechaInicio = new SolicitaDato()
+            .setTxtEtiqueta("Fecha de Inicio:")
+            .setEstilo4()
+            .setClase("dt")
+            .setTxtPlaceholder("")
+            .habilitarInput(false)
+
+        this.datos.ultimoPago = new SolicitaDato()
+            .setTxtEtiqueta("Fecha del Último Pago:")
+            .setEstilo4()
+            .setClase("dt")
+            .setTxtPlaceholder("")
+            .habilitarInput(false)
+
+        this.datos.nota = new SolicitaDato(SYS.TXTAREA)
+            .setTxtEtiqueta("Nota de Aclaración")
+            .habilitarInput(false)
+            .setClase("notas")
+            .setTxtPlaceholder("Comentarios de seguimiento")
 
         return this
     }

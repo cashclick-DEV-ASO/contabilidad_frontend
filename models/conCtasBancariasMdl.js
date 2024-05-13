@@ -30,7 +30,7 @@ export class ConCtasBancariasMdl extends Modelo {
         return await this.post("noConfig", datos)
     }
 
-    async modificaTransaccion(datos) {
+    async modificar(datos) {
         const datosEnvio = {
             query: `UPDATE cuenta_bancaria SET cta = ?, id_banco = ?, comentarios = ? WHERE id = ?`,
             parametros: [datos.no_cuenta, datos.id_b, datos.comentarios, datos.id_c]
@@ -39,7 +39,7 @@ export class ConCtasBancariasMdl extends Modelo {
         return await this.post("noConfig", datosEnvio)
     }
 
-    async eliminaTransaccion(datos) {
+    async eliminar(datos) {
         const datosEnvio = {
             query: "UPDATE cuenta_bancaria SET activa = 0 WHERE id = ?",
             parametros: [datos.id_c]

@@ -22,16 +22,6 @@ export class ConTrnBancosCtrl extends Controlador {
         this.llenaListaBancos().then(() => this.acciones.banco.actulizaOpciones(this.bancos))
     }
 
-    cambiaFechaI = () => {
-        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-    }
-
-    cambiaFechaF = () => {
-        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-    }
-
     cambioBanco = async () => {
         this.datos.tabla.limpiar()
 
@@ -52,7 +42,7 @@ export class ConTrnBancosCtrl extends Controlador {
             banco: this.banco
         }
 
-        this.modelo.buscarTransacciones(datos).then((res) => {
+        this.modelo.buscar(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)

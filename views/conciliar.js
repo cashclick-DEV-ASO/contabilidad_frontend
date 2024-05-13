@@ -20,17 +20,15 @@ export class Conciliar extends Vista {
 
         this.acciones.fechaI = new SolicitaDato()
             .setID("fechaI")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Inicial")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaI)
 
         this.acciones.fechaF = new SolicitaDato()
             .setID("fechaF")
-            .setTipo("date")
             .setTxtEtiqueta("Fecha Final")
-            .setValorFecha(new Date())
+            .setModoFecha()
             .setEstilo2()
             .setListener(SYS.CHNG, this.controlador.cambiaFechaF)
 
@@ -85,12 +83,7 @@ export class Conciliar extends Vista {
 
         this.datos.tabla.camposEspeciales = {
             fecha_valor: () => {
-                return new SolicitaDato()
-                    .setTipo("date")
-                    .setTxtEtiqueta("Fecha Valor")
-                    .setEstilo1()
-                    .setPropiedad("min", "2020-01-01")
-                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+                return new SolicitaDato().setTxtEtiqueta("Fecha Valor").setModoFecha().setEstilo1()
             },
             monto: () => {
                 return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()

@@ -5,12 +5,21 @@ export class ConAclaracionesMdl extends Modelo {
         super()
     }
 
-    async consultar(dwh) {
-        const trnsToSend = {}
-
+    async buscar() {
         const datos = {
-            query: "INSERT INTO transaccion_dwh (fecha_creacion, fecha_valor, cliente, credito, concepto, tipo, monto, capital, interes, iva_interes) VALUES ?",
-            parametros: [trnsToSend]
+            query: `
+            SELECT
+                td.credito,
+                td.cliente,
+                td.fecha_valor,
+                td.concepto,
+                td.notas
+            FROM
+                transaccion_dwh td
+            WHERE
+                td.notas IS NOT NULL
+            `,
+            parametros: []
         }
 
         return await this.post("noConfig", datos)

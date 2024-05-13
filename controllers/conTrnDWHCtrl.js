@@ -31,16 +31,6 @@ export class ConTrnDWHCtrl extends Controlador {
 
     cargaInicial = () => this.acciones.tipo.setOpciones(this.opciones)
 
-    cambiaFechaI = () => {
-        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-    }
-
-    cambiaFechaF = () => {
-        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-    }
-
     cambioTipo = async () => {
         this.datos.tabla.limpiar()
 
@@ -59,7 +49,7 @@ export class ConTrnDWHCtrl extends Controlador {
             tipo: this.opcion
         }
 
-        this.modelo.buscarTransacciones(datos).then((res) => {
+        this.modelo.buscar(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(resultado.mensaje)

@@ -10,9 +10,9 @@ export class ConSaldosCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.formatoTabla = {
-            fecha: this.formatoFecha,
-            saldo_inicial: this.formatoMoneda,
-            saldo_final: this.formatoMoneda
+            fecha_valor: this.formatoFecha,
+            monto: this.formatoMoneda,
+            tipo: this.tipoMovimiento
         }
     }
 
@@ -21,20 +21,6 @@ export class ConSaldosCtrl extends Controlador {
         this.llenaListaBancos().then(() => {
             this.acciones.banco.actulizaOpciones(this.bancos)
         })
-    }
-
-    cambiaFechaI = () => {
-        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-
-        this.limpiaCampos({ cta: false })
-    }
-
-    cambiaFechaF = () => {
-        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-
-        this.limpiaCampos({ cta: false })
     }
 
     cambioBanco = () => {
@@ -72,7 +58,7 @@ export class ConSaldosCtrl extends Controlador {
 
         if (!this.verificarDatos(datos)) return msj.ocultar()
 
-        this.modelo.consultaSaldoCuenta(datos).then((resultado) => {
+        this.modelo.buscar(datos).then((resultado) => {
             msj.ocultar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 

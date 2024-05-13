@@ -159,7 +159,7 @@ export class RegSaldosCtrl extends Controlador {
 
         if (cerrar) cerrar()
         let msj = this.msjProcesando("Guardando saldo...")
-        this.modelo.registraSaldo(sldo).then((resultado) => {
+        this.modelo.guardar(sldo).then((resultado) => {
             msj.ocultar()
             if (!resultado.success) return this.msjError(resultado.mensaje)
 

@@ -18,16 +18,6 @@ export class ConciliarCtrl extends Controlador {
         }
     }
 
-    cambiaFechaI = () => {
-        if (this.acciones.fechaI.getValor() > this.acciones.fechaF.getValor())
-            this.acciones.fechaF.setValor(this.acciones.fechaI.getValor())
-    }
-
-    cambiaFechaF = () => {
-        if (this.acciones.fechaF.getValor() < this.acciones.fechaI.getValor())
-            this.acciones.fechaI.setValor(this.acciones.fechaF.getValor())
-    }
-
     buscar = () => {
         this.acciones.concilia.habilitarBoton(false)
         this.acciones.guardar.habilitarBoton(false)
@@ -39,7 +29,7 @@ export class ConciliarCtrl extends Controlador {
             fechaF: this.acciones.fechaF.getValor()
         }
 
-        this.modelo.buscarTransacciones(datos).then((res) => {
+        this.modelo.buscar(datos).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(res.mensaje)
@@ -86,10 +76,10 @@ export class ConciliarCtrl extends Controlador {
             )
                 return
 
-            creditos[credito][1].forEach((abono) => {
+            creditos[credito][2].forEach((abono) => {
                 const a = {}
-                for (let indexC = 0; indexC < creditos[credito][2].length; indexC++) {
-                    const cargo = creditos[credito][2][indexC]
+                for (let indexC = 0; indexC < creditos[credito][1].length; indexC++) {
+                    const cargo = creditos[credito][1][indexC]
                     const c = {}
                     if (
                         parseFloat(abono.monto) === parseFloat(cargo.monto) ||
@@ -118,6 +108,44 @@ export class ConciliarCtrl extends Controlador {
                     }
                 }
             })
+
+            creditos[credito][2].forEach((abono) => {
+                if (abono.resultado === "OK") return
+                const a = {}
+                const cargosTMP = []
+                let montoC = 0
+
+                for (let indexC = 0; indexC < creditos[credito][1].length; indexC++) {
+                    const cargo = creditos[credito][1][indexC]
+
+                    if (cargo.resultado === "OK") break
+
+                    cargosTMP.push(cargo)
+                    montoC += parseFloat(cargo.monto)
+                    if (montoC.toFixed(2) === parseFloat(abono.monto).toFixed(2)) {
+                        a.resultado = cargo.id
+                        a.correspondencia = cargo.origen
+                        a.origen = abono.origen
+                        a.id = abono.id
+                        this.trnOK.push(a)
+                        abono.resultado = "OK"
+                        this.transacciones.push(abono)
+
+                        cargosTMP.forEach((c) => {
+                            const crg = {}
+                            crg.resultado = abono.id
+                            crg.correspondencia = abono.origen
+                            crg.origen = c.origen
+                            crg.id = c.id
+
+                            this.trnOK.push(crg)
+                            c.resultado = "OK"
+                            this.transacciones.push(c)
+                        })
+                        break
+                    }
+                }
+            })
         })
 
         if (this.trnOK.length === 0) {
@@ -136,7 +164,7 @@ export class ConciliarCtrl extends Controlador {
 
     guardar = () => {
         let msj = this.msjProcesando("Guardando transacciones...")
-        this.modelo.guardarConciliado(this.trnOK).then((res) => {
+        this.modelo.guardar(this.trnOK).then((res) => {
             msj.ocultar()
 
             if (!res.success) return this.msjError(res.mensaje)
