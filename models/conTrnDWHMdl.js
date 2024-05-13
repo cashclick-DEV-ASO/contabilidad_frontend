@@ -27,9 +27,9 @@ export class ConTrnDWHMdl extends Modelo {
             parametrosV.push(datos.fechaF)
         }
 
-        if (datos.banco && datos.banco.valor !== SYS.DFLT) {
-            filtros.push("id_banco = ?")
-            parametros.push(datos.banco.valor)
+        if (datos.tipo && datos.tipo.valor !== SYS.DFLT) {
+            filtros.push("tipo = ?")
+            parametros.push(datos.tipo.valor)
             filtrosV.push("id = ?")
             parametrosV.push("0")
         }
