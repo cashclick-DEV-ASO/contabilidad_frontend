@@ -126,12 +126,13 @@ export class RegTrnBancosMdl extends Modelo {
                 this.txtToFechaMysql(trn.fecha_valor),
                 trn.concepto,
                 trn.tipo,
+                trn.credito,
                 this.monedaToFloat(trn.monto)
             ]
         })
 
         const datos = {
-            query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, monto) VALUES ?",
+            query: "INSERT INTO transaccion_banco (id_edo_cta, linea, informacion, fecha_creacion, fecha_valor, concepto, tipo, credito, monto) VALUES ?",
             parametros: [trnsToSend]
         }
 

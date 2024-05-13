@@ -190,8 +190,8 @@ export class Modelo {
     }
 
     async getCuentas(idBanco = null) {
-        const query = `SELECT * FROM cuenta_bancaria ${
-            idBanco ? "WHERE avtiva = 1 AND id_banco = ?" : ""
+        const query = `SELECT * FROM cuenta_bancaria WHERE activa = 1${
+            idBanco ? " AND id_banco = ?" : ""
         } ORDER BY cta`
         const parametros = idBanco ? [idBanco] : []
         return this.getInformacionComponentes(query, parametros)

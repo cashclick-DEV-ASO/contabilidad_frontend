@@ -39,6 +39,8 @@ export class ConTrnBancosMdl extends Modelo {
             SELECT 
                 tb.id,
                 ec.periodo,
+                ec.archivo,
+                (SELECT cta FROM cuenta_bancaria WHERE id = ec.id_cuenta) AS cuenta,
                 (SELECT b.nombre FROM banco b WHERE b.id = ec.id_banco) AS banco,
                 tb.informacion AS información,
                 tb.fecha_creacion AS fecha_creación,
@@ -56,6 +58,8 @@ export class ConTrnBancosMdl extends Modelo {
             SELECT
                 tv.id,
                 tv.periodo,
+                null AS archivo,
+                null AS cuenta,
                 'Virtual' AS banco,
                 tv.informacion,
                 tv.fecha_registro,

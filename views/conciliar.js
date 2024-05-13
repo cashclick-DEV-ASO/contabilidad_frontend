@@ -2,13 +2,15 @@ import Vista from "./vista.js"
 import { ConciliarCtrl as Controlador } from "../controllers/controladores.js"
 import { ConciliarMdl as Modelo } from "../models/modelos.js"
 
-import { Botonera, SolicitaDato, TablaDatos } from "../components/componentes.js"
+import { Botonera, SolicitaDato, TablaDatos, ListaDesplegable } from "../components/componentes.js"
 
 import { SYS } from "../src/constantes.js"
+import { leerCookie } from "../src/utils.js"
 
 export class Conciliar extends Vista {
     constructor() {
         super("Conciliar")
+        this.perfil = leerCookie("CSHPERFIL")
         this.controlador = new Controlador(this, new Modelo())
         return this.inicia()
     }
@@ -79,6 +81,30 @@ export class Conciliar extends Vista {
             this.datos.tabla.permiteEliminar = false
             this.datos.tabla.permiteModificar = false
             this.datos.tabla.mostrarNoFila = true
+        }
+
+        this.datos.tabla.camposEspeciales = {
+            fecha_valor: () => {
+                return new SolicitaDato()
+                    .setTipo("date")
+                    .setTxtEtiqueta("Fecha Valor")
+                    .setEstilo1()
+                    .setPropiedad("min", "2020-01-01")
+                    .setPropiedad("max", new Date().toISOString().split("T")[0])
+            },
+            monto: () => {
+                return new SolicitaDato().setTxtEtiqueta("Monto").setEstilo1().setModoMoneda()
+            },
+            tipo: () => {
+                return new ListaDesplegable()
+                    .setTxtEtiqueta("Tipo Movimiento")
+                    .setEstilo1()
+                    .setOpciones([
+                        { texto: "No Identificado", valor: "0" },
+                        { texto: "Cargo", valor: "1" },
+                        { texto: "Abono", valor: "2" }
+                    ])
+            }
         }
 
         return this

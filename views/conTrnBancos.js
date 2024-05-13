@@ -128,6 +128,20 @@ export class ConTrnBancos extends Vista {
                     .setOpciones([...a, { texto: "Virtual", valor: "0" }])
                     .setBloquear(true)
                     .setMostrarPh(false)
+            },
+            archivo: () => {
+                return new SolicitaDato()
+                    .setTipo("text")
+                    .setTxtEtiqueta("Archivo")
+                    .setEstilo1()
+                    .habilitarInput(false)
+            },
+            cuenta: () => {
+                return new SolicitaDato()
+                    .setTipo("text")
+                    .setTxtEtiqueta("Cuenta")
+                    .setEstilo1()
+                    .habilitarInput(false)
             }
         }
 

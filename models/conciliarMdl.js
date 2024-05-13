@@ -19,65 +19,123 @@ export class ConciliarMdl extends Modelo {
             parametros.push(datos.fechaF)
         }
 
-        const datosBanco = {
-            query: `SELECT id, 'Bancos' as origen, informacion as credito, fecha_valor, tipo, monto, '' as resultado FROM transaccion_banco WHERE ${filtros.join(
-                " AND "
-            )}`,
-            parametros
+        const datosConciliacion = {
+            query: `
+            SELECT
+                *
+            FROM (
+                SELECT
+                    tb.id,
+                    (SELECT b.nombre FROM banco b WHERE b.id = ec.id_banco) AS origen,
+                    CASE ec.id_banco
+                        WHEN 2 THEN (SELECT credito FROM transaccion_mambu WHERE tb.credito LIKE CONCAT(identificador_bancario, '%') LIMIT 1)
+                        WHEN 3 THEN (SELECT credito FROM transaccion_mambu WHERE tb.concepto LIKE CONCAT(identificador_bancario, '%') AND tb.monto = monto LIMIT 1)
+                        ELSE tb.credito
+                    END AS credito,
+                    tb.fecha_valor,
+                    tb.tipo,
+                    tb.monto,
+                    null as resultado
+                FROM
+                    transaccion_banco tb
+                RIGHT JOIN
+                    edo_cta ec ON tb.id_edo_cta = ec.id
+                WHERE
+                    ${filtros.join(" AND ")}
+                    AND tb.resultado = 0
+                    AND tb.visible = 1
+                    AND (
+                            (ec.id_banco = 1 AND tb.credito LIKE '1%')
+                            OR (ec.id_banco = 2 AND tb.fecha_valor IS NOT NULL)
+                            OR (ec.id_banco = 3)
+                        )
+                UNION ALL
+                SELECT
+                    td.id,
+                    'DWH' as origen,
+                    td.credito,
+                    td.fecha_valor,
+                    td.tipo,
+                    td.monto,
+                    null as resultado
+                FROM
+                    transaccion_dwh td
+                WHERE
+                    ${filtros.join(" AND ")}
+                    AND td.resultado = 0
+                    AND td.visible = 1
+                UNION ALL
+                SELECT
+                    tm.id, 
+                    'Mambu' as origen,
+                    tm.credito,
+                    fecha_valor,
+                    tm.tipo,
+                    tm.monto,
+                    null as resultado
+                FROM
+                    transaccion_mambu tm
+                WHERE
+                    ${filtros.join(" AND ")}
+                    AND tm.resultado = 0
+                    AND tm.visible = 1
+            ) AS t
+            WHERE
+                credito IS NOT NULL
+            ORDER BY credito, fecha_valor
+            `,
+            parametros: [...parametros, ...parametros, ...parametros]
         }
 
-        const datosDWH = {
-            query: `SELECT id, 'DWH' as origen, credito, fecha_valor, tipo, monto, '' as resultado FROM transaccion_dwh WHERE ${filtros.join(
-                " AND "
-            )}`,
-            parametros
-        }
-
-        const datosMambu = {
-            query: `SELECT id, 'Mambu' as origen, credito, fecha_valor, tipo, monto, '' as resultado FROM transaccion_mambu WHERE ${filtros.join(
-                " AND "
-            )}`,
-            parametros
-        }
-
-        let banco = await this.post("noConfig", datosBanco)
-        let DWH = await this.post("noConfig", datosDWH)
-        let mambu = await this.post("noConfig", datosMambu)
-
-        let resultado = {
-            success: false,
-            mensaje: "No se encontraron transacciones a conciliar.",
-            datos: []
-        }
-
-        if (banco.success) resultado.datos = this.extraeNo(banco.datos)
-        if (DWH.success) resultado.datos = resultado.datos.concat(DWH.datos)
-        if (mambu.success) resultado.datos = resultado.datos.concat(mambu.datos)
-
-        if (resultado.datos.length > 0) {
-            resultado.success = true
-            resultado.mensaje = "Transacciones encontradas."
-        }
-
-        return resultado
-    }
-
-    extraeNo(datos) {
-        return datos
-            .map((dato) => {
-                const credito = dato.credito.substring(11, 20)
-                if (isNaN(credito)) return null
-                dato.credito = credito
-                return dato
-            })
-            .filter((objeto) => objeto !== null)
+        return await this.post("noConfig", datosConciliacion)
     }
 
     async guardarConciliado(datos) {
-        // return await this.post("guardarConciliado", datos)
+        const qryBancos =
+            "UPDATE transaccion_banco SET correspondencia = ?, resultado = ? WHERE id = ?"
+        const qryDWH = "UPDATE transaccion_dwh SET correspondencia = ?, resultado = ? WHERE id = ?"
+        const qryMambu =
+            "UPDATE transaccion_mambu SET correspondencia = ?, resultado = ? WHERE id = ?"
+        const qryVirtual =
+            "UPDATE transaccion_virtual SET correspondencia = ?, resultado = ? WHERE id = ?"
+
+        for (let index = 0; index < datos.length; index++) {
+            const dato = datos[index]
+            let r = null
+            let query = ""
+
+            if (
+                dato.origen === "Banco" ||
+                dato.origen === "BBVA" ||
+                dato.origen === "STP" ||
+                dato.origen === "Conekta"
+            )
+                query = qryBancos
+            if (dato.origen === "DWH") query = qryDWH
+            if (dato.origen === "Mambu") query = qryMambu
+            if (dato.origen === "Virtual") query = qryVirtual
+
+            if (!query)
+                return {
+                    success: false,
+                    mensaje: "No fue posible identificar el origen de una transacción."
+                }
+
+            r = await this.post("noConfig", {
+                query,
+                parametros: [dato.correspondencia, dato.resultado, dato.id]
+            })
+
+            if (r && !r.success)
+                return {
+                    success: false,
+                    mensaje: "Error al guardar las transacciones."
+                }
+        }
+
         return {
             success: true,
-            mensaje: "Transacciones conciliadas guardadas correctamente."
+            mensaje: "Transacciones guardadas correctamente."
         }
     }
 }

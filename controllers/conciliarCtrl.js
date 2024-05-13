@@ -10,10 +10,11 @@ export class ConciliarCtrl extends Controlador {
         this.acciones = this.vista.acciones
         this.datos = this.vista.datos
         this.transacciones = []
+        this.trnOK = []
         this.formatoTabla = {
             fecha_valor: this.formatoFecha,
             monto: this.formatoMoneda,
-            tipo: this.formatoTipo
+            tipo: this.tipoMovimiento
         }
     }
 
@@ -73,7 +74,8 @@ export class ConciliarCtrl extends Controlador {
             creditos[transaccion.credito][transaccion.tipo].push(transaccion)
         })
 
-        let trnOK = []
+        this.trnOK = []
+        this.transacciones = []
 
         Object.keys(creditos).forEach((credito) => {
             if (
@@ -85,16 +87,31 @@ export class ConciliarCtrl extends Controlador {
                 return
 
             creditos[credito][1].forEach((abono) => {
+                const a = {}
                 for (let indexC = 0; indexC < creditos[credito][2].length; indexC++) {
                     const cargo = creditos[credito][2][indexC]
+                    const c = {}
                     if (
                         parseFloat(abono.monto) === parseFloat(cargo.monto) ||
                         parseFloat(abono.monto) + parseFloat(cargo.monto) === 0
                     ) {
-                        abono.resultado = "OK"
+                        a.resultado = cargo.id
+                        a.correspondencia = cargo.origen
+                        a.origen = abono.origen
+                        a.id = abono.id
+
+                        c.resultado = abono.id
+                        c.correspondencia = abono.origen
+                        c.origen = cargo.origen
+                        c.id = cargo.id
+
+                        this.trnOK.push(a)
+                        this.trnOK.push(c)
+
                         cargo.resultado = "OK"
-                        trnOK.push(abono)
-                        trnOK.push(cargo)
+                        abono.resultado = "OK"
+                        this.transacciones.push(abono)
+                        this.transacciones.push(cargo)
 
                         creditos[credito][2].splice(indexC, 1)
                         break
@@ -103,12 +120,10 @@ export class ConciliarCtrl extends Controlador {
             })
         })
 
-        if (trnOK.length === 0) {
+        if (this.trnOK.length === 0) {
             msj.ocultar()
             return this.msjAdvertencia("No se encontraron transacciones a conciliar.")
         }
-
-        this.transacciones = trnOK
 
         this.datos.tabla
             .parseaJSON(this.transacciones, null, this.formatoTabla, ["id"])
@@ -121,16 +136,14 @@ export class ConciliarCtrl extends Controlador {
 
     guardar = () => {
         let msj = this.msjProcesando("Guardando transacciones...")
-        this.modelo.guardarConciliado(this.conciliado).then((res) => {
+        this.modelo.guardarConciliado(this.trnOK).then((res) => {
             msj.ocultar()
 
-            if (!res.success) {
-                this.acciones.concilia.habilitarBoton(false)
-                this.acciones.guardar.habilitarBoton(false)
-                this.datos.tabla.limpiar()
-                return this.msjError(res.mensaje)
-            }
+            if (!res.success) return this.msjError(res.mensaje)
 
+            this.acciones.concilia.habilitarBoton(false)
+            this.acciones.guardar.habilitarBoton(false)
+            this.datos.tabla.limpiar()
             this.msjExito(res.mensaje)
         })
     }

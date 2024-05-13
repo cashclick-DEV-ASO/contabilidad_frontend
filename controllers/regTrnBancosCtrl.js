@@ -20,7 +20,12 @@ export class RegTrnBancosCtrl extends Controlador {
             Fecha_Operación: this.formatoFecha,
             Fecha_Valor: this.formatoFecha,
             Monto: this.formatoMoneda,
-            Tipo_Movimiento: this.tipoMovimiento
+            Tipo_Movimiento: this.tipoMovimiento,
+            Crédito: (dato) => {
+                if (dato.length !== 9) return ""
+                if (dato.substring(0, 3) !== "100") return ""
+                return dato
+            }
         }
         this.formatoTablaConekta = {
             Fecha_Creación: this.formatoFecha,
@@ -193,6 +198,7 @@ export class RegTrnBancosCtrl extends Controlador {
                     fecha_valor: trn.fechavalor,
                     concepto: trn.idoperación,
                     tipo: trn.tipomovimiento === "Cargo" ? 1 : 2,
+                    credito: trn.crédito,
                     monto: trn.monto
                 }
             }),
@@ -214,7 +220,8 @@ export class RegTrnBancosCtrl extends Controlador {
                     concepto: trn.estatus,
                     tipo: 2,
                     monto: trn.monto,
-                    id_banco: this.banco.valor
+                    id_banco: this.banco.valor,
+                    credito: trn.idcliente
                 }
             }),
             msj,
@@ -285,6 +292,7 @@ export class RegTrnBancosCtrl extends Controlador {
 
             this.msjExito("Se guardó la información correctamente.")
             this.acciones.selLayout.actulizaOpciones([])
+            this.acciones.cuenta.actulizaOpciones([])
             this.limpiaCampos({ lyt: true, cta: true, bnk: true })
             this.acciones.guardar.habilitarBoton(false)
         })
