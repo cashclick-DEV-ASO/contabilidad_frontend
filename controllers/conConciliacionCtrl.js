@@ -63,10 +63,11 @@ export class ConConciliacionCtrl extends Controlador {
         })
     }
 
-    eliminar = (datos) => {
+    eliminar = (datos, cerrarEditor) => {
         this.msjContinuar("¿Está seguro de eliminar la correspondencia seleccionada?", {
             txtSi: "Si, eliminar",
-            callbackSi: (cerrar) => {
+            callbackSi: (ocultar) => {
+                if (ocultar) ocultar()
                 this.modelo.eliminar(datos).then((res) => {
                     if (!res.success) return mostrarError(res.mensaje)
                     this.msjExito("Correspondencia eliminada exitosamente.", (cerrar) => {
@@ -74,7 +75,10 @@ export class ConConciliacionCtrl extends Controlador {
                         if (cerrar) cerrar()
                     })
                 })
-                if (cerrar) cerrar()
+                if (cerrarEditor) cerrarEditor()
+            },
+            callbackNo: (ocultar) => {
+                if (ocultar) ocultar()
             }
         })
     }
